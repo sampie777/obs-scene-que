@@ -88,7 +88,7 @@ object OBSClient {
         for (scene in scenes) {
             val tScene = responseSceneToTScene(scene.name, scene.sources)
 
-            Globals.scenes[tScene.name] = tScene
+            Globals.scenes.add(tScene)
         }
 
         GUI.refreshScenes()

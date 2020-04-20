@@ -17,16 +17,7 @@
         <kotlin.code.style>official</kotlin.code.style>
         <junit.version>4.12</junit.version>
         <twasi.version>1.0.3</twasi.version>
-        <xuggle.version>5.4</xuggle.version>
-        <slf4j.version>1.7.30</slf4j.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>Dcm4Che Repository</id>
-            <url>https://www.dcm4che.org/maven2/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>

@@ -1,8 +1,6 @@
 import config.Config
 import gui.MainFrame
-import objects.Globals
 import objects.OBSClient
-import objects.TScene
 import java.awt.EventQueue
 import java.util.logging.Logger
 

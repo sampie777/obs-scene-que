@@ -1,5 +1,6 @@
 package objects
 
+import GUI
 import java.util.logging.Logger
 
 object Que {

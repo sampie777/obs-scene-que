@@ -1,11 +1,11 @@
 package gui
 
+import GUI
 import handles.SceneTransferHandler
 import objects.Globals
 import objects.TScene
 import java.awt.Dimension
 import javax.swing.*
-import kotlin.streams.toList
 
 class SceneListPanel : JPanel(), Refreshable {
 
@@ -39,9 +39,6 @@ class SceneListPanel : JPanel(), Refreshable {
     }
 
     override fun refreshScenes() {
-        list.setListData(Globals.scenes.values.stream()
-            .sorted { tScene, tScene2 -> tScene.name.compareTo(tScene2.name) }
-            .toList().toTypedArray()
-        );
+        list.setListData(Globals.scenes.toTypedArray());
     }
 }
