@@ -3,9 +3,11 @@ package gui
 import GUI
 import objects.OBSClient
 import objects.Que
+import java.awt.BorderLayout
 import java.awt.Dimension
 import java.util.logging.Logger
 import javax.swing.*
+import javax.swing.border.EmptyBorder
 
 class SceneLiveControlPanel : JPanel(), Refreshable {
 
@@ -24,20 +26,21 @@ class SceneLiveControlPanel : JPanel(), Refreshable {
     }
 
     private fun initGui() {
-        layout = BoxLayout(this, BoxLayout.Y_AXIS)
+        layout = BorderLayout(10, 10)
+        border = EmptyBorder(10, 10, 10, 10)
 
         val titleLabel = JLabel("Controls")
-        add(titleLabel)
-
-        add(Box.createRigidArea(Dimension(0, 20)))
+        add(titleLabel, BorderLayout.PAGE_START)
 
         previousSceneButton.addActionListener { setPreviousQueSceneLive() }
-        add(previousSceneButton)
-
-        add(Box.createRigidArea(Dimension(0, 20)))
-
         nextSceneButton.addActionListener { setNextQueSceneLive() }
-        add(nextSceneButton)
+
+        val buttonPanel = JPanel()
+        buttonPanel.layout = BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS)
+        buttonPanel.add(previousSceneButton)
+        buttonPanel.add(Box.createRigidArea(Dimension(0, 20)))
+        buttonPanel.add(nextSceneButton)
+        add(buttonPanel, BorderLayout.CENTER)
     }
 
     override fun refreshQueScenes() {

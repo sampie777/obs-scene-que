@@ -1,8 +1,12 @@
-package gui
+package gui.utils
 
+import gui.MainFrame
+import java.awt.Component
+import java.awt.Container
 import java.awt.Graphics2D
 import java.awt.RenderingHints
 import java.awt.image.BufferedImage
+import javax.swing.SwingUtilities
 
 
 fun createGraphics(width: Int, height: Int): Pair<BufferedImage, Graphics2D> {
@@ -42,4 +46,8 @@ fun drawImageInXCenter(mainGraphics2D: Graphics2D, y: Int, mainWidth: Int, buffe
 
 fun drawImageInYCenter(mainGraphics2D: Graphics2D, mainHeight: Int, x: Int, bufferedImage: BufferedImage) {
     mainGraphics2D.drawImage(bufferedImage, null, x, (mainHeight - bufferedImage.height) / 2)
+}
+
+fun getMainFrameComponent(childComponent: Component): Container? {
+    return SwingUtilities.getAncestorOfClass(MainFrame::class.java, childComponent)
 }

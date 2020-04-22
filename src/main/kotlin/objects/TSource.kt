@@ -10,7 +10,7 @@ class TSource {
     var fileName = ""
     var videoLength = 0
 
-    constructor() {}
+    constructor()
 
     constructor(name: String, type: String) {
         this.name = name

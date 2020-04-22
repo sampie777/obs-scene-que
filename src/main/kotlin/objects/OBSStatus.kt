@@ -6,6 +6,7 @@ enum class OBSStatus(val status: String) {
     DISCONNECTED("Disconnected"),
     LOADING_SCENE_SOURCES("Loading scene sources..."),
     CONNECTING("Connecting..."),
+    RECONNECTING("Reconnecting..."),
     CONNECTION_FAILED("Connection failed!"),
     LOADING_SCENES("Loading scenes..."),
 }

@@ -13,7 +13,8 @@ import kotlin.collections.HashMap
 object PropertyLoader {
     private val logger = Logger.getLogger(PropertyLoader.toString())
 
-    private val userPropertiesFile = File(getCurrentJarDirectory(this).absolutePath + File.separatorChar + "user.properties")
+    private val userPropertiesFile =
+        File(getCurrentJarDirectory(this).absolutePath + File.separatorChar + "user.properties")
     private var userProperties = Properties()
 
     private const val sceneValuePairDelimiter = "%=>"
@@ -25,6 +26,10 @@ object PropertyLoader {
 
     fun getPropertiesFile(): File {
         return userPropertiesFile
+    }
+
+    fun getUserProperties(): Properties {
+        return userProperties
     }
 
     private fun loadUserProperties() {
@@ -47,7 +52,7 @@ object PropertyLoader {
     }
 
     private fun saveUserPropertiesToFIle() {
-        logger.info("Saving user properties")
+        logger.fine("Saving user properties")
 
         if (!userPropertiesFile.exists()) {
             logger.info("Creating file: " + userPropertiesFile.absolutePath)
@@ -65,7 +70,7 @@ object PropertyLoader {
     fun loadConfig(configClass: Class<*>) {
         try {
             for (field in configClass.declaredFields) {
-                if (field.name == "INSTANCE") {
+                if (field.name == "INSTANCE" || field.name == "logger") {
                     continue
                 }
 
@@ -84,6 +89,7 @@ object PropertyLoader {
                 }
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             throw RuntimeException("Error loading configuration: $e", e)
         }
     }
@@ -91,7 +97,7 @@ object PropertyLoader {
     fun saveConfig(configClass: Class<*>) {
         try {
             for (field in configClass.declaredFields) {
-                if (field.name == "INSTANCE") {
+                if (field.name == "INSTANCE" || field.name == "logger") {
                     continue
                 }
 
@@ -103,7 +109,7 @@ object PropertyLoader {
                     field.isAccessible = true
                     val configValue = field.get(Config)
 
-                    logger.fine("Saving config field: ${field.name} with value: $configValue")
+                    logger.finer("Saving config field: ${field.name} with value: $configValue")
                     setPropertyValue(userProperties, field.name, field.type, configValue)
 
                 } catch (e: IllegalArgumentException) {
@@ -111,6 +117,7 @@ object PropertyLoader {
                 }
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             throw RuntimeException("Error saving configuration: $e", e)
         }
     }
@@ -134,10 +141,15 @@ object PropertyLoader {
             }
             return value.split(sceneValuesDelimiter)
                 .map {
-                    val v = it.split(sceneValuePairDelimiter);
-                    v[0] to v[1].toInt()
+                    val pair: List<String> = it.split(sceneValuePairDelimiter)
+                    if (pair.size != 2) {
+                        logger.warning("Invalid property pair: $it")
+                    }
+                    pair
                 }
-                .toMap()
+                .filter { it.size == 2 }
+                .map { it[0] to it[1].toInt() }
+                .toMap(HashMap())
         }
         if (type == ArrayList::class.java) {
             if (value.isEmpty()) {

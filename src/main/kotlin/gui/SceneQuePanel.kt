@@ -8,12 +8,13 @@ import objects.Globals
 import objects.OBSClient
 import objects.Que
 import objects.TScene
-import java.awt.BorderLayout
-import java.awt.Dimension
+import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.util.logging.Logger
 import javax.swing.*
+import javax.swing.border.CompoundBorder
+import javax.swing.border.EmptyBorder
 
 class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
 
@@ -27,19 +28,20 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
         GUI.register(this)
 
         initGui()
-        refreshQueScenes()
+
+        list.setListData(Que.getList().toTypedArray())
+        switchedScenes()
     }
 
     private fun initGui() {
-        layout = BoxLayout(this, BoxLayout.Y_AXIS)
+        layout = BorderLayout(10, 10)
+        border = EmptyBorder(10, 10, 10, 10)
 
         val titleLabel = JLabel("Que")
 
-        val mainPanel = JPanel(BorderLayout(10, 10))
-        mainPanel.add(titleLabel, BorderLayout.PAGE_START)
-        mainPanel.add(createQueListPanel(), BorderLayout.CENTER)
-        mainPanel.add(createButtonPanel(), BorderLayout.PAGE_END)
-        add(mainPanel)
+        add(titleLabel, BorderLayout.PAGE_START)
+        add(createQueListPanel(), BorderLayout.CENTER)
+        add(createButtonPanel(), BorderLayout.PAGE_END)
     }
 
     private fun createQueListPanel(): JScrollPane {
@@ -48,6 +50,12 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
         list.dragEnabled = true
         list.dropMode = DropMode.INSERT
         list.transferHandler = SceneTransferHandler()
+        list.font = Font("Dialog", Font.PLAIN, 14)
+        list.cursor = Cursor(Cursor.HAND_CURSOR)
+        list.border = CompoundBorder(
+            BorderFactory.createLineBorder(Color(180, 180, 180)),
+            EmptyBorder(10, 10, 0, 10)
+        )
 
         list.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
@@ -62,7 +70,7 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
         })
 
         val scrollPanel = JScrollPane(list)
-        scrollPanel.preferredSize = Dimension(300, 500)
+        scrollPanel.preferredSize = Dimension(350, 500)
         scrollPanel.border = null
         return scrollPanel
     }

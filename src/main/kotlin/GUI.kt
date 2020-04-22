@@ -33,11 +33,26 @@ object GUI {
         }
     }
 
+    fun refreshNotifications() {
+        for (component in components) {
+            component.refreshNotifications()
+        }
+    }
+
+
     fun register(component: Refreshable) {
         components.add(component)
     }
 
+    fun isRegistered(component: Refreshable): Boolean {
+        return components.contains(component)
+    }
+
     fun unregister(component: Refreshable) {
         components.remove(component)
+    }
+
+    fun unregisterAll() {
+        components.clear()
     }
 }
