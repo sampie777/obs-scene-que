@@ -38,6 +38,7 @@ object PropertyLoader {
         if (!userPropertiesFile.exists()) {
             logger.info("Creating file: " + userPropertiesFile.absolutePath)
             userPropertiesFile.createNewFile()
+            return
         }
 
         val userProperties = Properties()
@@ -52,7 +53,7 @@ object PropertyLoader {
     }
 
     private fun saveUserPropertiesToFIle() {
-        logger.fine("Saving user properties")
+        logger.info("Saving user properties")
 
         if (!userPropertiesFile.exists()) {
             logger.info("Creating file: " + userPropertiesFile.absolutePath)
@@ -94,7 +95,13 @@ object PropertyLoader {
         }
     }
 
-    fun saveConfig(configClass: Class<*>) {
+    /**
+     * Populates the userProperties object with the values from the given Config object.
+     * Returns true if the values have changed, otherwise returns false
+     */
+    fun saveConfig(configClass: Class<*>): Boolean {
+        val newProperties = Properties()
+
         try {
             for (field in configClass.declaredFields) {
                 if (field.name == "INSTANCE" || field.name == "logger") {
@@ -110,7 +117,7 @@ object PropertyLoader {
                     val configValue = field.get(Config)
 
                     logger.finer("Saving config field: ${field.name} with value: $configValue")
-                    setPropertyValue(userProperties, field.name, field.type, configValue)
+                    setPropertyValue(newProperties, field.name, field.type, configValue)
 
                 } catch (e: IllegalArgumentException) {
                     logger.warning(e.toString())
@@ -120,6 +127,12 @@ object PropertyLoader {
             e.printStackTrace()
             throw RuntimeException("Error saving configuration: $e", e)
         }
+
+        if (userProperties == newProperties) {
+            return false
+        }
+        userProperties = newProperties
+        return true
     }
 
     private fun getValue(props: Properties, name: String, type: Class<*>): Any? {
@@ -133,6 +146,9 @@ object PropertyLoader {
         if (type == Double::class.javaPrimitiveType) return value.toDouble()
         if (type == Color::class.java) {
             val rgb = value.split(",")
+            if (rgb.size < 3) {
+                return null
+            }
             return Color(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt())
         }
         if (type == HashMap::class.java) {
@@ -160,7 +176,12 @@ object PropertyLoader {
         throw IllegalArgumentException("Unknown configuration value type: " + type.name)
     }
 
-    private fun setPropertyValue(props: Properties, name: String, type: Class<*>, value: Any) {
+    private fun setPropertyValue(props: Properties, name: String, type: Class<*>, value: Any?) {
+        if (value == null) {
+            props.setProperty(name, "")
+            return
+        }
+
         if (type == Color::class.java) {
             val color = value as Color
             val stringValue = listOf(color.red, color.green, color.blue).joinToString(",")

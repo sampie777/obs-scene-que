@@ -32,7 +32,7 @@ class ConfigActionPanel(private val frame: ConfigFrame) : JPanel() {
     }
 
     private fun cancelWindow() {
-        logger.info("Exiting configuration panel")
+        logger.info("Exiting configuration window")
         frame.dispose()
     }
 
