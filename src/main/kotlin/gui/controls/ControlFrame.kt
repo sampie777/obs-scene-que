@@ -1,8 +1,6 @@
 package gui.controls
 
-import gui.config.ConfigActionPanel
-import gui.config.ConfigEditPanel
-import gui.config.ConfigFrame
+import gui.utils.loadIcon
 import java.awt.BorderLayout
 import java.awt.Component
 import java.util.logging.Logger
@@ -26,5 +24,6 @@ class ControlFrame(private val parentFrame: Component?)  : JFrame() {
         setSize(500, 250)
         setLocationRelativeTo(parentFrame)
         isVisible = true
+        iconImage = loadIcon("/icon-512.png")
     }
 }

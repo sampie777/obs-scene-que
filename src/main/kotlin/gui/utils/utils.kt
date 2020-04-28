@@ -1,12 +1,13 @@
 package gui.utils
 
 import gui.MainFrame
-import java.awt.Component
-import java.awt.Container
-import java.awt.Graphics2D
-import java.awt.RenderingHints
+import java.awt.*
 import java.awt.image.BufferedImage
+import java.net.URL
+import java.util.logging.Logger
 import javax.swing.SwingUtilities
+
+private val logger = Logger.getLogger("utils")
 
 
 fun createGraphics(width: Int, height: Int): Pair<BufferedImage, Graphics2D> {
@@ -50,4 +51,15 @@ fun drawImageInYCenter(mainGraphics2D: Graphics2D, mainHeight: Int, x: Int, buff
 
 fun getMainFrameComponent(childComponent: Component): Container? {
     return SwingUtilities.getAncestorOfClass(MainFrame::class.java, childComponent)
+}
+
+
+fun loadIcon(iconPath: String): Image? {
+    val resource: URL? = MainFrame::class.java.getResource(iconPath)
+    if (resource == null) {
+        logger.warning("Could not find icon: $iconPath")
+        return null
+    }
+
+    return Toolkit.getDefaultToolkit().getImage(resource)
 }
