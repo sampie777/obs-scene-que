@@ -3,6 +3,7 @@ package gui
 import GUI
 import createImageIcon
 import gui.notifications.NotificationFrame
+import gui.utils.getMainFrameComponent
 import objects.notifications.Notifications
 import java.awt.BorderLayout
 import java.awt.Cursor
@@ -33,7 +34,7 @@ class MainFramePanel : JSplitPane(), Refreshable {
         notificationsButton.isFocusPainted = false
         notificationsButton.cursor = Cursor(Cursor.HAND_CURSOR)
         notificationsButton.addActionListener {
-            NotificationFrame(this)
+            NotificationFrame(getMainFrameComponent(this))
         }
 
         val leftBottomPanel = JPanel(BorderLayout(10, 10))
