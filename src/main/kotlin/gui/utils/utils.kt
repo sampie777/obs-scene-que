@@ -5,6 +5,7 @@ import java.awt.*
 import java.awt.image.BufferedImage
 import java.net.URL
 import java.util.logging.Logger
+import javax.swing.JFrame
 import javax.swing.SwingUtilities
 
 private val logger = Logger.getLogger("utils")
@@ -49,8 +50,8 @@ fun drawImageInYCenter(mainGraphics2D: Graphics2D, mainHeight: Int, x: Int, buff
     mainGraphics2D.drawImage(bufferedImage, null, x, (mainHeight - bufferedImage.height) / 2)
 }
 
-fun getMainFrameComponent(childComponent: Component): Frame? {
-    return SwingUtilities.getAncestorOfClass(MainFrame::class.java, childComponent) as Frame
+fun getMainFrameComponent(childComponent: Component): JFrame? {
+    return SwingUtilities.getAncestorOfClass(MainFrame::class.java, childComponent) as JFrame
 }
 
 

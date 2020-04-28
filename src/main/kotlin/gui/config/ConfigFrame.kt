@@ -3,10 +3,11 @@ package gui.config
 import java.awt.BorderLayout
 import java.awt.Component
 import java.util.logging.Logger
+import javax.swing.JDialog
 import javax.swing.JFrame
 import javax.swing.JPanel
 
-class ConfigFrame(private val parentFrame: Component?) : JFrame() {
+class ConfigFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
     private val logger = Logger.getLogger(ConfigFrame::class.java.name)
 
     private val configEditPanel: ConfigEditPanel = ConfigEditPanel()
@@ -25,6 +26,7 @@ class ConfigFrame(private val parentFrame: Component?) : JFrame() {
         title = "Settings"
         setSize(560, 520)
         setLocationRelativeTo(parentFrame)
+        modalityType = ModalityType.APPLICATION_MODAL
         isVisible = true
     }
 

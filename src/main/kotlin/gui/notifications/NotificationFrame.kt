@@ -4,11 +4,9 @@ import GUI
 import gui.Refreshable
 import java.awt.BorderLayout
 import java.awt.Component
-import javax.swing.JFrame
-import javax.swing.JPanel
-import javax.swing.JScrollPane
+import javax.swing.*
 
-class NotificationFrame(private val parentFrame: Component?) : JFrame(), Refreshable {
+class NotificationFrame(private val parentFrame: JFrame?) : JDialog(parentFrame), Refreshable {
 
     init {
         GUI.register(this)
@@ -17,17 +15,27 @@ class NotificationFrame(private val parentFrame: Component?) : JFrame(), Refresh
     }
 
     private fun createGui() {
-        val mainPanel = JPanel()
-        mainPanel.layout = BorderLayout(0, 0)
-        add(mainPanel)
-
         val scrollPanel = JScrollPane(NotificationListPanel())
         scrollPanel.border = null
-        mainPanel.add(scrollPanel)
+
+        val closeButton = JButton("Close")
+        closeButton.horizontalAlignment = SwingConstants.CENTER
+        closeButton.alignmentX = Component.CENTER_ALIGNMENT
+        closeButton.addActionListener { dispose() }
+
+        val actionPanel = JPanel()
+        actionPanel.add(closeButton)
+
+        val mainPanel = JPanel()
+        mainPanel.layout = BorderLayout(0, 0)
+        mainPanel.add(scrollPanel, BorderLayout.CENTER)
+        mainPanel.add(actionPanel, BorderLayout.PAGE_END)
+        add(mainPanel)
 
         title = "Notifications"
         setSize(423, 500)
         setLocationRelativeTo(parentFrame)
+        modalityType = ModalityType.APPLICATION_MODAL
         isVisible = true
     }
 }
