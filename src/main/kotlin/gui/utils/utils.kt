@@ -49,8 +49,8 @@ fun drawImageInYCenter(mainGraphics2D: Graphics2D, mainHeight: Int, x: Int, buff
     mainGraphics2D.drawImage(bufferedImage, null, x, (mainHeight - bufferedImage.height) / 2)
 }
 
-fun getMainFrameComponent(childComponent: Component): Container? {
-    return SwingUtilities.getAncestorOfClass(MainFrame::class.java, childComponent)
+fun getMainFrameComponent(childComponent: Component): Frame? {
+    return SwingUtilities.getAncestorOfClass(MainFrame::class.java, childComponent) as Frame
 }
 
 

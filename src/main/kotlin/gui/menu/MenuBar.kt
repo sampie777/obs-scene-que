@@ -4,6 +4,6 @@ import javax.swing.JMenuBar
 
 class MenuBar : JMenuBar() {
     init {
-        add(FileMenu())
+        add(ApplicationMenu())
     }
 }
