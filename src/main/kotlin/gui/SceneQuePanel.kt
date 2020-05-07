@@ -106,6 +106,10 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
         GUI.refreshQueScenes()
     }
 
+    override fun refreshScenes() {
+        list.repaint()
+    }
+
     override fun refreshQueScenes() {
         list.setListData(Que.getList().toTypedArray())
 
