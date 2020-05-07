@@ -6,6 +6,7 @@ __pycache__
 *.tmp
 target/
 user.properties
+obs-scene-que.properties
 dependency-reduced-pom.xml
 out/
 releases/

@@ -14,7 +14,7 @@ object PropertyLoader {
     private val logger = Logger.getLogger(PropertyLoader.toString())
 
     private val userPropertiesFile =
-        File(getCurrentJarDirectory(this).absolutePath + File.separatorChar + "user.properties")
+        File(getCurrentJarDirectory(this).absolutePath + File.separatorChar + "obs-scene-que.properties")
     private var userProperties = Properties()
 
     private const val sceneValuePairDelimiter = "%=>"
