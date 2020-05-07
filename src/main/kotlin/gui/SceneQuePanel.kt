@@ -20,8 +20,10 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
 
     private val logger = Logger.getLogger(SceneQuePanel::class.java.name)
 
-    private val list: JList<TScene> = JList()
-    private val removeItemButton = JButton("Remove")
+    val list: JList<TScene> = JList()
+    val removeItemButton = JButton("Remove")
+    val removeInvalidItemsButton = JButton("Remove Invalid")
+    val removeAllButton = JButton("Remove All")
 
     init {
         name = "SceneQuePanel"
@@ -54,8 +56,9 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
         list.cursor = Cursor(Cursor.HAND_CURSOR)
         list.border = CompoundBorder(
             BorderFactory.createLineBorder(Color(180, 180, 180)),
-            EmptyBorder(10, 10, 0, 10)
+            EmptyBorder(10, 0, 0, 0)
         )
+        list.cellRenderer = QueListCellRenderer()
 
         list.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
@@ -77,15 +80,29 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
 
     private fun createButtonPanel(): JPanel {
         removeItemButton.addActionListener { removeSelectedItem() }
+        removeInvalidItemsButton.addActionListener { removeInvalidItems() }
+        removeAllButton.addActionListener { removeAllItems() }
 
         val buttonPanel = JPanel()
         buttonPanel.layout = BoxLayout(buttonPanel, BoxLayout.X_AXIS)
         buttonPanel.add(removeItemButton)
+        buttonPanel.add(removeInvalidItemsButton)
+        buttonPanel.add(removeAllButton)
         return buttonPanel
     }
 
     private fun removeSelectedItem() {
         Que.remove(list.selectedIndex)
+        GUI.refreshQueScenes()
+    }
+
+    private fun removeInvalidItems() {
+        Que.removeInvalidItems()
+        GUI.refreshQueScenes()
+    }
+
+    private fun removeAllItems() {
+        Que.clear()
         GUI.refreshQueScenes()
     }
 
@@ -98,19 +115,8 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
     }
 
     override fun switchedScenes() {
-        list.selectedIndex = getNewSelectedIndex()
-    }
-
-    private fun getNewSelectedIndex(): Int {
-        if (Globals.activeOBSSceneName == null || Que.current() == null) {
-            return -1
-        }
-
-        if (Globals.activeOBSSceneName != Que.current()!!.name) {
-            return -1
-        }
-
-        return Que.currentIndex()
+        list.clearSelection()
+        list.repaint()
     }
 
     override fun dropNewScene(scene: TScene, index: Int): Boolean {

@@ -176,7 +176,10 @@ object OBSClient {
 
     fun setActiveScene(scene: TScene) {
         logger.info("Setting new current scene to: $scene")
-        controller!!.setCurrentScene(scene.name) { }
+        controller!!.setCurrentScene(scene.name) {
+            GUI.switchedScenes()
+            setPreviewScene(Que.previewNext() ?: return@setCurrentScene)
+        }
     }
 
     private fun setPreviewScene(scene: TScene) {

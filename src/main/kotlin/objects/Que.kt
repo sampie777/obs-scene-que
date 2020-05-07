@@ -7,7 +7,7 @@ object Que {
 
     private val logger = Logger.getLogger(Que::class.java.name)
 
-    private val list: ArrayList<TScene> = ArrayList()
+    private var list: ArrayList<TScene> = ArrayList()
     private var currentIndex: Int = -1
 
     fun getList(): ArrayList<TScene> {
@@ -135,5 +135,11 @@ object Que {
 
     fun previewNext(): TScene? {
         return list.getOrNull(currentIndex + 1)
+    }
+
+    fun removeInvalidItems() {
+        list = list.filter { queScene ->
+            Globals.scenes.find { it.name == queScene.name } != null
+        } as ArrayList<TScene>
     }
 }
