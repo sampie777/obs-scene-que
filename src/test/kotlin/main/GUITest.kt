@@ -1,5 +1,6 @@
 package main
 
+import GUI
 import GuiComponentMock
 import kotlin.test.BeforeTest
 import kotlin.test.Test

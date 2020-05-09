@@ -7,7 +7,10 @@ import java.awt.Component
 import java.awt.Dimension
 import java.awt.Font
 import java.util.logging.Logger
-import javax.swing.*
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.JSpinner
+import javax.swing.SpinnerNumberModel
 
 class NumberFormInput<T : Number>(
     private val key: String,

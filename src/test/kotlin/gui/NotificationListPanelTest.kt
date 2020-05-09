@@ -1,5 +1,6 @@
 package gui
 
+import GUI
 import GuiComponentMock
 import gui.notifications.NotificationListPanel
 import objects.notifications.Notifications

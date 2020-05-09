@@ -14,6 +14,12 @@ object Config {
 
     var queSceneNames: ArrayList<String> = ArrayList()
 
+    var windowRestoreLastPosition: Boolean = false
+    var windowLocationX: Int = 0
+    var windowLocationY: Int = 0
+    var windowLocationWidth: Int = 1000
+    var windowLocationHeight: Int = 600
+
     fun load() {
         try {
             PropertyLoader.load()
@@ -68,5 +74,9 @@ object Config {
             e.printStackTrace()
             Notifications.add("Could not set configuration setting: $key", "Configuration")
         }
+    }
+
+    fun enableWriteToFile(value: Boolean) {
+        PropertyLoader.writeToFile = value
     }
 }

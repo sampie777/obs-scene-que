@@ -24,6 +24,9 @@ class ConfigEditPanel : JPanel() {
         formComponents.add(StringFormInput("obsAddress", "OBS websocket address", false))
         formComponents.add(StringFormInput("obsPassword", "OBS websocket password", true))
         formComponents.add(NumberFormInput<Long>("obsReconnectionTimeout", "Connection retry interval (millisec.)", 0, null))
+
+        formComponents.add(HeaderFormComponent("GUI"))
+        formComponents.add(BooleanFormInput("windowRestoreLastPosition", "Restore window position on start up"))
     }
 
     private fun createGui() {

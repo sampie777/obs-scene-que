@@ -1,7 +1,6 @@
 package gui.config
 
 import java.awt.BorderLayout
-import java.awt.Component
 import java.util.logging.Logger
 import javax.swing.JDialog
 import javax.swing.JFrame

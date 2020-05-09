@@ -4,7 +4,10 @@ import config.Config
 import gui.config.ConfigEditPanel
 import java.awt.*
 import java.util.logging.Logger
-import javax.swing.*
+import javax.swing.JButton
+import javax.swing.JColorChooser
+import javax.swing.JLabel
+import javax.swing.JPanel
 
 class ColorFormInput(
     private val key: String,

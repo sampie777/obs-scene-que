@@ -4,7 +4,6 @@ import GUI
 import config.Config
 import handles.SceneTransferDropComponent
 import handles.SceneTransferHandler
-import objects.Globals
 import objects.OBSClient
 import objects.Que
 import objects.TScene

@@ -1,12 +1,19 @@
 package gui.controls
 
+import GUI
 import gui.Refreshable
 import objects.Globals
 import objects.OBSClient
 import objects.Que
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Component
+import java.awt.Font
+import java.awt.GridLayout
 import java.util.logging.Logger
-import javax.swing.*
+import javax.swing.JButton
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.SwingConstants
 import javax.swing.border.EmptyBorder
 
 class ControlFramePanel : JPanel(), Refreshable {

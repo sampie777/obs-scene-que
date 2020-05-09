@@ -2,9 +2,15 @@ package gui.config.formcomponents
 
 import config.Config
 import gui.config.ConfigEditPanel
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Component
+import java.awt.Dimension
+import java.awt.Font
 import java.util.logging.Logger
-import javax.swing.*
+import javax.swing.JCheckBox
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.SwingConstants
 
 class BooleanFormInput(
     private val key: String,

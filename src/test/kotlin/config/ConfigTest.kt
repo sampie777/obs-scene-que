@@ -42,4 +42,22 @@ class ConfigTest {
         assertEquals("Could not set configuration setting: nonexistingkey", Notifications.list[0].message)
         assertNull(Config.get("nonexistingkey"))
     }
+
+    @Test
+    fun testEnableWriteToFileSetTrue() {
+        PropertyLoader.writeToFile = false
+
+        Config.enableWriteToFile(true)
+
+        assertTrue(PropertyLoader.writeToFile)
+    }
+
+    @Test
+    fun testEnableWriteToFileSetFalse() {
+        PropertyLoader.writeToFile = true
+
+        Config.enableWriteToFile(false)
+
+        assertFalse(PropertyLoader.writeToFile)
+    }
 }

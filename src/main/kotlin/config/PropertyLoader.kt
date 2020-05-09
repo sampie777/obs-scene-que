@@ -13,8 +13,13 @@ import kotlin.collections.HashMap
 object PropertyLoader {
     private val logger = Logger.getLogger(PropertyLoader.toString())
 
-    private val userPropertiesFile =
-        File(getCurrentJarDirectory(this).absolutePath + File.separatorChar + "obs-scene-que.properties")
+    // En-/disables the creation of a properties file and writing to a properties file.
+    // Leave disabled when running tests.
+    var writeToFile: Boolean = false
+
+    private val userPropertiesFile = File(
+        getCurrentJarDirectory(this).absolutePath + File.separatorChar + "obs-scene-que.properties"
+    )
     private var userProperties = Properties()
 
     private const val sceneValuePairDelimiter = "%=>"
@@ -35,9 +40,7 @@ object PropertyLoader {
     private fun loadUserProperties() {
         logger.info("Loading user properties from file: " + userPropertiesFile.absolutePath)
 
-        if (!userPropertiesFile.exists()) {
-            logger.info("Creating file: " + userPropertiesFile.absolutePath)
-            userPropertiesFile.createNewFile()
+        if (createNewPropertiesFile()) {
             return
         }
 
@@ -55,10 +58,12 @@ object PropertyLoader {
     private fun saveUserPropertiesToFIle() {
         logger.info("Saving user properties")
 
-        if (!userPropertiesFile.exists()) {
-            logger.info("Creating file: " + userPropertiesFile.absolutePath)
-            userPropertiesFile.createNewFile()
+        if (!writeToFile) {
+            logger.info("writeToFile is turned off, so not saving properties to file")
+            return
         }
+
+        createNewPropertiesFile()
 
         FileOutputStream(userPropertiesFile).use { fileOutputStream ->
             userProperties.store(
@@ -207,5 +212,20 @@ object PropertyLoader {
         }
 
         props.setProperty(name, value.toString())
+    }
+
+    private fun createNewPropertiesFile(): Boolean {
+        if (userPropertiesFile.exists()) {
+            return false
+        }
+
+        if (!writeToFile) {
+            logger.info("writeToFile is turned off, so not creating a new file")
+            return true
+        }
+
+        logger.info("Creating file: " + userPropertiesFile.absolutePath)
+        userPropertiesFile.createNewFile()
+        return true
     }
 }

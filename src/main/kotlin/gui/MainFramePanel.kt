@@ -9,7 +9,10 @@ import java.awt.BorderLayout
 import java.awt.Cursor
 import java.awt.Dimension
 import java.util.logging.Logger
-import javax.swing.*
+import javax.swing.Icon
+import javax.swing.JButton
+import javax.swing.JPanel
+import javax.swing.JSplitPane
 import javax.swing.border.EmptyBorder
 
 class MainFramePanel : JSplitPane(), Refreshable {

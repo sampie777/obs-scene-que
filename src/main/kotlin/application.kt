@@ -9,11 +9,12 @@ fun main(args: Array<String>) {
     logger.info("Starting application")
     logger.info("Executing JAR directory: " + getCurrentJarDirectory(Config).absolutePath)
 
+    Config.enableWriteToFile(true)
     Config.load()
     Config.save()
 
     EventQueue.invokeLater {
-        MainFrame()
+        MainFrame.createAndShow()
     }
 
     OBSClient.start()
