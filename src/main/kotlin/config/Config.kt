@@ -3,6 +3,8 @@ package config
 import objects.Que
 import objects.TScene
 import objects.notifications.Notifications
+import java.awt.Dimension
+import java.awt.Point
 import java.util.logging.Logger
 
 object Config {
@@ -15,10 +17,10 @@ object Config {
     var queSceneNames: ArrayList<String> = ArrayList()
 
     var windowRestoreLastPosition: Boolean = false
-    var windowLocationX: Int = 0
-    var windowLocationY: Int = 0
-    var windowLocationWidth: Int = 1000
-    var windowLocationHeight: Int = 600
+    var mainWindowLocation: Point = Point(0, 0)
+    var mainWindowSize: Dimension = Dimension(1000, 600)
+    var controlWindowLocation: Point = Point(-1, -1)
+    var controlWindowSize: Dimension = Dimension(500, 250)
 
     fun load() {
         try {

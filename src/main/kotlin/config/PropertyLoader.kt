@@ -2,6 +2,8 @@ package config
 
 import getCurrentJarDirectory
 import java.awt.Color
+import java.awt.Dimension
+import java.awt.Point
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -24,6 +26,7 @@ object PropertyLoader {
 
     private const val sceneValuePairDelimiter = "%=>"
     private const val sceneValuesDelimiter = "%;;"
+    private const val defaultValueDelimiter = ","
 
     fun load() {
         loadUserProperties()
@@ -88,7 +91,7 @@ object PropertyLoader {
                     }
 
                     field.isAccessible = true
-                    field.set(null, getValue(userProperties, field.name, field.type))
+                    field.set(null, propertyValueToTypedValue(userProperties, field.name, field.type))
 
                 } catch (e: IllegalArgumentException) {
                     logger.warning(e.toString())
@@ -122,7 +125,7 @@ object PropertyLoader {
                     val configValue = field.get(Config)
 
                     logger.finer("Saving config field: ${field.name} with value: $configValue")
-                    setPropertyValue(newProperties, field.name, field.type, configValue)
+                    typedValueToPropertyValue(newProperties, field.name, field.type, configValue)
 
                 } catch (e: IllegalArgumentException) {
                     logger.warning(e.toString())
@@ -140,7 +143,7 @@ object PropertyLoader {
         return true
     }
 
-    private fun getValue(props: Properties, name: String, type: Class<*>): Any? {
+    private fun propertyValueToTypedValue(props: Properties, name: String, type: Class<*>): Any? {
         val value = props.getProperty(name) ?: throw IllegalArgumentException("Missing configuration value: $name")
 
         if (type == String::class.java) return value
@@ -150,9 +153,9 @@ object PropertyLoader {
         if (type == Long::class.javaPrimitiveType) return value.toLong()
         if (type == Double::class.javaPrimitiveType) return value.toDouble()
         if (type == Color::class.java) {
-            val rgb = value.split(",")
+            val rgb = value.split(defaultValueDelimiter)
             if (rgb.size < 3) {
-                return null
+                throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
             }
             return Color(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt())
         }
@@ -178,10 +181,25 @@ object PropertyLoader {
             }
             return value.split(sceneValuesDelimiter)
         }
+        if (type == Point::class.java) {
+            val values = value.split(defaultValueDelimiter)
+            if (values.size != 2) {
+                throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
+            }
+            return Point(values[0].toInt(), values[1].toInt())
+        }
+        if (type == Dimension::class.java) {
+            val values = value.split(defaultValueDelimiter)
+            if (values.size != 2) {
+                throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
+            }
+            return Dimension(values[0].toInt(), values[1].toInt())
+        }
+
         throw IllegalArgumentException("Unknown configuration value type: " + type.name)
     }
 
-    private fun setPropertyValue(props: Properties, name: String, type: Class<*>, value: Any?) {
+    private fun typedValueToPropertyValue(props: Properties, name: String, type: Class<*>, value: Any?) {
         if (value == null) {
             props.setProperty(name, "")
             return
@@ -189,7 +207,7 @@ object PropertyLoader {
 
         if (type == Color::class.java) {
             val color = value as Color
-            val stringValue = listOf(color.red, color.green, color.blue).joinToString(",")
+            val stringValue = listOf(color.red, color.green, color.blue).joinToString(defaultValueDelimiter)
             props.setProperty(name, stringValue)
             return
         }
@@ -206,6 +224,20 @@ object PropertyLoader {
         if (type == ArrayList::class.java) {
             val list = value as ArrayList<*>
             val stringValue = list.joinToString(sceneValuesDelimiter)
+
+            props.setProperty(name, stringValue)
+            return
+        }
+        if (type == Point::class.java) {
+            val point = value as Point
+            val stringValue = point.x.toString() + defaultValueDelimiter + point.y
+
+            props.setProperty(name, stringValue)
+            return
+        }
+        if (type == Dimension::class.java) {
+            val dimension = value as Dimension
+            val stringValue = dimension.width.toString() + defaultValueDelimiter + dimension.height
 
             props.setProperty(name, stringValue)
             return

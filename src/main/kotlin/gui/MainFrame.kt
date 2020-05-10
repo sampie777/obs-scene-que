@@ -37,18 +37,16 @@ class MainFrame : JFrame(), Refreshable {
     }
 
     fun saveWindowPosition() {
-        Config.windowLocationX = location.x
-        Config.windowLocationY = location.y
-        Config.windowLocationWidth = size.width
-        Config.windowLocationHeight = size.height
+        Config.mainWindowSize = size
+        Config.mainWindowLocation = location
     }
 
     private fun initGUI() {
         add(MainFramePanel())
 
         if (Config.windowRestoreLastPosition) {
-            setSize(Config.windowLocationWidth, Config.windowLocationHeight)
-            setLocation(Config.windowLocationX, Config.windowLocationY)
+            size = Config.mainWindowSize
+            location = Config.mainWindowLocation
         } else {
             setSize(1000, 600)
         }

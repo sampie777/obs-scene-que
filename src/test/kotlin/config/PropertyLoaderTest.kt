@@ -1,6 +1,8 @@
 package config
 
 import java.awt.Color
+import java.awt.Dimension
+import java.awt.Point
 import kotlin.test.*
 
 class PropertyLoaderTest {
@@ -11,6 +13,8 @@ class PropertyLoaderTest {
         ConfigMock.stringProperty2 = "stringValue2"
         ConfigMock.longProperty1 = 100
         ConfigMock.nullableColorProperty1 = null
+        ConfigMock.pointProperty1 = Point(5, 6)
+        ConfigMock.dimensionProperty1 = Dimension(10, 11)
     }
 
     @Test
@@ -20,6 +24,8 @@ class PropertyLoaderTest {
         assertEquals("stringValue1", PropertyLoader.getUserProperties().getProperty("stringProperty1"))
         assertEquals("stringValue2", PropertyLoader.getUserProperties().getProperty("stringProperty2"))
         assertEquals("100", PropertyLoader.getUserProperties().getProperty("longProperty1"))
+        assertEquals("5,6", PropertyLoader.getUserProperties().getProperty("pointProperty1"))
+        assertEquals("10,11", PropertyLoader.getUserProperties().getProperty("dimensionProperty1"))
     }
 
     @Test
@@ -27,16 +33,45 @@ class PropertyLoaderTest {
         PropertyLoader.getUserProperties().setProperty("stringProperty1", "stringValue1.1")
         PropertyLoader.getUserProperties().setProperty("stringProperty2", "stringValue2.1")
         PropertyLoader.getUserProperties().setProperty("longProperty1", "200")
+        PropertyLoader.getUserProperties().setProperty("pointProperty1", "15,16")
+        PropertyLoader.getUserProperties().setProperty("dimensionProperty1", "20,21")
 
         PropertyLoader.loadConfig(ConfigMock::class.java)
 
         assertEquals("stringValue1.1", PropertyLoader.getUserProperties().getProperty("stringProperty1"))
         assertEquals("stringValue2.1", PropertyLoader.getUserProperties().getProperty("stringProperty2"))
         assertEquals("200", PropertyLoader.getUserProperties().getProperty("longProperty1"))
+        assertEquals("15,16", PropertyLoader.getUserProperties().getProperty("pointProperty1"))
+        assertEquals("20,21", PropertyLoader.getUserProperties().getProperty("dimensionProperty1"))
 
         assertEquals("stringValue1.1", ConfigMock.stringProperty1)
         assertEquals("stringValue2.1", ConfigMock.stringProperty2)
         assertEquals(200, ConfigMock.longProperty1)
+        assertEquals(Point(15, 16), ConfigMock.pointProperty1)
+        assertEquals(Dimension(20, 21), ConfigMock.dimensionProperty1)
+    }
+
+    @Test
+    fun testLoadPropertiesForConfigWithAbsentValues() {
+        PropertyLoader.getUserProperties().remove("stringProperty1")
+        PropertyLoader.getUserProperties().remove("stringProperty2")
+        PropertyLoader.getUserProperties().remove("longProperty1")
+        PropertyLoader.getUserProperties().remove("pointProperty1")
+        PropertyLoader.getUserProperties().remove("dimensionProperty1")
+
+        PropertyLoader.loadConfig(ConfigMock::class.java)
+
+        assertEquals(null, PropertyLoader.getUserProperties().getProperty("stringProperty1"))
+        assertEquals(null, PropertyLoader.getUserProperties().getProperty("stringProperty2"))
+        assertEquals(null, PropertyLoader.getUserProperties().getProperty("longProperty1"))
+        assertEquals(null, PropertyLoader.getUserProperties().getProperty("pointProperty1"))
+        assertEquals(null, PropertyLoader.getUserProperties().getProperty("dimensionProperty1"))
+
+        assertEquals("stringValue1", ConfigMock.stringProperty1)
+        assertEquals("stringValue2", ConfigMock.stringProperty2)
+        assertEquals(100, ConfigMock.longProperty1)
+        assertEquals(Point(5, 6), ConfigMock.pointProperty1)
+        assertEquals(Dimension(10, 11), ConfigMock.dimensionProperty1)
     }
 
     @Test
