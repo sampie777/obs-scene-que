@@ -1,7 +1,7 @@
 package gui.config.formcomponents
 
 import config.Config
-import gui.config.ConfigEditPanel
+import themes.Theme
 import java.awt.*
 import java.util.logging.Logger
 import javax.swing.JButton
@@ -10,10 +10,10 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 
 class ColorFormInput(
-    private val key: String,
+    override val key: String,
     private val labelText: String
 ) : FormInput {
-    private val logger = Logger.getLogger(ConfigEditPanel::class.java.name)
+    private val logger = Logger.getLogger(ColorFormInput::class.java.name)
 
     private lateinit var color: Color
     private val button = JButton()
@@ -23,7 +23,7 @@ class ColorFormInput(
         color = Config.get(key) as? Color ?: Color.BLACK
 
         val label = JLabel(labelText)
-        label.font = Font("Dialog", Font.PLAIN, 12)
+        label.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 12)
 
         button.text = "Choose"
         button.background = color

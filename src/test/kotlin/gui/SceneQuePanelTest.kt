@@ -1,6 +1,6 @@
 package gui
 
-import objects.Globals
+import objects.OBSState
 import objects.Que
 import objects.TScene
 import kotlin.test.BeforeTest
@@ -12,7 +12,7 @@ class SceneQuePanelTest {
     @BeforeTest
     fun before() {
         Que.clear()
-        Globals.scenes.clear()
+        OBSState.scenes.clear()
     }
 
     @Test
@@ -66,9 +66,9 @@ class SceneQuePanelTest {
 
     @Test
     fun testRemoveInvalidItemsButtonRemovesInvalidItems() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
         Que.add(TScene("1"))
         Que.add(TScene("invalid 1"))
         Que.add(TScene("3"))

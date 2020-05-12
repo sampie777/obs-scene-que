@@ -2,7 +2,7 @@ package gui
 
 import GUI
 import handles.SceneTransferHandler
-import objects.Globals
+import objects.OBSState
 import objects.TScene
 import java.awt.*
 import javax.swing.*
@@ -47,6 +47,6 @@ class SceneListPanel : JPanel(), Refreshable {
     }
 
     override fun refreshScenes() {
-        list.setListData(Globals.scenes.toTypedArray());
+        list.setListData(OBSState.scenes.toTypedArray());
     }
 }

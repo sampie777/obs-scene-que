@@ -6,7 +6,9 @@ import gui.controls.ControlFrame
 import gui.notifications.NotificationFrame
 import gui.utils.getMainFrameComponent
 import gui.websocketScanner.WebsocketScannerFrame
+import themes.Theme
 import java.util.logging.Logger
+import javax.swing.BorderFactory
 import javax.swing.JMenu
 import javax.swing.JMenuItem
 
@@ -18,6 +20,8 @@ class ApplicationMenu : JMenu("Application") {
     }
 
     private fun initGui() {
+        popupMenu.border = BorderFactory.createLineBorder(Theme.get.BORDER_COLOR)
+
         val controlFrameItem = JMenuItem("Control window")
         val notificationsItem = JMenuItem("Notifications")
         val scannerItem = JMenuItem("Network Scanner")

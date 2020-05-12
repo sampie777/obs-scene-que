@@ -139,7 +139,7 @@ object Que {
 
     fun removeInvalidItems() {
         list = list.filter { queScene ->
-            Globals.scenes.find { it.name == queScene.name } != null
+            OBSState.scenes.find { it.name == queScene.name } != null
         } as ArrayList<TScene>
     }
 }

@@ -10,7 +10,7 @@ class OBSClientTest {
 
     @BeforeTest
     fun before() {
-        Globals.scenes.clear()
+        OBSState.scenes.clear()
     }
 
     @Test
@@ -32,7 +32,7 @@ class OBSClientTest {
 
     @Test
     fun testSetOBSScenes() {
-        Globals.OBSActivityStatus = OBSStatus.LOADING_SCENES
+        OBSState.clientActivityStatus = OBSClientStatus.LOADING_SCENES
         val panelMock = GuiComponentMock()
         GUI.register(panelMock)
 
@@ -48,12 +48,12 @@ class OBSClientTest {
         scenes.add(Scene())
 
         // When
-        OBSClient.setOBSScenes(scenes)
+        OBSClient.processOBSScenesToOBSStateScenes(scenes)
 
         assertTrue(panelMock.refreshScenesCalled)
         assertFalse(panelMock.switchedScenesCalled)
         assertTrue(panelMock.refreshOBSStatusCalled)
-        assertEquals(3, Globals.scenes.size)
-        assertNull(Globals.OBSActivityStatus)
+        assertEquals(3, OBSState.scenes.size)
+        assertNull(OBSState.clientActivityStatus)
     }
 }

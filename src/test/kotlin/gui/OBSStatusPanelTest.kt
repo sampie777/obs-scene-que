@@ -1,8 +1,8 @@
 package gui
 
 import config.Config
-import objects.Globals
-import objects.OBSStatus
+import objects.OBSClientStatus
+import objects.OBSState
 import kotlin.test.*
 
 class OBSStatusPanelTest {
@@ -10,15 +10,15 @@ class OBSStatusPanelTest {
     @BeforeTest
     fun before() {
         Config.obsAddress = "ws://localhost:4444"
-        Globals.OBSActivityStatus = null
-        Globals.OBSConnectionStatus = OBSStatus.UNKNOWN
+        OBSState.clientActivityStatus = null
+        OBSState.connectionStatus = OBSClientStatus.UNKNOWN
     }
 
     @Test
     fun testGetOBSStatusRepresentationWithUnkownStatus() {
         val panel = OBSStatusPanel()
 
-        Globals.OBSConnectionStatus = OBSStatus.UNKNOWN
+        OBSState.connectionStatus = OBSClientStatus.UNKNOWN
 
         assertEquals("Unknown", panel.getOBSStatusRepresentation())
     }
@@ -27,7 +27,7 @@ class OBSStatusPanelTest {
     fun testGetOBSStatusRepresentationWithConnectingStatus() {
         val panel = OBSStatusPanel()
 
-        Globals.OBSConnectionStatus = OBSStatus.CONNECTING
+        OBSState.connectionStatus = OBSClientStatus.CONNECTING
 
         assertEquals("Connecting to ${Config.obsAddress}...", panel.getOBSStatusRepresentation())
     }
@@ -36,7 +36,7 @@ class OBSStatusPanelTest {
     fun testGetOBSStatusRepresentationWithConnectedStatus() {
         val panel = OBSStatusPanel()
 
-        Globals.OBSConnectionStatus = OBSStatus.CONNECTED
+        OBSState.connectionStatus = OBSClientStatus.CONNECTED
 
         assertEquals("Connected", panel.getOBSStatusRepresentation())
     }
@@ -45,7 +45,7 @@ class OBSStatusPanelTest {
     fun testGetOBSStatusRepresentationWithDisconnectedStatus() {
         val panel = OBSStatusPanel()
 
-        Globals.OBSConnectionStatus = OBSStatus.DISCONNECTED
+        OBSState.connectionStatus = OBSClientStatus.DISCONNECTED
 
         assertEquals("Disconnected", panel.getOBSStatusRepresentation())
     }
@@ -54,7 +54,7 @@ class OBSStatusPanelTest {
     fun testGetOBSStatusRepresentationWithConnectionFailedStatus() {
         val panel = OBSStatusPanel()
 
-        Globals.OBSConnectionStatus = OBSStatus.CONNECTION_FAILED
+        OBSState.connectionStatus = OBSClientStatus.CONNECTION_FAILED
 
         assertEquals("Connection failed!", panel.getOBSStatusRepresentation())
     }
@@ -63,22 +63,22 @@ class OBSStatusPanelTest {
     fun testGetOBSStatusRepresentationWithLoadingScenesStatus() {
         val panel = OBSStatusPanel()
 
-        Globals.OBSActivityStatus = OBSStatus.LOADING_SCENES
-        Globals.OBSConnectionStatus = OBSStatus.CONNECTED
+        OBSState.clientActivityStatus = OBSClientStatus.LOADING_SCENES
+        OBSState.connectionStatus = OBSClientStatus.CONNECTED
 
         assertEquals("Loading scenes...", panel.getOBSStatusRepresentation())
     }
 
     @Test
     fun testMessageLabelWithRefreshingOBSStatus() {
-        Globals.OBSConnectionStatus = OBSStatus.UNKNOWN
+        OBSState.connectionStatus = OBSClientStatus.UNKNOWN
         val panel = OBSStatusPanel()
 
         assertEquals("OBS: Unknown", panel.getMessageLabel().text)
         assertFalse(panel.getMessageLabel().toolTipText.contains("Connected"),
             "'Connected' string is falsy in messageLabel tooltip text")
 
-        Globals.OBSConnectionStatus = OBSStatus.CONNECTED
+        OBSState.connectionStatus = OBSClientStatus.CONNECTED
         panel.refreshOBSStatus()
 
         assertEquals("OBS: Connected", panel.getMessageLabel().text)

@@ -1,7 +1,7 @@
 package gui.config.formcomponents
 
 import config.Config
-import gui.config.ConfigEditPanel
+import themes.Theme
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
@@ -13,10 +13,10 @@ import javax.swing.JPanel
 import javax.swing.SwingConstants
 
 class BooleanFormInput(
-    private val key: String,
+    override val key: String,
     private val labelText: String
 ) : FormInput {
-    private val logger = Logger.getLogger(ConfigEditPanel::class.java.name)
+    private val logger = Logger.getLogger(BooleanFormInput::class.java.name)
 
     private val input = JCheckBox()
 
@@ -24,7 +24,7 @@ class BooleanFormInput(
         val configValue: Boolean? = Config.get(key) as? Boolean
 
         val label = JLabel(labelText)
-        label.font = Font("Dialog", Font.PLAIN, 12)
+        label.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 12)
 
         input.isSelected = configValue ?: false
         input.preferredSize = Dimension(100, 20)

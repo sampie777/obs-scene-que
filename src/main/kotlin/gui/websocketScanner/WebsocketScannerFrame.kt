@@ -4,14 +4,14 @@ import config.Config
 import objects.websocketScanner.ScanResult
 import objects.websocketScanner.WebsocketScannerSwingWorker
 import java.awt.BorderLayout
-import java.awt.Frame
 import java.util.logging.Logger
 import javax.swing.JDialog
+import javax.swing.JFrame
 import javax.swing.JOptionPane
 import javax.swing.JPanel
 import javax.swing.border.EmptyBorder
 
-open class WebsocketScannerFrame(private val parentFrame: Frame?, private val visible: Boolean = true) : JDialog(parentFrame) {
+open class WebsocketScannerFrame(private val parentFrame: JFrame?, private val visible: Boolean = true) : JDialog(parentFrame) {
     private val logger = Logger.getLogger(WebsocketScannerFrame::class.java.name)
 
     val websocketScannerTable = WebsocketScannerTable()

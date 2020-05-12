@@ -1,6 +1,6 @@
 package gui
 
-import objects.Globals
+import objects.OBSState
 import objects.Que
 import objects.TScene
 import java.awt.Color
@@ -18,15 +18,15 @@ class QueListCellRendererTest {
     @BeforeTest
     fun before() {
         Que.clear()
-        Globals.scenes.clear()
-        Globals.activeOBSSceneName = null
+        OBSState.scenes.clear()
+        OBSState.currentSceneName = null
     }
 
     @Test
     fun testListWithNoCellSelected() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -45,9 +45,9 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellSelected() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -66,10 +66,10 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellActiveInOBS() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
-        Globals.activeOBSSceneName = "1"
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
+        OBSState.currentSceneName = "1"
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -88,10 +88,10 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellActiveInOBSAndSelected() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
-        Globals.activeOBSSceneName = "1"
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
+        OBSState.currentSceneName = "1"
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -110,9 +110,9 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellIsCurrentQueButNotActiveInOBS() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -132,9 +132,9 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellIsCurrentQueButNotActiveInOBSAndSelected() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -154,10 +154,10 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellIsCurrentQueAndActiveInOBS() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
-        Globals.activeOBSSceneName = "1"
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
+        OBSState.currentSceneName = "1"
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -177,10 +177,10 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellIsCurrentQueAndActiveInOBSAndSelected() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
-        Globals.activeOBSSceneName = "1"
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
+        OBSState.currentSceneName = "1"
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -200,8 +200,8 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellIsNonExistingScene() {
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -220,8 +220,8 @@ class QueListCellRendererTest {
 
     @Test
     fun testListWithFirstCellIsNonExistingSceneAndSelected() {
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))
@@ -240,9 +240,9 @@ class QueListCellRendererTest {
 
     @Test
     fun testNullValueGivesDefaultBackgroundColor() {
-        Globals.scenes.add(TScene("1"))
-        Globals.scenes.add(TScene("2"))
-        Globals.scenes.add(TScene("3"))
+        OBSState.scenes.add(TScene("1"))
+        OBSState.scenes.add(TScene("2"))
+        OBSState.scenes.add(TScene("3"))
         Que.add(TScene("1"))
         Que.add(TScene("2"))
         Que.add(TScene("3"))

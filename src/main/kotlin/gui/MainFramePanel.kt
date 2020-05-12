@@ -1,10 +1,11 @@
 package gui
 
 import GUI
-import createImageIcon
 import gui.notifications.NotificationFrame
+import gui.utils.createImageIcon
 import gui.utils.getMainFrameComponent
 import objects.notifications.Notifications
+import themes.Theme
 import java.awt.BorderLayout
 import java.awt.Cursor
 import java.awt.Dimension
@@ -20,8 +21,8 @@ class MainFramePanel : JSplitPane(), Refreshable {
 
     val notificationsButton = JButton()
 
-    private val notificationsButtonIconDefault: Icon? = createImageIcon("/notification-bell-empty-24.png")
-    private val notificationsButtonIconYellow: Icon? = createImageIcon("/notification-bell-yellow-24.png")
+    private val notificationsButtonIconDefault: Icon? = createImageIcon(Theme.get.NOTIFICATIONS_BUTTON_ICON_DEFAULT)
+    private val notificationsButtonIconYellow: Icon? = createImageIcon(Theme.get.NOTIFICATIONS_BUTTON_ICON_ALERT)
 
     init {
         GUI.register(this)
@@ -32,6 +33,8 @@ class MainFramePanel : JSplitPane(), Refreshable {
     }
 
     private fun createGui() {
+        border = null
+
         notificationsButton.isBorderPainted = false
         notificationsButton.isContentAreaFilled = false
         notificationsButton.isFocusPainted = false

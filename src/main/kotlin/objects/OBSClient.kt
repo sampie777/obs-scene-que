@@ -21,12 +21,15 @@ object OBSClient {
 
     fun start() {
         logger.info("Connecting to OBS on: ${Config.obsAddress}")
-        Globals.OBSConnectionStatus = if (!reconnecting) OBSStatus.CONNECTING else OBSStatus.RECONNECTING
+        OBSState.connectionStatus = if (!reconnecting) OBSClientStatus.CONNECTING else OBSClientStatus.RECONNECTING
         GUI.refreshOBSStatus()
 
-        controller = OBSRemoteController(Config.obsAddress, false)
+        val obsPassword: String? = if (Config.obsPassword.isEmpty()) null else Config.obsPassword
 
-        if (controller!!.isFailed) { // Awaits response from OBS
+        controller = OBSRemoteController(Config.obsAddress, false, obsPassword)
+
+        // Await response from OBS
+        if (controller!!.isFailed) {
             logger.severe("Failed to create controller")
             processFailedConnection("Could not connect to OBS", reconnect = true)
         }
@@ -41,7 +44,7 @@ object OBSClient {
     }
 
     private fun processFailedConnection(message: String, reconnect: Boolean = true) {
-        Globals.OBSConnectionStatus = OBSStatus.CONNECTION_FAILED
+        OBSState.connectionStatus = OBSClientStatus.CONNECTION_FAILED
         GUI.refreshOBSStatus()
 
         if (!reconnecting) {
@@ -65,9 +68,25 @@ object OBSClient {
 
     private fun registerCallbacks() {
         try {
+            controller!!.registerOnError { message, throwable ->
+                logger.severe("OBS Controller gave an error: $message")
+                throwable.printStackTrace()
+
+                Notifications.add("OBS Connection module gave an unexpected error: $message", "OBS")
+            }
+        } catch (t: Throwable) {
+            logger.severe("Failed to create OBS callback: registerOnError")
+            t.printStackTrace()
+            Notifications.add(
+                "Failed to register error callback: cannot notify when unexpected errors occur",
+                "OBS"
+            )
+        }
+
+        try {
             controller!!.registerDisconnectCallback {
                 logger.info("Disconnected from OBS")
-                Globals.OBSConnectionStatus = OBSStatus.DISCONNECTED
+                OBSState.connectionStatus = OBSClientStatus.DISCONNECTED
                 GUI.refreshOBSStatus()
 
                 Notifications.add("Disconnected from OBS", "OBS")
@@ -86,7 +105,7 @@ object OBSClient {
         try {
             controller!!.registerConnectCallback {
                 logger.info("Connected to OBS")
-                Globals.OBSConnectionStatus = OBSStatus.CONNECTED
+                OBSState.connectionStatus = OBSClientStatus.CONNECTED
                 GUI.refreshOBSStatus()
 
                 if (reconnecting) {
@@ -103,6 +122,26 @@ object OBSClient {
             t.printStackTrace()
             Notifications.add(
                 "Failed to register connect callback: scenes cannot be loaded at startup",
+                "OBS"
+            )
+        }
+
+        try {
+            controller!!.registerConnectionFailedCallback { message: String ->
+                logger.severe("Failed to connect to OBS: $message")
+                OBSState.connectionStatus = OBSClientStatus.CONNECTION_FAILED
+                Notifications.add(
+                    "Failed to connect to OBS: $message",
+                    "OBS"
+                )
+
+                GUI.refreshOBSStatus()
+            }
+        } catch (t: Throwable) {
+            logger.severe("Failed to create OBS callback: registerConnectionFailedCallback")
+            t.printStackTrace()
+            Notifications.add(
+                "Failed to register connectionFailed callback: connection failures won't be shown",
                 "OBS"
             )
         }
@@ -138,29 +177,55 @@ object OBSClient {
         }
     }
 
+    /**
+     * Actively request the current scene from BOS
+     */
+    private fun getCurrentSceneFromOBS() {
+        logger.fine("Retrieving current scene")
+        controller!!.getCurrentScene { res: ResponseBase ->
+            val currentScene = res as GetCurrentSceneResponse
+
+            processNewScene(currentScene.name)
+        }
+    }
+
+    /**
+     * Set the new scene name as new current scene and notify everyone of this change
+     */
+    fun processNewScene(sceneName: String) {
+        logger.info("New scene: $sceneName")
+        OBSState.currentSceneName = sceneName
+
+        logger.info("New scene: " + OBSState.currentSceneName)
+
+        GUI.switchedScenes()
+        setPreviewScene(Que.previewNext() ?: return)
+    }
+
     private fun getScenes() {
         logger.info("Retrieving scenes")
-        Globals.OBSActivityStatus = OBSStatus.LOADING_SCENES
+        OBSState.clientActivityStatus = OBSClientStatus.LOADING_SCENES
         GUI.refreshOBSStatus()
 
         controller!!.getScenes { response: ResponseBase ->
             val res = response as GetSceneListResponse
             logger.info(res.scenes.size.toString() + " scenes retrieved")
 
-            setOBSScenes(res.scenes)
+            processOBSScenesToOBSStateScenes(res.scenes)
         }
     }
 
-    fun setOBSScenes(scenes: List<Scene>) {
-        Globals.scenes.clear()
+    fun processOBSScenesToOBSStateScenes(scenes: List<Scene>) {
+        logger.info("Set the OBS Scenes")
+        OBSState.scenes.clear()
         for (scene in scenes) {
             val tScene = responseSceneToTScene(scene.name, scene.sources)
 
-            Globals.scenes.add(tScene)
+            OBSState.scenes.add(tScene)
         }
 
         GUI.refreshScenes()
-        Globals.OBSActivityStatus = null
+        OBSState.clientActivityStatus = null
         GUI.refreshOBSStatus()
     }
 
@@ -185,29 +250,5 @@ object OBSClient {
     private fun setPreviewScene(scene: TScene) {
         logger.info("Setting new preview scene to: $scene")
         controller!!.setPreviewScene(scene.name) { }
-    }
-
-    /**
-     * Actively request the current scene from BOS
-     */
-    private fun getCurrentSceneFromOBS() {
-        logger.fine("Retrieving current scene")
-        controller!!.getCurrentScene { res: ResponseBase ->
-            val currentScene = res as GetCurrentSceneResponse
-
-            processNewScene(currentScene.name)
-        }
-    }
-
-    /**
-     * Set the new scene name as new current scene and notify everyone of this change
-     */
-    fun processNewScene(sceneName: String) {
-        Globals.activeOBSSceneName = sceneName
-
-        logger.info("New scene: " + Globals.activeOBSSceneName)
-
-        GUI.switchedScenes()
-        setPreviewScene(Que.previewNext() ?: return)
     }
 }

@@ -1,6 +1,6 @@
 package objects
 
-enum class OBSStatus(val status: String) {
+enum class OBSClientStatus(val status: String) {
     UNKNOWN("Unknown"),
     CONNECTED("Connected"),
     DISCONNECTED("Disconnected"),

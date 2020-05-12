@@ -1,5 +1,6 @@
 package gui.utils
 
+import themes.Theme
 import java.awt.Cursor
 import java.awt.Desktop
 import java.io.IOException
@@ -14,12 +15,13 @@ class ClickableLinkComponent(linkText: String, private val url: String) : JButto
     private val logger = Logger.getLogger(ClickableLinkComponent::class.java.name)
 
     init {
-        text = "<html><font color='#000099'>$linkText</font></html>"
+        text = linkText
         border = BorderFactory.createEmptyBorder()
         isBorderPainted = false
         isContentAreaFilled = false
         isFocusPainted = false
         background = null
+        foreground = Theme.get.LINK_FONT_COLOR
         horizontalAlignment = SwingConstants.LEFT
         cursor = Cursor(Cursor.HAND_CURSOR)
         toolTipText = url

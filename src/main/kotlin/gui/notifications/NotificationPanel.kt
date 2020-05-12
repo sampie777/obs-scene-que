@@ -1,6 +1,7 @@
 package gui.notifications
 
 import objects.notifications.Notification
+import themes.Theme
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Font
@@ -28,15 +29,15 @@ class NotificationPanel(private val notification: Notification) : JPanel() {
         )
 
         val subjectLabel = JLabel(notification.subject.toUpperCase())
-        subjectLabel.font = Font("Dialog", Font.BOLD, 13)
+        subjectLabel.font = Font(Theme.get.FONT_FAMILY, Font.BOLD, 13)
         subjectLabel.foreground = Color(125, 125, 125)
 
         val timestampLabel = JLabel(SimpleDateFormat("HH:mm").format(notification.timestamp))
-        timestampLabel.font = Font("Dialog", Font.PLAIN, 10)
+        timestampLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 10)
         timestampLabel.foreground = Color(125, 125, 125)
 
         val messageLabel = JLabel("<html><div style='width: 280px'>${notification.message}</div></html>")
-        messageLabel.font = Font("Dialog", Font.PLAIN, 16)
+        messageLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 16)
 
         val topPanel = JPanel(BorderLayout(10, 10))
         topPanel.add(subjectLabel, BorderLayout.LINE_START)

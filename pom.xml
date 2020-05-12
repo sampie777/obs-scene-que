@@ -16,7 +16,7 @@
         <kotlin.version>1.3.70</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
         <junit.version>4.12</junit.version>
-        <twasi.version>1.0.3</twasi.version>
+        <twasi.version>1.0.5</twasi.version>
     </properties>
 
     <dependencies>

@@ -5,6 +5,7 @@ import java.awt.*
 import java.awt.image.BufferedImage
 import java.net.URL
 import java.util.logging.Logger
+import javax.swing.ImageIcon
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 
@@ -63,4 +64,14 @@ fun loadIcon(iconPath: String): Image? {
     }
 
     return Toolkit.getDefaultToolkit().getImage(resource)
+}
+
+fun createImageIcon(path: String): ImageIcon? {
+    val imgURL: URL? = MainFrame::class.java.getResource(path)
+    if (imgURL != null) {
+        return ImageIcon(imgURL)
+    }
+
+    logger.severe("Couldn't find imageIcon: $path")
+    return null
 }

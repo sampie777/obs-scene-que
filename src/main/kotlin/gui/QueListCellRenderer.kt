@@ -1,9 +1,9 @@
 package gui
 
-import objects.Globals
+import objects.OBSState
 import objects.Que
 import objects.TScene
-import java.awt.Color
+import themes.Theme
 import java.awt.Component
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JLabel
@@ -12,15 +12,15 @@ import javax.swing.border.EmptyBorder
 
 class QueListCellRenderer : DefaultListCellRenderer() {
 
-    val selectedColor = Color(184, 207, 229)
-    val activeOBSColor = Color(200, 230, 255)
-    val activeOBSSelectedColor = Color(180, 200, 235)
-    val activeQueColor = Color(225, 253, 225)
-    val activeQueSelectedColor = Color(100, 225, 100)
-    val activeQueAndOBSColor = Color(180, 255, 180)
-    val activeQueAndOBSSelectedColor = Color(100, 225, 100)
-    val nonExistingColor = Color(230, 230, 230)
-    val nonExistingSelectedColor = Color(190, 190, 190)
+    val selectedColor = Theme.get.SELECTED_COLOR
+    val activeOBSColor = Theme.get.ACTIVE_OBS_COLOR
+    val activeOBSSelectedColor = Theme.get.ACTIVE_OBS_SELECTED_COLOR
+    val activeQueColor = Theme.get.ACTIVE_QUE_COLOR
+    val activeQueSelectedColor = Theme.get.ACTIVE_QUE_SELECTED_COLOR
+    val activeQueAndOBSColor = Theme.get.ACTIVE_QUE_AND_OBS_COLOR
+    val activeQueAndOBSSelectedColor = Theme.get.ACTIVE_QUE_AND_OBS_SELECTED_COLOR
+    val nonExistingColor = Theme.get.NON_EXISTING_COLOR
+    val nonExistingSelectedColor = Theme.get.NON_EXISTING_SELECTED_COLOR
 
     override fun getListCellRendererComponent(
         list: JList<*>,
@@ -37,13 +37,13 @@ class QueListCellRenderer : DefaultListCellRenderer() {
         }
 
         val scene = value as TScene
-        val sceneExist = Globals.scenes.find { it.name == scene.name }
+        val sceneExist = OBSState.scenes.find { it.name == scene.name }
 
-        if (scene.name == Que.current()?.name && index == Que.currentIndex() && Globals.activeOBSSceneName == scene.name) {
+        if (scene.name == Que.current()?.name && index == Que.currentIndex() && OBSState.currentSceneName == scene.name) {
             cell.background = if(isSelected) activeQueAndOBSSelectedColor else activeQueAndOBSColor
         } else if (scene.name == Que.current()?.name && index == Que.currentIndex()) {
             cell.background = if(isSelected) activeQueSelectedColor else activeQueColor
-        } else if (Globals.activeOBSSceneName == scene.name) {
+        } else if (OBSState.currentSceneName == scene.name) {
             cell.background = if(isSelected) activeOBSSelectedColor else activeOBSColor
         } else if (sceneExist == null) {
             cell.background = if (isSelected) nonExistingSelectedColor else nonExistingColor

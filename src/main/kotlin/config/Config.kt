@@ -22,6 +22,8 @@ object Config {
     var controlWindowLocation: Point = Point(-1, -1)
     var controlWindowSize: Dimension = Dimension(500, 250)
 
+    var theme: String = "LightTheme"
+
     fun load() {
         try {
             PropertyLoader.load()

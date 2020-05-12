@@ -2,8 +2,8 @@ package gui.controls
 
 import GUI
 import gui.Refreshable
-import objects.Globals
 import objects.OBSClient
+import objects.OBSState
 import objects.Que
 import java.awt.BorderLayout
 import java.awt.Component
@@ -82,7 +82,7 @@ class ControlFramePanel : JPanel(), Refreshable {
             nextSceneButton.text = "Next: ${nextScene.name}"
         }
 
-        currentSceneLabel.text = "Current: ${Globals.activeOBSSceneName}"
+        currentSceneLabel.text = "Current: ${OBSState.currentSceneName}"
     }
 
     private fun refreshButtonsState() {
