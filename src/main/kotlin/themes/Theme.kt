@@ -67,6 +67,8 @@ object Theme {
         UIManager.put("Label.foreground", get.FONT_COLOR)
         UIManager.put("List.background", get.BACKGROUND_COLOR)
         UIManager.put("List.foreground", get.FONT_COLOR)
+        UIManager.put("List.selectionBackground", get.LIST_SELECTION_BACKGROUND_COLOR)
+        UIManager.put("List.selectionForeground", get.LIST_SELECTION_FONT_COLOR_DEFAULT)
         UIManager.put("MenuBar.background", get.BACKGROUND_COLOR)
         UIManager.put("MenuBar.foreground", get.FONT_COLOR)
         UIManager.put("MenuBar.borderColor", get.MENU_BAR_BORDER_COLOR)

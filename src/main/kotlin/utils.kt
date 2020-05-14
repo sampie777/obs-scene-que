@@ -1,4 +1,5 @@
 import config.Config
+import java.awt.Color
 import java.io.File
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
@@ -42,4 +43,8 @@ fun exitApplication() {
         t.printStackTrace()
     }
     exitProcess(0)
+}
+
+fun brightness(color: Color): Double {
+    return 0.2126 * color.red + 0.7152 * color.green + 0.0722 * color.blue
 }

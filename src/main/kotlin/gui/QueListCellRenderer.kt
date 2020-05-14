@@ -1,5 +1,6 @@
 package gui
 
+import brightness
 import objects.OBSState
 import objects.Que
 import objects.TScene
@@ -12,7 +13,7 @@ import javax.swing.border.EmptyBorder
 
 class QueListCellRenderer : DefaultListCellRenderer() {
 
-    val selectedColor = Theme.get.SELECTED_COLOR
+    val selectedColor = Theme.get.LIST_SELECTION_BACKGROUND_COLOR
     val activeOBSColor = Theme.get.ACTIVE_OBS_COLOR
     val activeOBSSelectedColor = Theme.get.ACTIVE_OBS_SELECTED_COLOR
     val activeQueColor = Theme.get.ACTIVE_QUE_COLOR
@@ -47,6 +48,12 @@ class QueListCellRenderer : DefaultListCellRenderer() {
             cell.background = if(isSelected) activeOBSSelectedColor else activeOBSColor
         } else if (sceneExist == null) {
             cell.background = if (isSelected) nonExistingSelectedColor else nonExistingColor
+        }
+
+        if (brightness(cell.background) > 110) {
+            cell.foreground = Theme.get.LIST_SELECTION_FONT_COLOR_DARK
+        } else {
+            cell.foreground = Theme.get.LIST_SELECTION_FONT_COLOR_LIGHT
         }
 
         return cell
