@@ -6,11 +6,9 @@ import java.awt.BorderLayout
 import java.awt.Component
 import javax.swing.*
 
-class NotificationFrame(private val parentFrame: JFrame?) : JDialog(parentFrame), Refreshable {
+class NotificationFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
 
     init {
-        GUI.register(this)
-
         createGui()
     }
 

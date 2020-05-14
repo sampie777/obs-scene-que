@@ -29,6 +29,11 @@ class OBSStatusPanel : JPanel(), Refreshable {
         add(messageLabel)
     }
 
+    override fun removeNotify() {
+        super.removeNotify()
+        GUI.unregister(this)
+    }
+
     fun getMessageLabel(): JLabel {
         return messageLabel
     }

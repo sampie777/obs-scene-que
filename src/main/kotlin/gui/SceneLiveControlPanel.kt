@@ -43,6 +43,11 @@ class SceneLiveControlPanel : JPanel(), Refreshable {
         add(buttonPanel, BorderLayout.CENTER)
     }
 
+    override fun removeNotify() {
+        super.removeNotify()
+        GUI.unregister(this)
+    }
+
     override fun refreshQueScenes() {
         switchedScenes()
     }

@@ -16,13 +16,12 @@ object Config {
 
     var queSceneNames: ArrayList<String> = ArrayList()
 
+    var theme: String = "LightTheme"
     var windowRestoreLastPosition: Boolean = false
     var mainWindowLocation: Point = Point(0, 0)
     var mainWindowSize: Dimension = Dimension(1000, 600)
     var controlWindowLocation: Point = Point(-1, -1)
     var controlWindowSize: Dimension = Dimension(500, 250)
-
-    var theme: String = "LightTheme"
 
     fun load() {
         try {

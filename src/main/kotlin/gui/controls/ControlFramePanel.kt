@@ -61,6 +61,15 @@ class ControlFramePanel : JPanel(), Refreshable {
         add(buttonPanel, BorderLayout.CENTER)
     }
 
+    override fun removeNotify() {
+        super.removeNotify()
+        GUI.unregister(this)
+    }
+
+    override fun windowClosing(window: Component) {
+        GUI.unregister(this)
+    }
+
     override fun refreshQueScenes() {
         switchedScenes()
     }

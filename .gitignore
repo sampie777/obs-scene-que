@@ -10,4 +10,5 @@ obs-scene-que.properties
 dependency-reduced-pom.xml
 out/
 releases/
+snapshots/
 *.xcf

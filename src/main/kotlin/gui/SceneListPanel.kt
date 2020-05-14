@@ -46,6 +46,11 @@ class SceneListPanel : JPanel(), Refreshable {
         add(scrollPanel, BorderLayout.CENTER)
     }
 
+    override fun removeNotify() {
+        super.removeNotify()
+        GUI.unregister(this)
+    }
+
     override fun refreshScenes() {
         list.setListData(OBSState.scenes.toTypedArray());
     }

@@ -29,6 +29,11 @@ class NotificationListPanel : JPanel(), Refreshable {
         add(mainPanel)
     }
 
+    override fun removeNotify() {
+        super.removeNotify()
+        GUI.unregister(this)
+    }
+
     private fun addNotificationPanels() {
         mainPanel.removeAll()
 

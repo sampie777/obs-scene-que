@@ -36,11 +36,6 @@ class MainFrame : JFrame(), Refreshable {
         initGUI()
     }
 
-    fun saveWindowPosition() {
-        Config.mainWindowSize = size
-        Config.mainWindowLocation = location
-    }
-
     private fun initGUI() {
         add(MainFramePanel())
 
@@ -55,5 +50,10 @@ class MainFrame : JFrame(), Refreshable {
         title = "OBS Scene Que"
         defaultCloseOperation = EXIT_ON_CLOSE
         iconImage = loadIcon("/icon-512.png")
+    }
+
+    fun saveWindowPosition() {
+        Config.mainWindowSize = size
+        Config.mainWindowLocation = location
     }
 }

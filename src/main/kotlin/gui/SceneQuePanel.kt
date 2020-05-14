@@ -45,6 +45,11 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
         add(createButtonPanel(), BorderLayout.PAGE_END)
     }
 
+    override fun removeNotify() {
+        super.removeNotify()
+        GUI.unregister(this)
+    }
+
     private fun createQueListPanel(): JScrollPane {
         list.name = "QueList"
         list.selectionMode = ListSelectionModel.SINGLE_SELECTION

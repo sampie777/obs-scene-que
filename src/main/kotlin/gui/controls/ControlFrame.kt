@@ -10,15 +10,18 @@ import java.util.logging.Logger
 import javax.swing.JFrame
 import javax.swing.JPanel
 
+class ControlFrameWindowAdapter(private val frame: ControlFrame) : WindowAdapter() {
+    override fun windowClosing(winEvt: WindowEvent) {
+        GUI.windowClosing(frame)
+        frame.saveWindowPosition()
+    }
+}
+
 class ControlFrame(private val parentFrame: Component?) : JFrame() {
     private val logger = Logger.getLogger(ControlFrame::class.java.name)
 
     init {
-        addWindowListener(object : WindowAdapter() {
-            override fun windowClosing(winEvt: WindowEvent) {
-                saveWindowPosition()
-            }
-        })
+        addWindowListener(ControlFrameWindowAdapter(this))
 
         createGui()
     }

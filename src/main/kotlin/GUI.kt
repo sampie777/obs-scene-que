@@ -1,46 +1,64 @@
 import gui.Refreshable
+import java.awt.Component
+import java.util.logging.Logger
 
 object GUI {
+    private val logger = Logger.getLogger(GUI::class.java.name)
+
     private val components: HashSet<Refreshable> = HashSet()
 
     fun refreshTimer() {
-        for (component in components) {
+        val componentsCopy = components.toTypedArray()
+        for (component in componentsCopy) {
             component.refreshTimer()
         }
     }
 
     fun switchedScenes() {
-        for (component in components) {
+        val componentsCopy = components.toTypedArray()
+        for (component in componentsCopy) {
             component.switchedScenes()
         }
     }
 
     fun refreshScenes() {
-        for (component in components) {
+        val componentsCopy = components.toTypedArray()
+        for (component in componentsCopy) {
             component.refreshScenes()
         }
     }
 
     fun refreshQueScenes() {
-        for (component in components) {
+        val componentsCopy = components.toTypedArray()
+        for (component in componentsCopy) {
             component.refreshQueScenes()
         }
     }
 
     fun refreshOBSStatus() {
-        for (component in components) {
+        val componentsCopy = components.toTypedArray()
+        for (component in componentsCopy) {
             component.refreshOBSStatus()
         }
     }
 
     fun refreshNotifications() {
-        for (component in components) {
+        val componentsCopy = components.toTypedArray()
+        for (component in componentsCopy) {
             component.refreshNotifications()
+        }
+    }
+
+    fun windowClosing(window: Component) {
+        val componentsCopy = components.toTypedArray()
+        for (component in componentsCopy) {
+            component.windowClosing(window)
         }
     }
 
 
     fun register(component: Refreshable) {
+        logger.info("Registering component: ${component::class.java}")
         components.add(component)
     }
 
@@ -49,10 +67,14 @@ object GUI {
     }
 
     fun unregister(component: Refreshable) {
+        logger.info("Unregistering component: ${component::class.java}")
         components.remove(component)
     }
 
     fun unregisterAll() {
+        logger.info("Unregistering all (${components.size}) components")
         components.clear()
     }
+
+    fun registeredComponents() = components
 }

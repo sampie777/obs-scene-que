@@ -63,6 +63,11 @@ class MainFramePanel : JSplitPane(), Refreshable {
         setRightComponent(rightPanel)
     }
 
+    override fun removeNotify() {
+        super.removeNotify()
+        GUI.unregister(this)
+    }
+
     override fun refreshNotifications() {
         if (Notifications.unreadNotifications > 0) {
             notificationsButton.icon = notificationsButtonIconYellow
