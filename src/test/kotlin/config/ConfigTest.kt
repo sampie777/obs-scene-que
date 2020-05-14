@@ -7,7 +7,7 @@ class ConfigTest {
 
     @BeforeTest
     fun before() {
-        Notifications.list.clear()
+        Notifications.clear()
     }
 
     @Test

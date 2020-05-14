@@ -9,6 +9,7 @@ object ApplicationInfo {
     val artifactId: String
     val name: String
     val author: String
+    val url: String
 
     init {
         properties.load(MainFrame::class.java.getResourceAsStream("/application.properties"))
@@ -16,6 +17,7 @@ object ApplicationInfo {
         artifactId = properties.getProperty("artifactId")
         name = properties.getProperty("name")
         author = properties.getProperty("author")
+        url = properties.getProperty("url")
     }
 
 }

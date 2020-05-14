@@ -10,6 +10,7 @@
     <packaging>jar</packaging>
 
     <name>OBS Scene Que</name>
+    <url>https://github.com/sampie777/obs-scene-que/</url>
 
     <properties>
         <author>Samuel-Anton Jansen</author>
@@ -147,13 +148,13 @@
                         <configuration>
                             <headerType>gui</headerType>
                             <dontWrapJar>false</dontWrapJar>
-                            <outfile>target/obs-scene-que-${project.version}.exe</outfile>
-                            <jar>target/obs-scene-que-${project.version}.jar</jar>
+                            <outfile>target/${project.artifactId}-${project.version}.exe</outfile>
+                            <jar>target/${project.artifactId}-${project.version}.jar</jar>
                             <errTitle/>
                             <cmdLine/>
                             <chdir/>
                             <priority>normal</priority>
-                            <downloadUrl>https://github.com/sampie777/obs-scene-que/</downloadUrl>
+                            <downloadUrl>${project.url}</downloadUrl>
                             <supportUrl/>
                             <stayAlive>false</stayAlive>
                             <restartOnCrash>false</restartOnCrash>
@@ -174,7 +175,7 @@
                                 <!--suppress UnresolvedMavenProperty -->
                                 <fileVersion>${project.baseVersion}.0</fileVersion>
                                 <txtFileVersion>-</txtFileVersion>
-                                <fileDescription>${project.name} executable</fileDescription>
+                                <fileDescription>${project.name}</fileDescription>
                                 <copyright>${author}</copyright>
                                 <!--suppress UnresolvedMavenProperty -->
                                 <productVersion>${project.baseVersion}.0</productVersion>

@@ -20,11 +20,17 @@ class InfoFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
         mainPanel.border = EmptyBorder(0, 20, 10, 20)
         add(mainPanel)
 
-        val versionLabel = JLabel("<html><h1>${ApplicationInfo.name}</h1><p>By ${ApplicationInfo.author}</p><p>Version: ${ApplicationInfo.version}</p></html>")
+        val versionLabel = JLabel(
+            "<html>" +
+                    "<h1>${ApplicationInfo.name}</h1>" +
+                    "<p>By ${ApplicationInfo.author}</p>" +
+                    "<p>Version: ${ApplicationInfo.version}</p>" +
+                    "</html>"
+        )
         versionLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 14)
+
         val sourceCodeLabel = ClickableLinkComponent(
-            "${ApplicationInfo.name} on BitBucket",
-            "https://github.com/sampie777/obs-scene-que"
+            "${ApplicationInfo.name} on Github", ApplicationInfo.url
         )
         sourceCodeLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 14)
 

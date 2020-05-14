@@ -26,4 +26,9 @@ object Notifications {
         unreadNotifications = 0
         GUI.refreshNotifications()
     }
+
+    fun clear() {
+        list.clear()
+        markAllAsRead()
+    }
 }
