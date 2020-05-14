@@ -1,6 +1,7 @@
 package gui.menu
 
 import gui.utils.ClickableLinkComponent
+import objects.ApplicationInfo
 import themes.Theme
 import java.awt.Dimension
 import java.awt.Font
@@ -19,11 +20,10 @@ class InfoFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
         mainPanel.border = EmptyBorder(0, 20, 10, 20)
         add(mainPanel)
 
-        val currentRelease = "1.3.1"
-        val versionLabel = JLabel("<html><h1>OBS Scene Que</h1><p>By Samuel-Anton Jansen</p><p>Version: $currentRelease</p></html>")
+        val versionLabel = JLabel("<html><h1>${ApplicationInfo.name}</h1><p>By ${ApplicationInfo.author}</p><p>Version: ${ApplicationInfo.version}</p></html>")
         versionLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 14)
         val sourceCodeLabel = ClickableLinkComponent(
-            "OBS Scene Que on BitBucket",
+            "${ApplicationInfo.name} on BitBucket",
             "https://github.com/sampie777/obs-scene-que"
         )
         sourceCodeLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 14)
