@@ -12,5 +12,5 @@ interface Refreshable {
 
     fun refreshNotifications() {}
 
-    fun windowClosing(window: Component) {}
+    fun windowClosing(window: Component?) {}
 }

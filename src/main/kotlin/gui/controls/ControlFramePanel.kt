@@ -66,7 +66,11 @@ class ControlFramePanel : JPanel(), Refreshable {
         GUI.unregister(this)
     }
 
-    override fun windowClosing(window: Component) {
+    override fun windowClosing(window: Component?) {
+        if (window !is ControlFrame) {
+            return
+        }
+
         GUI.unregister(this)
     }
 

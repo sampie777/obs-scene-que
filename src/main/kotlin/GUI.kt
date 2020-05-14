@@ -49,7 +49,7 @@ object GUI {
         }
     }
 
-    fun windowClosing(window: Component) {
+    fun windowClosing(window: Component?) {
         val componentsCopy = components.toTypedArray()
         for (component in componentsCopy) {
             component.windowClosing(window)

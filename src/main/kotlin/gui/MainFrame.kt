@@ -10,6 +10,14 @@ import java.awt.event.WindowEvent
 import java.util.logging.Logger
 import javax.swing.JFrame
 
+class MainFrameWindowAdapter(private val frame: MainFrame) : WindowAdapter() {
+    override fun windowClosing(winEvt: WindowEvent) {
+        frame.saveWindowPosition()
+        GUI.windowClosing(frame)
+        exitApplication()
+    }
+}
+
 class MainFrame : JFrame(), Refreshable {
     private val logger = Logger.getLogger(MainFrame::class.java.name)
 
@@ -26,12 +34,7 @@ class MainFrame : JFrame(), Refreshable {
     init {
         GUI.register(this)
 
-        addWindowListener(object : WindowAdapter() {
-            override fun windowClosing(winEvt: WindowEvent) {
-                saveWindowPosition()
-                exitApplication()
-            }
-        })
+        addWindowListener(MainFrameWindowAdapter(this))
 
         initGUI()
     }
@@ -40,8 +43,12 @@ class MainFrame : JFrame(), Refreshable {
         add(MainFramePanel())
 
         if (Config.windowRestoreLastPosition) {
-            size = Config.mainWindowSize
             location = Config.mainWindowLocation
+            size = Config.mainWindowSize
+
+            if (Config.mainWindowsIsMaximized) {
+                extendedState = extendedState or MAXIMIZED_BOTH
+            }
         } else {
             setSize(1000, 600)
         }
@@ -53,7 +60,13 @@ class MainFrame : JFrame(), Refreshable {
     }
 
     fun saveWindowPosition() {
-        Config.mainWindowSize = size
         Config.mainWindowLocation = location
+
+        if (extendedState == MAXIMIZED_BOTH) {
+            Config.mainWindowsIsMaximized = true
+        } else {
+            Config.mainWindowsIsMaximized = false
+            Config.mainWindowSize = size
+        }
     }
 }

@@ -29,7 +29,7 @@ class ApplicationMenu : JMenu("Application") {
         val infoItem = JMenuItem("Info")
         val quitItem = JMenuItem("Quit")
 
-        controlFrameItem.addActionListener { ControlFrame(getMainFrameComponent(this)) }
+        controlFrameItem.addActionListener { ControlFrame.createAndShow(getMainFrameComponent(this)) }
         notificationsItem.addActionListener { NotificationFrame(getMainFrameComponent(this)) }
         scannerItem.addActionListener { WebsocketScannerFrame(getMainFrameComponent(this)) }
         settingsItem.addActionListener { ConfigFrame(getMainFrameComponent(this)) }

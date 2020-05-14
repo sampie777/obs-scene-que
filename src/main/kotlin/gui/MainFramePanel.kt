@@ -1,12 +1,14 @@
 package gui
 
 import GUI
+import config.Config
 import gui.notifications.NotificationFrame
 import gui.utils.createImageIcon
 import gui.utils.getMainFrameComponent
 import objects.notifications.Notifications
 import themes.Theme
 import java.awt.BorderLayout
+import java.awt.Component
 import java.awt.Cursor
 import java.awt.Dimension
 import java.util.logging.Logger
@@ -61,11 +63,19 @@ class MainFramePanel : JSplitPane(), Refreshable {
 
         setLeftComponent(leftPanel)
         setRightComponent(rightPanel)
+
+        if (Config.windowRestoreLastPosition) {
+            dividerLocation = Config.mainPanelDividerLocation
+        }
     }
 
     override fun removeNotify() {
         super.removeNotify()
         GUI.unregister(this)
+    }
+
+    override fun windowClosing(window: Component?) {
+        Config.mainPanelDividerLocation = dividerLocation
     }
 
     override fun refreshNotifications() {

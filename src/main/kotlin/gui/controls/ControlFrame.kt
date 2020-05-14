@@ -1,5 +1,6 @@
 package gui.controls
 
+import GUI
 import config.Config
 import gui.utils.loadIcon
 import java.awt.BorderLayout
@@ -20,6 +21,16 @@ class ControlFrameWindowAdapter(private val frame: ControlFrame) : WindowAdapter
 class ControlFrame(private val parentFrame: Component?) : JFrame() {
     private val logger = Logger.getLogger(ControlFrame::class.java.name)
 
+    companion object {
+        fun create(parentFrame: Component?): ControlFrame = ControlFrame(parentFrame)
+
+        fun createAndShow(parentFrame: Component?): ControlFrame {
+            val frame = create(parentFrame)
+            frame.isVisible = true
+            return frame
+        }
+    }
+
     init {
         addWindowListener(ControlFrameWindowAdapter(this))
 
@@ -33,12 +44,16 @@ class ControlFrame(private val parentFrame: Component?) : JFrame() {
         mainPanel.add(ControlFramePanel(), BorderLayout.CENTER)
 
         if (Config.windowRestoreLastPosition) {
-            size = Config.controlWindowSize
-
             if (isLocationRelaviteToParent()) {
                 setLocationRelativeTo(parentFrame)
             } else {
                 location = Config.controlWindowLocation
+            }
+
+            size = Config.controlWindowSize
+            
+            if (Config.controlWindowsIsMaximized) {
+                extendedState = extendedState or MAXIMIZED_BOTH
             }
         } else {
             setSize(500, 250)
@@ -46,13 +61,18 @@ class ControlFrame(private val parentFrame: Component?) : JFrame() {
         }
 
         title = "Live control"
-        isVisible = true
         iconImage = loadIcon("/icon-512.png")
     }
 
     fun saveWindowPosition() {
-        Config.controlWindowSize = size
         Config.controlWindowLocation = location
+
+        if (extendedState == MAXIMIZED_BOTH) {
+            Config.controlWindowsIsMaximized = true
+        } else {
+            Config.controlWindowsIsMaximized = false
+            Config.controlWindowSize = size
+        }
     }
 
     private fun isLocationRelaviteToParent() =
