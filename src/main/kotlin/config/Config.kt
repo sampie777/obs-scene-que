@@ -17,7 +17,7 @@ object Config {
     var queSceneNames: ArrayList<String> = ArrayList()
 
     var theme: String = "LightTheme"
-    var windowRestoreLastPosition: Boolean = false
+    var windowRestoreLastPosition: Boolean = true
     var mainWindowLocation: Point = Point(0, 0)
     var mainWindowSize: Dimension = Dimension(1000, 600)
     var mainWindowsIsMaximized: Boolean = false
