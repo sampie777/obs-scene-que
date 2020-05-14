@@ -71,9 +71,9 @@ class GUITest {
             }
         }
 
-        val mock1 = GuiRemovingComponentMock()
-        val mock2 = GuiRemovingComponentMock()
-        val mock3 = GuiRemovingComponentMock()
+        GuiRemovingComponentMock()  // mock 1
+        GuiRemovingComponentMock()  // mock 2
+        GuiRemovingComponentMock()  // mock 3
         assertEquals(3, GUI.registeredComponents().size)
 
         GUI.refreshNotifications()
