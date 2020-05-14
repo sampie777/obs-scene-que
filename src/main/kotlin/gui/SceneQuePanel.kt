@@ -7,6 +7,7 @@ import handles.SceneTransferHandler
 import objects.OBSClient
 import objects.Que
 import objects.TScene
+import themes.Theme
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -63,6 +64,7 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
             EmptyBorder(10, 0, 0, 0)
         )
         list.cellRenderer = QueListCellRenderer()
+        list.background = Theme.get.QUE_LIST_BACKGROUND_COLOR
 
         list.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {

@@ -20,6 +20,7 @@ abstract class BaseTheme {
     open val LIST_SELECTION_BACKGROUND_COLOR = Color(184, 207, 229)
     open val LIST_SELECTION_FONT_COLOR_DEFAULT = LIST_SELECTION_FONT_COLOR_LIGHT
 
+    open val QUE_LIST_BACKGROUND_COLOR = Color(255, 255, 255)
     open val ACTIVE_OBS_COLOR = Color(200, 230, 255)
     open val ACTIVE_OBS_SELECTED_COLOR = Color(180, 200, 235)
     open val ACTIVE_QUE_COLOR = Color(225, 253, 225)

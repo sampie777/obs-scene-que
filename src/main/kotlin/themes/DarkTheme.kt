@@ -15,6 +15,7 @@ class DarkTheme : BaseTheme() {
     override val BORDER_COLOR = Color(130, 130, 130)
     override val MENU_BAR_BORDER_COLOR = Color(65, 65, 65)
 
+    override val QUE_LIST_BACKGROUND_COLOR = Color(60, 60, 60)
     override val LIST_SELECTION_FONT_COLOR_LIGHT = Color(200, 200, 200)
     override val LIST_SELECTION_FONT_COLOR_DARK = Color(51, 51, 51)
     override val LIST_SELECTION_BACKGROUND_COLOR = Color(79, 84, 90)
