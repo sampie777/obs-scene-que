@@ -12,8 +12,9 @@ import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
+@Suppress("unused")
 class ObsPlugin : BasePlugin, Refreshable {
-    override val name = "OBS plugin"
+    override val name = "ObsPlugin"
     override val description = "Que items for integration with OBS"
 
     override val tabName = "OBS"

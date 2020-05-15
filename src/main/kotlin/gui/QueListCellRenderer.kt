@@ -2,7 +2,7 @@ package gui
 
 import brightness
 import objects.OBSState
-import objects.Que
+import objects.que.Que
 import plugins.common.QueItem
 import plugins.obs.ObsSceneQueItem
 import themes.Theme

@@ -1,7 +1,6 @@
 package config
 
 import getCurrentJarDirectory
-import objects.Que
 import objects.notifications.Notifications
 import java.awt.Dimension
 import java.awt.Point
@@ -15,8 +14,6 @@ object Config {
     var obsPassword: String = ""
     var obsReconnectionTimeout: Long = 3000
 
-    var queItems: ArrayList<String> = ArrayList()
-
     var theme: String = "LightTheme"
     var windowRestoreLastPosition: Boolean = true
     var mainWindowLocation: Point = Point(0, 0)
@@ -27,14 +24,13 @@ object Config {
     var controlWindowsIsMaximized: Boolean = false
     var mainPanelDividerLocation: Int = 370
 
+    var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "default.osq"
     var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"
 
     fun load() {
         try {
             PropertyLoader.load()
             PropertyLoader.loadConfig(this::class.java)
-
-            Que.fromStringArray(queItems)
         } catch (e: Exception) {
             logger.severe("Failed to load Config")
             e.printStackTrace()
@@ -44,8 +40,6 @@ object Config {
 
     fun save() {
         try {
-            queItems = Que.toStringArray()
-
             if (PropertyLoader.saveConfig(this::class.java)) {
                 PropertyLoader.save()
             }

@@ -1,10 +1,9 @@
 package gui
 
 import GUI
-import config.Config
 import handles.QueItemDropComponent
 import handles.QueItemTransferHandler
-import objects.Que
+import objects.que.Que
 import plugins.common.QueItem
 import themes.Theme
 import java.awt.*
@@ -117,7 +116,7 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
     override fun refreshQueItems() {
         list.setListData(Que.getList().toTypedArray())
 
-        Config.save()
+        Que.save()
 
         switchedScenes()
     }

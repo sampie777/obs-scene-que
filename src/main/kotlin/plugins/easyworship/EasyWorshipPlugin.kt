@@ -12,8 +12,9 @@ import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
+@Suppress("unused")
 class EasyWorshipPlugin : BasePlugin {
-    override val name = "EasyWorship plugin"
+    override val name = "EasyWorshipPlugin"
     override val description = "Que items for integration with EasyWorship"
 
     override val tabName = "EasyWorship"
@@ -52,8 +53,8 @@ class EasyWorshipPlugin : BasePlugin {
 
     override fun configStringToQueItem(value: String): QueItem {
         return when (value) {
-            "Previous item" -> EasyWorshipPreviousVerseQueItem()
-            "Next item" -> EasyWorshipNextVerseQueItem()
+            "Previous verse" -> EasyWorshipPreviousVerseQueItem()
+            "Next verse" -> EasyWorshipNextVerseQueItem()
             else -> EmptyQueItem("Invalid EasyWorship Que Item")
         }
     }

@@ -30,6 +30,10 @@ class ConfigEditPanel : JPanel() {
         formComponents.add(HeaderFormComponent("GUI"))
         formComponents.add(ThemeSelectFormInput("theme", "Theme", Theme.availableThemes()))
         formComponents.add(BooleanFormInput("windowRestoreLastPosition", "Restore window position on start up"))
+
+        formComponents.add(HeaderFormComponent("Que"))
+        formComponents.add(StringFormInput("queFile", "Que file", false))
+        formComponents.add(StringFormInput("pluginDirectory", "Plugin directory", false))
     }
 
     private fun createGui() {

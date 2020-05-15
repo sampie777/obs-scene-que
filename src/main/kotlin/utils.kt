@@ -1,4 +1,5 @@
 import config.Config
+import objects.que.Que
 import plugins.PluginLoader
 import java.awt.Color
 import java.io.File
@@ -49,6 +50,7 @@ fun exitApplication() {
     try {
         logger.info("Saving configuration...")
         Config.save()
+        Que.save()
     } catch (t: Throwable) {
         logger.warning("Failed to save configuration")
         t.printStackTrace()

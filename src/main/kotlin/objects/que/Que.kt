@@ -1,21 +1,25 @@
-package objects
+package objects.que
 
 import GUI
+import objects.OBSState
 import objects.notifications.Notifications
-import plugins.PluginLoader
 import plugins.common.QueItem
 import plugins.obs.ObsSceneQueItem
 import java.util.logging.Logger
 
 object Que {
 
-    private val logger = Logger.getLogger(Que::class.java.name)
+    private val logger = Logger.getLogger(Que.toString())
 
     private var list: ArrayList<QueItem> = ArrayList()
     private var currentIndex: Int = -1
 
     fun getList(): ArrayList<QueItem> {
         return list
+    }
+
+    fun setList(list: ArrayList<QueItem>) {
+        this.list = list
     }
 
     fun run() {
@@ -167,22 +171,15 @@ object Que {
         }
     }
 
-    fun toStringArray(): ArrayList<String> {
-        return getList().map {
-            "[" + it.pluginName + "|" + it.toConfigString() + "]"
-        } as ArrayList<String>
+    fun load() {
+        QueLoader.load()
     }
 
-    fun fromStringArray(stringList: ArrayList<String>) {
-        list = stringList
-            .map {
-                val pluginName = it.substringAfter("[").substringBefore("|")
-                val data = it.substringAfter("|").substringBeforeLast("]")
+    fun save() {
+        QueLoader.save()
+    }
 
-                val plugin = PluginLoader.plugins.find { plugin -> plugin.name == pluginName } ?: return@map null
-
-                plugin.configStringToQueItem(data)
-            }
-            .filterNotNull() as ArrayList<QueItem>
+    fun enableWriteToFile(value: Boolean) {
+        QueLoader.writeToFile = value
     }
 }

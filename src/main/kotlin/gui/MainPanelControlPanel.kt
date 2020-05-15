@@ -1,7 +1,7 @@
 package gui
 
 import GUI
-import objects.Que
+import objects.que.Que
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.util.logging.Logger

@@ -20,5 +20,5 @@ interface BasePlugin {
      */
     fun sourcePanel(): JComponent
 
-    fun configStringToQueItem(value: String): QueItem = EmptyQueItem(value)
+    fun configStringToQueItem(value: String): QueItem
 }

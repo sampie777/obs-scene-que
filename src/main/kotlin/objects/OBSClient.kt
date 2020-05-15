@@ -10,6 +10,7 @@ import net.twasi.obsremotejava.requests.GetCurrentScene.GetCurrentSceneResponse
 import net.twasi.obsremotejava.requests.GetSceneList.GetSceneListResponse
 import net.twasi.obsremotejava.requests.ResponseBase
 import objects.notifications.Notifications
+import objects.que.Que
 import plugins.obs.ObsSceneQueItem
 import java.util.*
 import java.util.logging.Logger

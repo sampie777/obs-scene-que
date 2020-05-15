@@ -2,7 +2,7 @@ package gui.controls
 
 import GUI
 import gui.Refreshable
-import objects.Que
+import objects.que.Que
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Font
@@ -92,7 +92,7 @@ class ControlFramePanel : JPanel(), Refreshable {
             nextQueItemButton.text = "Next: ${nextQueItem.name}"
         }
 
-        currentQueItemLabel.text = "Current: ${Que.current()}"
+        currentQueItemLabel.text = "Current: ${Que.current()?.name}"
     }
 
     private fun refreshButtonsState() {
