@@ -2,6 +2,7 @@ package plugins.obs
 
 import GUI
 import gui.Refreshable
+import gui.utils.createImageIcon
 import handles.QueItemTransferHandler
 import objects.OBSState
 import objects.TScene
@@ -16,6 +17,8 @@ import javax.swing.border.EmptyBorder
 class ObsPlugin : BasePlugin, Refreshable {
     override val name = "ObsPlugin"
     override val description = "Que items for integration with OBS"
+
+    override val icon: Icon? = createImageIcon("/plugins/obs/icon-14.png")
 
     override val tabName = "OBS"
 

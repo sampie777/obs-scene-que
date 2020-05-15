@@ -1,5 +1,6 @@
 package plugins.easyworship
 
+import gui.utils.createImageIcon
 import handles.QueItemTransferHandler
 import plugins.common.BasePlugin
 import plugins.common.EmptyQueItem
@@ -16,6 +17,8 @@ import javax.swing.border.EmptyBorder
 class EasyWorshipPlugin : BasePlugin {
     override val name = "EasyWorshipPlugin"
     override val description = "Que items for integration with EasyWorship"
+
+    override val icon: Icon? = createImageIcon("/plugins/easyworship/icon-14.png")
 
     override val tabName = "EasyWorship"
 

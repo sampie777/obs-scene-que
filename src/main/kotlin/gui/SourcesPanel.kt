@@ -24,7 +24,7 @@ class SourcesPanel : JPanel() {
 
         for (plugin in PluginLoader.plugins) {
             try {
-                tabbedPane.addTab(plugin.tabName, null, plugin.sourcePanel(), plugin.description)
+                tabbedPane.addTab(plugin.tabName, plugin.icon, plugin.sourcePanel(), plugin.description)
             } catch (e: Exception) {
                 logger.warning("Failed to load panel for plugin: ${plugin.name}")
                 e.printStackTrace()
