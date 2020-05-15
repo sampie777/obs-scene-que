@@ -1,7 +1,7 @@
 import config.Config
 import gui.MainFrame
 import objects.ApplicationInfo
-import objects.OBSClient
+import plugins.PluginLoader
 import themes.Theme
 import java.awt.EventQueue
 import java.util.logging.Logger
@@ -14,6 +14,9 @@ fun main(args: Array<String>) {
     Config.enableWriteToFile(true)
     Config.load()
     Config.save()
+
+    PluginLoader.loadAll()
+    PluginLoader.enableAll()
 
     Theme.init()
 

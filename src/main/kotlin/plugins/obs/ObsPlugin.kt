@@ -1,0 +1,61 @@
+package plugins.obs
+
+import GUI
+import gui.Refreshable
+import handles.SceneTransferHandler
+import objects.OBSState
+import objects.TScene
+import plugins.common.BasePlugin
+import java.awt.*
+import javax.swing.*
+import javax.swing.border.CompoundBorder
+import javax.swing.border.EmptyBorder
+
+class ObsPlugin : BasePlugin, Refreshable {
+    override val name = "OBS plugin"
+    override val description = "Que items for integration with OBS"
+
+    override val tabName = "OBS"
+
+    private val list: JList<TScene> = JList()
+
+    override fun enable() {
+        GUI.register(this)
+    }
+
+    override fun disable() {
+        GUI.unregister(this)
+    }
+
+    override fun sourcePanel(): JComponent {
+        val panel = JPanel(BorderLayout(10, 10))
+        panel.border = EmptyBorder(10, 10, 0, 10)
+
+        val titleLabel = JLabel("Available scenes")
+        panel.add(titleLabel, BorderLayout.PAGE_START)
+
+        list.name = "SceneList"
+        list.selectionMode = ListSelectionModel.SINGLE_SELECTION
+        list.dragEnabled = true
+        list.transferHandler = SceneTransferHandler()
+        list.background = null
+        list.font = Font("Dialog", Font.PLAIN, 14)
+        list.cursor = Cursor(Cursor.HAND_CURSOR)
+        list.border = CompoundBorder(
+            BorderFactory.createLineBorder(Color(180, 180, 180)),
+            EmptyBorder(10, 10, 0, 10)
+        )
+
+        val scrollPanel = JScrollPane(list)
+        scrollPanel.preferredSize = Dimension(300, 500)
+        scrollPanel.border = null
+        panel.add(scrollPanel, BorderLayout.CENTER)
+
+        return panel
+    }
+
+    override fun refreshScenes() {
+        list.setListData(OBSState.scenes.toTypedArray())
+        list.repaint()
+    }
+}

@@ -26,6 +26,8 @@ object Config {
     var controlWindowsIsMaximized: Boolean = false
     var mainPanelDividerLocation: Int = 370
 
+    var pluginDirectory: String = "./plugins"
+
     fun load() {
         try {
             PropertyLoader.load()

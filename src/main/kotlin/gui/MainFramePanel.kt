@@ -53,7 +53,7 @@ class MainFramePanel : JSplitPane(), Refreshable {
 
         val leftPanel = JPanel()
         leftPanel.layout = BorderLayout(10, 10)
-        leftPanel.add(SceneListPanel(), BorderLayout.CENTER)
+        leftPanel.add(SourcesPanel(), BorderLayout.CENTER)
         leftPanel.add(leftBottomPanel, BorderLayout.PAGE_END)
 
         val rightPanel = JPanel()
