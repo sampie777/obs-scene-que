@@ -28,10 +28,10 @@ object GUI {
         }
     }
 
-    fun refreshQueScenes() {
+    fun refreshQueItems() {
         val componentsCopy = components.toTypedArray()
         for (component in componentsCopy) {
-            component.refreshQueScenes()
+            component.refreshQueItems()
         }
     }
 

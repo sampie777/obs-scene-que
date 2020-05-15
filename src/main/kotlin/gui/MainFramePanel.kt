@@ -58,8 +58,8 @@ class MainFramePanel : JSplitPane(), Refreshable {
 
         val rightPanel = JPanel()
         rightPanel.layout = BorderLayout(10, 10)
-        rightPanel.add(SceneQuePanel(), BorderLayout.LINE_START)
-        rightPanel.add(SceneLiveControlPanel(), BorderLayout.CENTER)
+        rightPanel.add(QuePanel(), BorderLayout.LINE_START)
+        rightPanel.add(MainPanelControlPanel(), BorderLayout.CENTER)
 
         setLeftComponent(leftPanel)
         setRightComponent(rightPanel)

@@ -19,4 +19,6 @@ interface BasePlugin {
      * Renders the panel component for the Sources panel (left panel of the main split pane)
      */
     fun sourcePanel(): JComponent
+
+    fun configStringToQueItem(value: String): QueItem = EmptyQueItem(value)
 }

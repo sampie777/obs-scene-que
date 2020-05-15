@@ -1,28 +1,40 @@
 package objects
 
 import GUI
+import objects.notifications.Notifications
+import plugins.PluginLoader
+import plugins.common.QueItem
+import plugins.obs.ObsSceneQueItem
 import java.util.logging.Logger
 
 object Que {
 
     private val logger = Logger.getLogger(Que::class.java.name)
 
-    private var list: ArrayList<TScene> = ArrayList()
+    private var list: ArrayList<QueItem> = ArrayList()
     private var currentIndex: Int = -1
 
-    fun getList(): ArrayList<TScene> {
+    fun getList(): ArrayList<QueItem> {
         return list
     }
 
-    fun previous(): TScene? {
-        if (currentIndex <= 0) {
-            logger.info("Reached start of que")
-            return null
-        }
-        return list.getOrNull(--currentIndex)
+    fun run() {
+        val current = current() ?: return
+
+        activateItem(current)
+        GUI.refreshQueItems()
     }
 
-    fun current(): TScene? {
+    fun previous() {
+        if (currentIndex <= 0) {
+            logger.info("Reached start of que")
+            return
+        }
+        activateItem(list.getOrNull(--currentIndex))
+        GUI.refreshQueItems()
+    }
+
+    fun current(): QueItem? {
         return list.getOrNull(currentIndex)
     }
 
@@ -30,15 +42,16 @@ object Que {
         return currentIndex
     }
 
-    fun next(): TScene? {
+    fun next() {
         if (currentIndex >= list.size - 1) {
             logger.info("Reached end of que")
-            return null
+            return
         }
-        return list.getOrNull(++currentIndex)
+        activateItem(list.getOrNull(++currentIndex))
+        GUI.refreshQueItems()
     }
 
-    fun getAt(index: Int): TScene? {
+    fun getAt(index: Int): QueItem? {
         return list.getOrNull(index)
     }
 
@@ -54,7 +67,7 @@ object Que {
         return currentIndex >= list.size - 1
     }
 
-    fun setCurrentSceneByName(name: String) {
+    fun setCurrentQueItemByName(name: String) {
         val newIndex = list.map { it.name }
             .indexOf(name)
 
@@ -62,7 +75,7 @@ object Que {
         GUI.switchedScenes()
     }
 
-    fun setCurrentSceneByIndex(index: Int) {
+    fun setCurrentQueItemByIndex(index: Int) {
         currentIndex = index
         if (currentIndex >= list.size) {
             currentIndex = list.size - 1
@@ -71,11 +84,11 @@ object Que {
         }
     }
 
-    fun add(scene: TScene) {
-        add(list.size, scene)
+    fun add(item: QueItem) {
+        add(list.size, item)
     }
 
-    fun add(index: Int, scene: TScene) {
+    fun add(index: Int, item: QueItem) {
         var newIndex = index
         if (index > list.size) {
             newIndex = list.size
@@ -84,18 +97,18 @@ object Que {
         }
 
         // Prevent adding duplicates
-        if (newIndex > 0 && list[newIndex - 1].name == scene.name) {
+        if (newIndex > 0 && list[newIndex - 1].name == item.name) {
             return
         }
 
-        list.add(newIndex, scene)
+        list.add(newIndex, item)
 
         if (newIndex <= currentIndex) {
             currentIndex++
         }
     }
 
-    fun remove(index: Int): TScene? {
+    fun remove(index: Int): QueItem? {
         if (index < 0 || index >= list.size) {
             return null
         }
@@ -122,24 +135,54 @@ object Que {
             newIndex = toIndex - 1
         }
 
-        val scene = list.removeAt(fromIndex)
+        val item = list.removeAt(fromIndex)
 
-        list.add(newIndex, scene)
+        list.add(newIndex, item)
 
         return true
     }
 
-    fun previewPrevious(): TScene? {
+    fun previewPrevious(): QueItem? {
         return list.getOrNull(currentIndex - 1)
     }
 
-    fun previewNext(): TScene? {
+    fun previewNext(): QueItem? {
         return list.getOrNull(currentIndex + 1)
     }
 
     fun removeInvalidItems() {
-        list = list.filter { queScene ->
-            OBSState.scenes.find { it.name == queScene.name } != null
-        } as ArrayList<TScene>
+        list = list.filter { item ->
+            item !is ObsSceneQueItem ||
+                    OBSState.scenes.find { it.name == item.name } != null
+        } as ArrayList<QueItem>
+    }
+
+    private fun activateItem(item: QueItem?) {
+        try {
+            item!!.activate()
+        } catch (e: Exception) {
+            logger.warning("Failed to run current que item")
+            e.printStackTrace()
+            Notifications.add("Failed to run current que item '${item?.name}'", "Que")
+        }
+    }
+
+    fun toStringArray(): ArrayList<String> {
+        return getList().map {
+            "[" + it.pluginName + "|" + it.toConfigString() + "]"
+        } as ArrayList<String>
+    }
+
+    fun fromStringArray(stringList: ArrayList<String>) {
+        list = stringList
+            .map {
+                val pluginName = it.substringAfter("[").substringBefore("|")
+                val data = it.substringAfter("|").substringBeforeLast("]")
+
+                val plugin = PluginLoader.plugins.find { plugin -> plugin.name == pluginName } ?: return@map null
+
+                plugin.configStringToQueItem(data)
+            }
+            .filterNotNull() as ArrayList<QueItem>
     }
 }

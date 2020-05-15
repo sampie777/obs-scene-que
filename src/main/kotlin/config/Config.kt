@@ -1,10 +1,11 @@
 package config
 
+import getCurrentJarDirectory
 import objects.Que
-import objects.TScene
 import objects.notifications.Notifications
 import java.awt.Dimension
 import java.awt.Point
+import java.io.File
 import java.util.logging.Logger
 
 object Config {
@@ -14,7 +15,7 @@ object Config {
     var obsPassword: String = ""
     var obsReconnectionTimeout: Long = 3000
 
-    var queSceneNames: ArrayList<String> = ArrayList()
+    var queItems: ArrayList<String> = ArrayList()
 
     var theme: String = "LightTheme"
     var windowRestoreLastPosition: Boolean = true
@@ -26,19 +27,14 @@ object Config {
     var controlWindowsIsMaximized: Boolean = false
     var mainPanelDividerLocation: Int = 370
 
-    var pluginDirectory: String = "./plugins"
+    var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"
 
     fun load() {
         try {
             PropertyLoader.load()
             PropertyLoader.loadConfig(this::class.java)
 
-            Que.clear()
-            queSceneNames.forEach {
-                val scene = TScene()
-                scene.name = it
-                Que.add(scene)
-            }
+            Que.fromStringArray(queItems)
         } catch (e: Exception) {
             logger.severe("Failed to load Config")
             e.printStackTrace()
@@ -48,10 +44,7 @@ object Config {
 
     fun save() {
         try {
-            queSceneNames.clear()
-            Que.getList().forEach {
-                queSceneNames.add(it.name)
-            }
+            queItems = Que.toStringArray()
 
             if (PropertyLoader.saveConfig(this::class.java)) {
                 PropertyLoader.save()

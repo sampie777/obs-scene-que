@@ -2,11 +2,10 @@ package gui
 
 import GUI
 import config.Config
-import handles.SceneTransferDropComponent
-import handles.SceneTransferHandler
-import objects.OBSClient
+import handles.QueItemDropComponent
+import handles.QueItemTransferHandler
 import objects.Que
-import objects.TScene
+import plugins.common.QueItem
 import themes.Theme
 import java.awt.*
 import java.awt.event.MouseAdapter
@@ -16,17 +15,17 @@ import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
-class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
+class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
 
-    private val logger = Logger.getLogger(SceneQuePanel::class.java.name)
+    private val logger = Logger.getLogger(QuePanel::class.java.name)
 
-    val list: JList<TScene> = JList()
+    val list: JList<QueItem> = JList()
     val removeItemButton = JButton("Remove")
     val removeInvalidItemsButton = JButton("Remove Invalid")
     val removeAllButton = JButton("Remove All")
 
     init {
-        name = "SceneQuePanel"
+        name = "QuePanel"
         GUI.register(this)
 
         initGui()
@@ -56,7 +55,7 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
         list.selectionMode = ListSelectionModel.SINGLE_SELECTION
         list.dragEnabled = true
         list.dropMode = DropMode.INSERT
-        list.transferHandler = SceneTransferHandler()
+        list.transferHandler = QueItemTransferHandler()
         list.font = Font("Dialog", Font.PLAIN, 14)
         list.cursor = Cursor(Cursor.HAND_CURSOR)
         list.border = CompoundBorder(
@@ -71,9 +70,8 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
                 val selectedIndex = (e.source as JList<*>).selectedIndex
 
                 if (e.clickCount == 2) {   // On double click
-                    logger.info("Set selected scene to live")
-                    Que.setCurrentSceneByIndex(selectedIndex)
-                    OBSClient.setActiveScene(Que.current() ?: return)
+                    Que.setCurrentQueItemByIndex(selectedIndex)
+                    Que.run()
                 }
             }
         })
@@ -99,24 +97,24 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
 
     private fun removeSelectedItem() {
         Que.remove(list.selectedIndex)
-        GUI.refreshQueScenes()
+        GUI.refreshQueItems()
     }
 
     private fun removeInvalidItems() {
         Que.removeInvalidItems()
-        GUI.refreshQueScenes()
+        GUI.refreshQueItems()
     }
 
     private fun removeAllItems() {
         Que.clear()
-        GUI.refreshQueScenes()
+        GUI.refreshQueItems()
     }
 
     override fun refreshScenes() {
         list.repaint()
     }
 
-    override fun refreshQueScenes() {
+    override fun refreshQueItems() {
         list.setListData(Que.getList().toTypedArray())
 
         Config.save()
@@ -129,21 +127,21 @@ class SceneQuePanel : JPanel(), Refreshable, SceneTransferDropComponent {
         list.repaint()
     }
 
-    override fun dropNewScene(scene: TScene, index: Int): Boolean {
-        logger.info("Dropped new Scene: $scene at index: $index")
+    override fun dropNewItem(item: QueItem, index: Int): Boolean {
+        logger.info("Dropped new QueItem: $item at index: $index")
 
-        Que.add(index, scene)
+        Que.add(index, item)
 
-        GUI.refreshQueScenes()
+        GUI.refreshQueItems()
         return true
     }
 
-    override fun dropMoveScene(fromIndex: Int, toIndex: Int): Boolean {
-        logger.info("Dropped moving Scene at index: $toIndex")
+    override fun dropMoveItem(fromIndex: Int, toIndex: Int): Boolean {
+        logger.info("Dropped moving QueItem at index: $toIndex")
 
         val result = Que.move(fromIndex, toIndex)
 
-        GUI.refreshQueScenes()
+        GUI.refreshQueItems()
         return result
     }
 }

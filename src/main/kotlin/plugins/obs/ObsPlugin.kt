@@ -2,10 +2,11 @@ package plugins.obs
 
 import GUI
 import gui.Refreshable
-import handles.SceneTransferHandler
+import handles.QueItemTransferHandler
 import objects.OBSState
 import objects.TScene
 import plugins.common.BasePlugin
+import plugins.common.QueItem
 import java.awt.*
 import javax.swing.*
 import javax.swing.border.CompoundBorder
@@ -17,7 +18,7 @@ class ObsPlugin : BasePlugin, Refreshable {
 
     override val tabName = "OBS"
 
-    private val list: JList<TScene> = JList()
+    private val list: JList<QueItem> = JList()
 
     override fun enable() {
         GUI.register(this)
@@ -34,10 +35,9 @@ class ObsPlugin : BasePlugin, Refreshable {
         val titleLabel = JLabel("Available scenes")
         panel.add(titleLabel, BorderLayout.PAGE_START)
 
-        list.name = "SceneList"
         list.selectionMode = ListSelectionModel.SINGLE_SELECTION
         list.dragEnabled = true
-        list.transferHandler = SceneTransferHandler()
+        list.transferHandler = QueItemTransferHandler()
         list.background = null
         list.font = Font("Dialog", Font.PLAIN, 14)
         list.cursor = Cursor(Cursor.HAND_CURSOR)
@@ -54,8 +54,12 @@ class ObsPlugin : BasePlugin, Refreshable {
         return panel
     }
 
+    override fun configStringToQueItem(value: String): QueItem {
+        return ObsSceneQueItem(TScene(value))
+    }
+
     override fun refreshScenes() {
-        list.setListData(OBSState.scenes.toTypedArray())
+        list.setListData(OBSState.scenes.map { ObsSceneQueItem(it) }.toTypedArray())
         list.repaint()
     }
 }

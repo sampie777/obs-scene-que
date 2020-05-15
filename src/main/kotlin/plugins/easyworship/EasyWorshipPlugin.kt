@@ -1,7 +1,9 @@
 package plugins.easyworship
 
-import handles.SceneTransferHandler
+import handles.QueItemTransferHandler
 import plugins.common.BasePlugin
+import plugins.common.EmptyQueItem
+import plugins.common.QueItem
 import plugins.easyworship.queItems.EasyWorshipNextVerseQueItem
 import plugins.easyworship.queItems.EasyWorshipPreviousVerseQueItem
 import plugins.easyworship.queItems.EasyWorshipQueItem
@@ -31,7 +33,7 @@ class EasyWorshipPlugin : BasePlugin {
         val list: JList<EasyWorshipQueItem> = JList(queItems)
         list.selectionMode = ListSelectionModel.SINGLE_SELECTION
         list.dragEnabled = true
-        list.transferHandler = SceneTransferHandler()
+        list.transferHandler = QueItemTransferHandler()
         list.background = null
         list.font = Font("Dialog", Font.PLAIN, 14)
         list.cursor = Cursor(Cursor.HAND_CURSOR)
@@ -46,5 +48,13 @@ class EasyWorshipPlugin : BasePlugin {
         panel.add(scrollPanel, BorderLayout.CENTER)
 
         return panel
+    }
+
+    override fun configStringToQueItem(value: String): QueItem {
+        return when (value) {
+            "Previous item" -> EasyWorshipPreviousVerseQueItem()
+            "Next item" -> EasyWorshipNextVerseQueItem()
+            else -> EmptyQueItem("Invalid EasyWorship Que Item")
+        }
     }
 }

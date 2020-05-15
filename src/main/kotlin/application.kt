@@ -1,6 +1,7 @@
 import config.Config
 import gui.MainFrame
 import objects.ApplicationInfo
+import objects.OBSClient
 import plugins.PluginLoader
 import themes.Theme
 import java.awt.EventQueue

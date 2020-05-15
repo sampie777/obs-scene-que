@@ -3,7 +3,8 @@ package gui
 import brightness
 import objects.OBSState
 import objects.Que
-import objects.TScene
+import plugins.common.QueItem
+import plugins.obs.ObsSceneQueItem
 import themes.Theme
 import java.awt.Component
 import javax.swing.DefaultListCellRenderer
@@ -37,17 +38,25 @@ class QueListCellRenderer : DefaultListCellRenderer() {
             return cell
         }
 
-        val scene = value as TScene
-        val sceneExist = OBSState.scenes.find { it.name == scene.name }
+        val item = value as QueItem
+        cell.text = item.pluginName + " | " + item.name
 
-        if (scene.name == Que.current()?.name && index == Que.currentIndex() && OBSState.currentSceneName == scene.name) {
-            cell.background = if(isSelected) activeQueAndOBSSelectedColor else activeQueAndOBSColor
-        } else if (scene.name == Que.current()?.name && index == Que.currentIndex()) {
-            cell.background = if(isSelected) activeQueSelectedColor else activeQueColor
-        } else if (OBSState.currentSceneName == scene.name) {
-            cell.background = if(isSelected) activeOBSSelectedColor else activeOBSColor
-        } else if (sceneExist == null) {
-            cell.background = if (isSelected) nonExistingSelectedColor else nonExistingColor
+        if (item.name == Que.current()?.name && index == Que.currentIndex()) {
+            cell.background = if (isSelected) activeQueAndOBSSelectedColor else activeQueAndOBSColor
+        }
+
+        if (item is ObsSceneQueItem) {
+            val sceneExist = OBSState.scenes.find { it.name == item.scene.name }
+
+            if (item.scene.name == Que.current()?.name && index == Que.currentIndex() && OBSState.currentSceneName == item.scene.name) {
+                cell.background = if (isSelected) activeQueAndOBSSelectedColor else activeQueAndOBSColor
+            } else if (item.scene.name == Que.current()?.name && index == Que.currentIndex()) {
+                cell.background = if (isSelected) activeQueSelectedColor else activeQueColor
+            } else if (OBSState.currentSceneName == item.scene.name) {
+                cell.background = if (isSelected) activeOBSSelectedColor else activeOBSColor
+            } else if (sceneExist == null) {
+                cell.background = if (isSelected) nonExistingSelectedColor else nonExistingColor
+            }
         }
 
         if (brightness(cell.background) > 110) {
