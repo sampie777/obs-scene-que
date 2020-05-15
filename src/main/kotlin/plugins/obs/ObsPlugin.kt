@@ -59,11 +59,11 @@ class ObsPlugin : BasePlugin, Refreshable {
     }
 
     override fun configStringToQueItem(value: String): QueItem {
-        return ObsSceneQueItem(TScene(value))
+        return ObsSceneQueItem(this, TScene(value))
     }
 
     override fun refreshScenes() {
-        list.setListData(OBSState.scenes.map { ObsSceneQueItem(it) }.toTypedArray())
+        list.setListData(OBSState.scenes.map { ObsSceneQueItem(this, it) }.toTypedArray())
         list.repaint()
     }
 }

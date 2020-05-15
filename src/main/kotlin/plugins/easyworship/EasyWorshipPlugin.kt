@@ -3,7 +3,6 @@ package plugins.easyworship
 import gui.utils.createImageIcon
 import handles.QueItemTransferHandler
 import plugins.common.BasePlugin
-import plugins.common.EmptyQueItem
 import plugins.common.QueItem
 import plugins.easyworship.queItems.EasyWorshipNextVerseQueItem
 import plugins.easyworship.queItems.EasyWorshipPreviousVerseQueItem
@@ -30,8 +29,8 @@ class EasyWorshipPlugin : BasePlugin {
         panel.add(titleLabel, BorderLayout.PAGE_START)
 
         val queItems = arrayOf(
-            EasyWorshipPreviousVerseQueItem(),
-            EasyWorshipNextVerseQueItem()
+            EasyWorshipPreviousVerseQueItem(this),
+            EasyWorshipNextVerseQueItem(this)
         )
 
         val list: JList<EasyWorshipQueItem> = JList(queItems)
@@ -56,9 +55,9 @@ class EasyWorshipPlugin : BasePlugin {
 
     override fun configStringToQueItem(value: String): QueItem {
         return when (value) {
-            "Previous verse" -> EasyWorshipPreviousVerseQueItem()
-            "Next verse" -> EasyWorshipNextVerseQueItem()
-            else -> EmptyQueItem("Invalid EasyWorship Que Item")
+            "Previous verse" -> EasyWorshipPreviousVerseQueItem(this)
+            "Next verse" -> EasyWorshipNextVerseQueItem(this)
+            else -> throw IllegalArgumentException("Invalid EasyWorship Que Item: $value")
         }
     }
 }

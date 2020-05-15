@@ -2,11 +2,11 @@ package plugins.obs
 
 import objects.OBSClient
 import objects.TScene
+import plugins.common.BasePlugin
 import plugins.common.QueItem
 
-class ObsSceneQueItem(val scene: TScene) : QueItem {
+class ObsSceneQueItem(override val plugin: BasePlugin, val scene: TScene) : QueItem {
     override val name: String = scene.name
-    override val pluginName: String = "ObsPlugin"
 
     override fun activate() {
         OBSClient.setActiveScene(scene)

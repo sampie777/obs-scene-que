@@ -1,8 +1,8 @@
 package objects.que
 
 import config.Config
+import objects.notifications.Notifications
 import plugins.PluginLoader
-import plugins.common.EmptyQueItem
 import plugins.common.QueItem
 import java.io.File
 import java.util.*
@@ -32,13 +32,21 @@ internal object QueLoader {
                 val pluginName = it.substringAfter("[").substringBefore("|")
                 val data = it.substringAfter("|").substringBeforeLast("]")
 
-                if (pluginName == "BasePlugin") {
-                    return@map EmptyQueItem(data)
+                val plugin = PluginLoader.plugins.find { plugin -> plugin.name == pluginName }
+
+                if (plugin == null) {
+                    Notifications.add("Plugin '$pluginName' not found", "Que")
+                    return@map null
                 }
 
-                val plugin = PluginLoader.plugins.find { plugin -> plugin.name == pluginName } ?: return@map null
-
-                plugin.configStringToQueItem(data)
+                try {
+                    plugin.configStringToQueItem(data)
+                } catch (e: Exception) {
+                    logger.warning("Failed to load que item $it")
+                    e.printStackTrace()
+                    Notifications.add("Failed to load que item '$data' for '$pluginName': $e", "Que")
+                    return@map null
+                }
             }
             .filterNotNull() as ArrayList<QueItem>
 
@@ -52,7 +60,7 @@ internal object QueLoader {
         }
 
         val textData = Que.getList().joinToString("\n") {
-            "[" + it.pluginName + "|" + it.toConfigString() + "]"
+            "[" + it.plugin.name + "|" + it.toConfigString() + "]"
         }
 
         if (textData == lastSavedData) {

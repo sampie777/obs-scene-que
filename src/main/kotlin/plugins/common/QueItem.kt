@@ -2,7 +2,7 @@ package plugins.common
 
 interface QueItem {
     val name: String
-    val pluginName: String
+    val plugin: BasePlugin
 
     fun activate()
     fun deactivate()

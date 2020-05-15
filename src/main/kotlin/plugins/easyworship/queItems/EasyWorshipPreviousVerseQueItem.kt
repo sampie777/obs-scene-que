@@ -1,6 +1,8 @@
 package plugins.easyworship.queItems
 
-class EasyWorshipPreviousVerseQueItem : EasyWorshipQueItem("Previous verse") {
+import plugins.common.BasePlugin
+
+class EasyWorshipPreviousVerseQueItem(plugin: BasePlugin) : EasyWorshipQueItem(plugin, "Previous verse") {
     override fun activate() {
         println("Activate previous verse")
     }

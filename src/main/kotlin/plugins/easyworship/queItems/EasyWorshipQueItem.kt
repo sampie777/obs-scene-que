@@ -1,9 +1,9 @@
 package plugins.easyworship.queItems
 
+import plugins.common.BasePlugin
 import plugins.common.QueItem
 
-abstract class EasyWorshipQueItem(override val name: String) : QueItem {
-    override val pluginName: String = "EasyWorshipPlugin"
+abstract class EasyWorshipQueItem(override val plugin: BasePlugin, override val name: String) : QueItem {
 
     override fun toString() = name
 
