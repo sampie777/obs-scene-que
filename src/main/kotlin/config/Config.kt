@@ -24,6 +24,8 @@ object Config {
     var controlWindowsIsMaximized: Boolean = false
     var mainPanelDividerLocation: Int = 370
 
+    var sourcePanelLastOpenedTab: String = "OBS"
+
     var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "default.osq"
     var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"
 
