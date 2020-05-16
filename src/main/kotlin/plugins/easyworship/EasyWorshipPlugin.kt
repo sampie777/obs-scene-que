@@ -68,4 +68,10 @@ class EasyWorshipPlugin : BasePlugin {
             else -> throw IllegalArgumentException("Invalid EasyWorship Que Item: $value")
         }
     }
+
+    override fun enable() {
+        super.enable()
+        EasyWorshipProperties.writeToFile = true
+        EasyWorshipProperties.load()
+    }
 }

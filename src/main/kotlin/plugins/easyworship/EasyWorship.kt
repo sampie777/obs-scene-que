@@ -46,13 +46,6 @@ object EasyWorship {
     private val logger = Logger.getLogger(EasyWorship::class.java.name)
 
     private const val windowContainsText = "EasyWorship 2009"
-    private const val previousVerseKey = KeyEvent.VK_UP
-    private const val nextVerseKey = KeyEvent.VK_DOWN
-    private const val previousSongKey = KeyEvent.VK_PAGE_UP
-    private const val nextSongKey = KeyEvent.VK_PAGE_DOWN
-    private const val logoScreenKey = KeyEvent.VK_L
-    private const val blackScreenKey = KeyEvent.VK_B
-    private const val clearScreenKey = KeyEvent.VK_C
 
     private var windowHandle: HWND? = null
     private val robot = Robot()
@@ -133,37 +126,37 @@ object EasyWorship {
 
     private fun previousVerse() {
         logger.info("Set previous verse")
-        keyPress(previousVerseKey)
+        keyPress(EasyWorshipProperties.previousVerseKey)
     }
 
     private fun nextVerse() {
         logger.info("Set next verse")
-        keyPress(nextVerseKey)
+        keyPress(EasyWorshipProperties.nextVerseKey)
     }
 
     private fun previousSong() {
         logger.info("Set previous song")
-        keyPress(previousSongKey)
+        keyPress(EasyWorshipProperties.previousSongKey)
     }
 
     private fun nextSong() {
         logger.info("Set next song")
-        keyPress(nextSongKey)
+        keyPress(EasyWorshipProperties.nextSongKey)
     }
 
     private fun logoScreen() {
         logger.info("Toggle logo screen")
-        ctrlKeyPress(logoScreenKey)
+        ctrlKeyPress(EasyWorshipProperties.logoScreenKey)
     }
 
     private fun blackScreen() {
         logger.info("Toggle black scree")
-        ctrlKeyPress(blackScreenKey)
+        ctrlKeyPress(EasyWorshipProperties.blackScreenKey)
     }
 
     private fun clearScreen() {
         logger.info("Toggle clear scree")
-        ctrlKeyPress(clearScreenKey)
+        ctrlKeyPress(EasyWorshipProperties.clearScreenKey)
     }
 
     private fun keyPress(key: Int, sleepTime: Int = 50) {
