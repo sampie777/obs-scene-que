@@ -9,7 +9,6 @@ import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.logging.Logger
-import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 object PluginLoader {
@@ -90,16 +89,19 @@ object PluginLoader {
                 continue
             }
 
-            val pluginMainClass: File? = fileEntries.find { !it.isDirectory && it.name.endsWith(pluginEntryFileExtensionName) }
+            val pluginMainClass: File? =
+                fileEntries.find { !it.isDirectory && it.name.endsWith(pluginEntryFileExtensionName) }
             if (pluginMainClass == null) {
                 logger.warning("No entry file found in directory: ${file.absolutePath}")
                 continue
             }
 
-            val rootPath = javaClass.getResource("/").file
+            val rootPath = File(javaClass.getResource("/").file).absolutePath
             val className = pluginMainClass.absolutePath.substringAfter(rootPath)
                 .substringBeforeLast(".class")
                 .replace("/", ".")
+                .replace('\\', '.')
+                .trimStart('.')
 
             classes.add(className)
         }

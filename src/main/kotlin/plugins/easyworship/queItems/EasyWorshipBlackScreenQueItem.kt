@@ -4,9 +4,9 @@ import GUI
 import plugins.common.BasePlugin
 import plugins.easyworship.EasyWorship
 
-class EasyWorshipPreviousVerseQueItem(plugin: BasePlugin) : EasyWorshipQueItem(plugin, "Previous verse") {
+class EasyWorshipBlackScreenQueItem(plugin: BasePlugin) : EasyWorshipQueItem(plugin, "Toggle black screen") {
     override fun activate() {
-        EasyWorship.doPreviousVerse()
+        EasyWorship.doBlackScreen()
         GUI.currentFrame?.toFront()
     }
 

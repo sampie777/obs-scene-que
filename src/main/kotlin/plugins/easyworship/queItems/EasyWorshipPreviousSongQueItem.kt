@@ -4,9 +4,9 @@ import GUI
 import plugins.common.BasePlugin
 import plugins.easyworship.EasyWorship
 
-class EasyWorshipPreviousVerseQueItem(plugin: BasePlugin) : EasyWorshipQueItem(plugin, "Previous verse") {
+class EasyWorshipPreviousSongQueItem(plugin: BasePlugin) : EasyWorshipQueItem(plugin, "Previous song") {
     override fun activate() {
-        EasyWorship.doPreviousVerse()
+        EasyWorship.doPreviousSong()
         GUI.currentFrame?.toFront()
     }
 

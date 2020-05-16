@@ -18,7 +18,7 @@ interface QueItem {
         isSelected: Boolean,
         cellHasFocus: Boolean
     ) {
-        cell.text = plugin.name + " | " + name
+        cell.text = name
         cell.icon = plugin.icon
 
         if (name == Que.current()?.name && index == Que.currentIndex()) {

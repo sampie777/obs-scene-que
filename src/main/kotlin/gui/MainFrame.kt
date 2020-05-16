@@ -16,6 +16,11 @@ class MainFrameWindowAdapter(private val frame: MainFrame) : WindowAdapter() {
         GUI.windowClosing(frame)
         exitApplication()
     }
+
+    override fun windowActivated(e: WindowEvent?) {
+        super.windowActivated(e)
+        GUI.currentFrame = frame
+    }
 }
 
 class MainFrame : JFrame(), Refreshable {

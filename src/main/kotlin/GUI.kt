@@ -1,9 +1,12 @@
 import gui.Refreshable
 import java.awt.Component
 import java.util.logging.Logger
+import javax.swing.JFrame
 
 object GUI {
     private val logger = Logger.getLogger(GUI::class.java.name)
+
+    var currentFrame: JFrame? = null
 
     private val components: HashSet<Refreshable> = HashSet()
 

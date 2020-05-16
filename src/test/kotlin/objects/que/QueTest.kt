@@ -44,7 +44,7 @@ class QueTest {
 
         Que.add(2, item)
 
-        assertEquals(3, Que.size())
+        assertEquals(4, Que.size())
     }
 
     @Test

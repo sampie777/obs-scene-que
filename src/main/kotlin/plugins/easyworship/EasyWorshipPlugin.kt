@@ -4,9 +4,7 @@ import gui.utils.createImageIcon
 import handles.QueItemTransferHandler
 import plugins.common.BasePlugin
 import plugins.common.QueItem
-import plugins.easyworship.queItems.EasyWorshipNextVerseQueItem
-import plugins.easyworship.queItems.EasyWorshipPreviousVerseQueItem
-import plugins.easyworship.queItems.EasyWorshipQueItem
+import plugins.easyworship.queItems.*
 import java.awt.*
 import javax.swing.*
 import javax.swing.border.CompoundBorder
@@ -29,8 +27,13 @@ class EasyWorshipPlugin : BasePlugin {
         panel.add(titleLabel, BorderLayout.PAGE_START)
 
         val queItems = arrayOf(
+            EasyWorshipPreviousSongQueItem(this),
+            EasyWorshipNextSongQueItem(this),
             EasyWorshipPreviousVerseQueItem(this),
-            EasyWorshipNextVerseQueItem(this)
+            EasyWorshipNextVerseQueItem(this),
+            EasyWorshipLogoScreenQueItem(this),
+            EasyWorshipBlackScreenQueItem(this),
+            EasyWorshipClearScreenQueItem(this)
         )
 
         val list: JList<EasyWorshipQueItem> = JList(queItems)
@@ -57,6 +60,11 @@ class EasyWorshipPlugin : BasePlugin {
         return when (value) {
             "Previous verse" -> EasyWorshipPreviousVerseQueItem(this)
             "Next verse" -> EasyWorshipNextVerseQueItem(this)
+            "Previous song" -> EasyWorshipPreviousSongQueItem(this)
+            "Next song" -> EasyWorshipNextSongQueItem(this)
+            "Toggle logo screen" -> EasyWorshipLogoScreenQueItem(this)
+            "Toggle black screen" -> EasyWorshipBlackScreenQueItem(this)
+            "Toggle clear screen" -> EasyWorshipClearScreenQueItem(this)
             else -> throw IllegalArgumentException("Invalid EasyWorship Que Item: $value")
         }
     }

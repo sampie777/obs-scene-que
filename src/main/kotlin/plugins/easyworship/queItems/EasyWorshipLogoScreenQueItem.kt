@@ -4,9 +4,9 @@ import GUI
 import plugins.common.BasePlugin
 import plugins.easyworship.EasyWorship
 
-class EasyWorshipPreviousVerseQueItem(plugin: BasePlugin) : EasyWorshipQueItem(plugin, "Previous verse") {
+class EasyWorshipLogoScreenQueItem(plugin: BasePlugin) : EasyWorshipQueItem(plugin, "Toggle logo screen") {
     override fun activate() {
-        EasyWorship.doPreviousVerse()
+        EasyWorship.doLogoScreen()
         GUI.currentFrame?.toFront()
     }
 

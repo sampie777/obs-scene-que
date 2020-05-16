@@ -113,13 +113,6 @@ object Que {
             newIndex = 0
         }
 
-        // Prevent adding duplicates
-        if (newIndex > 0
-            && list[newIndex - 1].name == item.name
-            && list[newIndex - 1].plugin.name == item.plugin.name) {
-            return
-        }
-
         list.add(newIndex, item)
 
         if (newIndex <= currentIndex) {
