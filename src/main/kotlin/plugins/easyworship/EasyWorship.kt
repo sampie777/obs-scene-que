@@ -126,6 +126,11 @@ object EasyWorship {
             findWindowHandle(windowContainsText)
         }
 
+        if (windowHandle == null) {
+            Notifications.add("Cannot focus window: window not found", "EasyWorship")
+            return
+        }
+
         User32.INSTANCE.SetForegroundWindow(windowHandle)
         User32.INSTANCE.SetFocus(windowHandle)
     }
