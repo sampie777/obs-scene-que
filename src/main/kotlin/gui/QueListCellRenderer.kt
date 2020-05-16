@@ -40,6 +40,7 @@ class QueListCellRenderer : DefaultListCellRenderer() {
 
         val item = value as QueItem
         cell.text = item.plugin.name + " | " + item.name
+        cell.icon = item.plugin.icon
 
         if (item.name == Que.current()?.name && index == Que.currentIndex()) {
             cell.background = if (isSelected) activeQueAndOBSSelectedColor else activeQueAndOBSColor

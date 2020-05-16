@@ -17,13 +17,13 @@ fun main(args: Array<String>) {
     Config.load()
     Config.save()
 
+    Theme.init()
+
     PluginLoader.loadAll()
     PluginLoader.enableAll()
 
     Que.enableWriteToFile(true)
     Que.load()
-
-    Theme.init()
 
     EventQueue.invokeLater {
         MainFrame.createAndShow()
