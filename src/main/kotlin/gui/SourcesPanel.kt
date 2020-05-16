@@ -1,6 +1,7 @@
 package gui
 
 import plugins.PluginLoader
+import java.awt.BorderLayout
 import java.util.logging.Logger
 import javax.swing.JPanel
 import javax.swing.JTabbedPane
@@ -8,19 +9,20 @@ import javax.swing.JTabbedPane
 class SourcesPanel : JPanel() {
     private val logger = Logger.getLogger(SourcesPanel::class.java.name)
 
-
     init {
         initGui()
     }
 
     private fun initGui() {
+        layout = BorderLayout()
+
         val tabbedPane = JTabbedPane()
         tabbedPane.tabPlacement = JTabbedPane.TOP
         tabbedPane.border = null
         tabbedPane.addChangeListener {
             logger.fine("Selecting tab: " + tabbedPane.getTitleAt(tabbedPane.selectedIndex))
         }
-        add(tabbedPane)
+        add(tabbedPane, BorderLayout.CENTER)
 
         for (plugin in PluginLoader.plugins) {
             try {

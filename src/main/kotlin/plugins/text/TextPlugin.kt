@@ -15,7 +15,7 @@ class TextPlugin : BasePlugin {
     override val name = "TextPlugin"
     override val description = "Que items for just displaying text"
 
-    override val icon: Icon? = createImageIcon("/plugins/obs/icon-14.png")
+    override val icon: Icon? = createImageIcon("/plugins/text/icon-14.png")
 
     override val tabName = "Text"
 

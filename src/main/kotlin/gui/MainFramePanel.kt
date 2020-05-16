@@ -51,13 +51,11 @@ class MainFramePanel : JSplitPane(), Refreshable {
         leftBottomPanel.add(OBSStatusPanel(), BorderLayout.LINE_START)
         leftBottomPanel.add(notificationsButton, BorderLayout.LINE_END)
 
-        val leftPanel = JPanel()
-        leftPanel.layout = BorderLayout(10, 10)
+        val leftPanel = JPanel(BorderLayout(10, 10))
         leftPanel.add(SourcesPanel(), BorderLayout.CENTER)
         leftPanel.add(leftBottomPanel, BorderLayout.PAGE_END)
 
-        val rightPanel = JPanel()
-        rightPanel.layout = BorderLayout(10, 10)
+        val rightPanel = JPanel(BorderLayout(10, 10))
         rightPanel.add(QuePanel(), BorderLayout.LINE_START)
         rightPanel.add(MainPanelControlPanel(), BorderLayout.CENTER)
 
