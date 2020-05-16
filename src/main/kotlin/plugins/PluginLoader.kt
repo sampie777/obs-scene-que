@@ -9,12 +9,17 @@ import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.logging.Logger
+import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 object PluginLoader {
     private val logger = Logger.getLogger(PluginLoader.toString())
     private val pluginDirectory = Config.pluginDirectory
-    private const val internalPluginDirectory = "/plugins"
+    private val internalPluginClasses = listOf(
+        "/plugins/easyworship/EasyWorshipPlugin",
+        "/plugins/obs/ObsPlugin",
+        "/plugins/text/TextPlugin"
+    )
     private const val pluginExtensionName = "Plugin.jar"
     private const val pluginEntryFileExtensionName = "Plugin.class"
 
@@ -30,15 +35,13 @@ object PluginLoader {
         logger.info("${plugins.size} loaded")
     }
 
-    private fun loadInternalPlugins() {
-        val pluginDirectories: Array<File> = getInternalPluginFiles()
-
-        if (pluginDirectories.isEmpty()) {
+    fun loadInternalPlugins() {
+        if (internalPluginClasses.isEmpty()) {
             logger.info("No internal plugins found")
             return
         }
 
-        val classes = getPluginClassesFromDirectories(pluginDirectories)
+        val classes = internalPluginClasses.map { pathToClass(it) } as ArrayList<String>
         logger.info("Internal plugins found: " + classes.joinToString { it })
 
         loadInternalClasses(classes)
@@ -61,7 +64,7 @@ object PluginLoader {
     }
 
     private fun getInternalPluginFiles(): Array<File> {
-        val pluginDirectories = File(javaClass.getResource(internalPluginDirectory).file)
+        val pluginDirectories = File(javaClass.getResource("/plugins").file)
             .listFiles { file -> file.isDirectory && file.name != "common" }
             ?: return emptyArray()
 
@@ -96,17 +99,25 @@ object PluginLoader {
                 continue
             }
 
-            val rootPath = File(javaClass.getResource("/").file).absolutePath
-            val className = pluginMainClass.absolutePath.substringAfter(rootPath)
-                .substringBeforeLast(".class")
-                .replace("/", ".")
-                .replace('\\', '.')
-                .trimStart('.')
+            val className = pathToClass(pluginMainClass.absolutePath)
 
             classes.add(className)
         }
 
         return classes
+    }
+
+    private fun pathToClass(path: String): String {
+        val rootPath = try {
+            File(javaClass.getResource("/").file).absolutePath
+        } catch (e: IllegalStateException) {
+            ""
+        }
+        return path.substringAfter(rootPath)
+            .substringBeforeLast(".class")
+            .replace("/", ".")
+            .replace('\\', '.')
+            .trimStart('.')
     }
 
     private fun getPluginClassNamesFromJar(jarUrlClassLoader: URLClassLoader): ArrayList<String> {
