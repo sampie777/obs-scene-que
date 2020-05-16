@@ -2,6 +2,7 @@ package objects.que
 
 import mocks.MockPlugin
 import mocks.MockPlugin2
+import mocks.QueItemMock
 import kotlin.test.*
 
 class QueTest {
@@ -214,5 +215,81 @@ class QueTest {
         assertEquals(item1, Que.getAt(0))
         assertEquals(item2, Que.getAt(1))
         assertEquals(item3, Que.getAt(2))
+    }
+
+    @Test
+    fun testActivateCurrentQueItem() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        Que.add(item1)
+        Que.setCurrentQueItemByIndex(0)
+        assertFalse(item1.isActivated)
+
+        Que.activateCurrent()
+
+        assertTrue(item1.isActivated)
+    }
+
+    @Test
+    fun testNextQueItemGetsActivatedOnNextCall() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(0)
+        assertFalse(item1.isDeactivated)
+        assertFalse(item2.isActivated)
+
+        Que.next()
+
+        assertTrue(item1.isDeactivated)
+        assertTrue(item2.isActivated)
+    }
+
+    @Test
+    fun testPreviousQueItemGetsActivatedOnPreviousCall() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(1)
+        assertFalse(item1.isActivated)
+        assertFalse(item2.isDeactivated)
+
+        Que.previous()
+
+        assertTrue(item1.isActivated)
+        assertTrue(item2.isDeactivated)
+    }
+
+    @Test
+    fun testNextQueItemDoesntGetsActivatedOnPreviewNextCall() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(0)
+        assertFalse(item1.isDeactivated)
+        assertFalse(item2.isActivated)
+
+        Que.previewNext()
+
+        assertFalse(item1.isDeactivated)
+        assertFalse(item2.isActivated)
+    }
+
+    @Test
+    fun testPreviousQueItemDoesntGetsActivatedOnPreviewPreviousCall() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(1)
+        assertFalse(item1.isActivated)
+        assertFalse(item2.isDeactivated)
+
+        Que.previewPrevious()
+
+        assertFalse(item1.isActivated)
+        assertFalse(item2.isDeactivated)
     }
 }

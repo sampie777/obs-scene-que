@@ -262,13 +262,4 @@ object OBSClient {
         }
         return null
     }
-
-    private fun getPreviousQueScene(): ObsSceneQueItem? {
-        for (i in (Que.currentIndex() - 1)..0) {
-            if (Que.getAt(i) is ObsSceneQueItem) {
-                return Que.getAt(i) as ObsSceneQueItem
-            }
-        }
-        return null
-    }
 }

@@ -22,10 +22,17 @@ object Que {
         this.list = list
     }
 
-    fun run() {
+    fun activateCurrent() {
         val current = current() ?: return
 
         activateItem(current)
+        GUI.refreshQueItems()
+    }
+
+    fun deactivateCurrent() {
+        val current = current() ?: return
+
+        deactivateItem(current)
         GUI.refreshQueItems()
     }
 
@@ -34,6 +41,8 @@ object Que {
             logger.info("Reached start of que")
             return
         }
+
+        deactivateCurrent()
         activateItem(list.getOrNull(--currentIndex))
         GUI.refreshQueItems()
     }
@@ -51,6 +60,8 @@ object Que {
             logger.info("Reached end of que")
             return
         }
+
+        deactivateCurrent()
         activateItem(list.getOrNull(++currentIndex))
         GUI.refreshQueItems()
     }
@@ -77,6 +88,9 @@ object Que {
         GUI.switchedScenes()
     }
 
+    /**
+     * Set the current que pointer to this index. This does not activate the que item!
+     */
     fun setCurrentQueItemByIndex(index: Int) {
         currentIndex = index
         if (currentIndex >= list.size) {
@@ -166,9 +180,19 @@ object Que {
         try {
             item!!.activate()
         } catch (e: Exception) {
-            logger.warning("Failed to run current que item")
+            logger.warning("Failed to activate current que item")
             e.printStackTrace()
-            Notifications.add("Failed to run current que item '${item?.name}'", "Que")
+            Notifications.add("Failed to activate current que item '${item?.name}'", "Que")
+        }
+    }
+
+    private fun deactivateItem(item: QueItem?) {
+        try {
+            item!!.deactivate()
+        } catch (e: Exception) {
+            logger.warning("Failed to deactivate current que item")
+            e.printStackTrace()
+            Notifications.add("Failed to deactivate current que item '${item?.name}'", "Que")
         }
     }
 

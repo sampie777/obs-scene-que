@@ -70,7 +70,7 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
 
                 if (e.clickCount == 2) {   // On double click
                     Que.setCurrentQueItemByIndex(selectedIndex)
-                    Que.run()
+                    Que.activateCurrent()
                 }
             }
         })

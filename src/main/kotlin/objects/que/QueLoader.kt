@@ -28,29 +28,30 @@ internal object QueLoader {
         }
 
         val queList = queFile.readLines()
-            .map {
-                val pluginName = it.substringAfter("[").substringBefore("|")
-                val data = it.substringAfter("|").substringBeforeLast("]")
-
-                val plugin = PluginLoader.plugins.find { plugin -> plugin.name == pluginName }
-
-                if (plugin == null) {
-                    Notifications.add("Plugin '$pluginName' not found", "Que")
-                    return@map null
-                }
-
-                try {
-                    plugin.configStringToQueItem(data)
-                } catch (e: Exception) {
-                    logger.warning("Failed to load que item $it")
-                    e.printStackTrace()
-                    Notifications.add("Failed to load que item '$data' for '$pluginName': $e", "Que")
-                    return@map null
-                }
-            }
-            .filterNotNull() as ArrayList<QueItem>
+            .mapNotNull { loadQueItemForStringLine(it) } as ArrayList<QueItem>
 
         Que.setList(queList)
+    }
+
+    fun loadQueItemForStringLine(line: String): QueItem? {
+        val pluginName = line.substringBefore("|")
+        val data = line.substringAfter("|")
+
+        val plugin = PluginLoader.plugins.find { plugin -> plugin.name == pluginName }
+
+        if (plugin == null) {
+            Notifications.add("Plugin '$pluginName' not found", "Que")
+            return null
+        }
+
+        try {
+            return plugin.configStringToQueItem(data)
+        } catch (e: Exception) {
+            logger.warning("Failed to load que item $line")
+            e.printStackTrace()
+            Notifications.add("Failed to load que item '$data' for '$pluginName': $e", "Que")
+            return null
+        }
     }
 
     fun save() {
@@ -59,9 +60,7 @@ internal object QueLoader {
             return
         }
 
-        val textData = Que.getList().joinToString("\n") {
-            "[" + it.plugin.name + "|" + it.toConfigString() + "]"
-        }
+        val textData = queToString()
 
         if (textData == lastSavedData) {
             logger.fine("No changes in que, so skipping save")
@@ -72,5 +71,11 @@ internal object QueLoader {
         File(Config.queFile).writeText(textData)
 
         lastSavedData = textData
+    }
+
+    fun queToString(): String {
+        return Que.getList().joinToString("\n") {
+            it.plugin.name + "|" + it.toConfigString()
+        }
     }
 }
