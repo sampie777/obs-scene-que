@@ -71,10 +71,8 @@ object Que {
         return currentIndex >= list.size - 1
     }
 
-    fun setCurrentQueItemByName(name: String) {
-        val newIndex = list.map { it.name }
-            .indexOf(name)
-
+    fun setCurrentQueItemByName(pluginName: String, name: String) {
+        val newIndex = list.indexOfFirst { it.name == name && it.plugin.name == pluginName }
         currentIndex = newIndex
         GUI.switchedScenes()
     }
@@ -93,6 +91,7 @@ object Que {
     }
 
     fun add(index: Int, item: QueItem) {
+        println("Addind item at: $index")
         var newIndex = index
         if (index > list.size) {
             newIndex = list.size
@@ -101,7 +100,9 @@ object Que {
         }
 
         // Prevent adding duplicates
-        if (newIndex > 0 && list[newIndex - 1].name == item.name) {
+        if (newIndex > 0
+            && list[newIndex - 1].name == item.name
+            && list[newIndex - 1].plugin.name == item.plugin.name) {
             return
         }
 

@@ -1,5 +1,6 @@
 package config
 
+import mocks.ConfigMock
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point

@@ -1,10 +1,7 @@
 package gui
 
 import brightness
-import objects.OBSState
-import objects.que.Que
 import plugins.common.QueItem
-import plugins.obs.ObsSceneQueItem
 import themes.Theme
 import java.awt.Component
 import javax.swing.DefaultListCellRenderer
@@ -13,16 +10,6 @@ import javax.swing.JList
 import javax.swing.border.EmptyBorder
 
 class QueListCellRenderer : DefaultListCellRenderer() {
-
-    val selectedColor = Theme.get.LIST_SELECTION_BACKGROUND_COLOR
-    val activeOBSColor = Theme.get.ACTIVE_OBS_COLOR
-    val activeOBSSelectedColor = Theme.get.ACTIVE_OBS_SELECTED_COLOR
-    val activeQueColor = Theme.get.ACTIVE_QUE_COLOR
-    val activeQueSelectedColor = Theme.get.ACTIVE_QUE_SELECTED_COLOR
-    val activeQueAndOBSColor = Theme.get.ACTIVE_QUE_AND_OBS_COLOR
-    val activeQueAndOBSSelectedColor = Theme.get.ACTIVE_QUE_AND_OBS_SELECTED_COLOR
-    val nonExistingColor = Theme.get.NON_EXISTING_COLOR
-    val nonExistingSelectedColor = Theme.get.NON_EXISTING_SELECTED_COLOR
 
     override fun getListCellRendererComponent(
         list: JList<*>,
@@ -39,26 +26,7 @@ class QueListCellRenderer : DefaultListCellRenderer() {
         }
 
         val item = value as QueItem
-        cell.text = item.plugin.name + " | " + item.name
-        cell.icon = item.plugin.icon
-
-        if (item.name == Que.current()?.name && index == Que.currentIndex()) {
-            cell.background = if (isSelected) activeQueAndOBSSelectedColor else activeQueAndOBSColor
-        }
-
-        if (item is ObsSceneQueItem) {
-            val sceneExist = OBSState.scenes.find { it.name == item.scene.name }
-
-            if (item.scene.name == Que.current()?.name && index == Que.currentIndex() && OBSState.currentSceneName == item.scene.name) {
-                cell.background = if (isSelected) activeQueAndOBSSelectedColor else activeQueAndOBSColor
-            } else if (item.scene.name == Que.current()?.name && index == Que.currentIndex()) {
-                cell.background = if (isSelected) activeQueSelectedColor else activeQueColor
-            } else if (OBSState.currentSceneName == item.scene.name) {
-                cell.background = if (isSelected) activeOBSSelectedColor else activeOBSColor
-            } else if (sceneExist == null) {
-                cell.background = if (isSelected) nonExistingSelectedColor else nonExistingColor
-            }
-        }
+        item.getListCellRendererComponent(cell, index, isSelected, cellHasFocus)
 
         if (brightness(cell.background) > 110) {
             cell.foreground = Theme.get.LIST_SELECTION_FONT_COLOR_DARK

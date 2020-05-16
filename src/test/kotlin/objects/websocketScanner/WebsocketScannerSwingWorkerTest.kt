@@ -1,5 +1,6 @@
 package objects.websocketScanner
 
+import mocks.WebsocketScannerFrameMock
 import java.beans.PropertyChangeEvent
 import kotlin.test.Test
 import kotlin.test.assertEquals

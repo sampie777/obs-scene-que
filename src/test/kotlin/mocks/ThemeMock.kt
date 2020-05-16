@@ -1,5 +1,6 @@
-package themes
+package mocks
 
+import themes.BaseTheme
 import java.awt.Color
 
 class ThemeMock : BaseTheme() {
