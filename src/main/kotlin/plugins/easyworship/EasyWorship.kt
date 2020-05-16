@@ -55,6 +55,12 @@ object EasyWorship {
     }
 
     private fun findWindowHandle(windowTitle: String) {
+        if (!System.getProperty("os.name").contains("win")) {
+            logger.warning("Must run on Windows to find the window")
+            Notifications.add("Application must run on Windows operating system", "EasyWorship")
+            return
+        }
+
         val windowFinder = WindowFinder(windowTitle)
         User32.INSTANCE.EnumWindows(windowFinder, null)
 

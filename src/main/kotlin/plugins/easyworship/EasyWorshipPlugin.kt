@@ -65,7 +65,7 @@ class EasyWorshipPlugin : BasePlugin {
             "Toggle logo screen" -> EasyWorshipLogoScreenQueItem(this)
             "Toggle black screen" -> EasyWorshipBlackScreenQueItem(this)
             "Toggle clear screen" -> EasyWorshipClearScreenQueItem(this)
-            else -> throw IllegalArgumentException("Invalid EasyWorship Que Item: $value")
+            else -> throw IllegalArgumentException("Invalid EasyWorship que item: $value")
         }
     }
 

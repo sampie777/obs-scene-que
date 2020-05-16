@@ -10,7 +10,7 @@ import javax.swing.JList
 import javax.swing.SwingUtilities
 import javax.swing.TransferHandler
 
-class QueItemTransferHandler : TransferHandler() {
+class QueItemTransferHandler(private val queItem: QueItem? = null) : TransferHandler() {
 
     private val logger = Logger.getLogger(QueItemTransferHandler::class.java.name)
 
@@ -36,18 +36,28 @@ class QueItemTransferHandler : TransferHandler() {
      * When starting to drag an object:
      * Bundle up the selected item in a single liturgieItemList for export.
      */
-    override fun createTransferable(c: JComponent): Transferable {
-        val list = c as JList<*>
+    override fun createTransferable(component: JComponent): Transferable {
+        var fromIndex = -1
+        val item: QueItem
 
-        // Get data that needs to be dragged
-        val item: QueItem = list.selectedValue as QueItem
+        if (queItem != null) {
+            item = queItem
+        } else if (component is JList<*>) {
+            // Get data that needs to be dragged
+            item = component.selectedValue as QueItem
+            fromIndex = component.selectedIndex
+        } else {
+            logger.severe("Failed to get a valid QueItem from transfer handler")
+            throw IllegalArgumentException("Failed to get a valid QueItem from transfer handler")
+        }
+
         logger.info("Start dragging QueItem: $item")
 
-        val isCopyingToAQueItemDropComponent = isParentAQueItemDropComponent(c)
+        val isCopyingToAQueItemDropComponent = isParentAQueItemDropComponent(component)
 
         return QueItemTransferable(
             queItemObjectFlavor,
-            QueItemTransferablePackage(item, list.selectedIndex, isCopyingToAQueItemDropComponent)
+            QueItemTransferablePackage(item, fromIndex, isCopyingToAQueItemDropComponent)
         )
     }
 
