@@ -55,7 +55,7 @@ object EasyWorship {
     }
 
     private fun findWindowHandle(windowTitle: String) {
-        if (!System.getProperty("os.name").contains("win")) {
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
             logger.warning("Must run on Windows to find the window")
             Notifications.add("Application must run on Windows operating system", "EasyWorship")
             return
