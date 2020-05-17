@@ -1,7 +1,5 @@
 package gui.notifications
 
-import GUI
-import gui.Refreshable
 import java.awt.BorderLayout
 import java.awt.Component
 import javax.swing.*
