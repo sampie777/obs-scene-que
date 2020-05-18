@@ -105,7 +105,7 @@ object Que {
     }
 
     fun add(index: Int, item: QueItem) {
-        println("Addind item at: $index")
+        logger.info("Adding que item at: $index")
         var newIndex = index
         if (index > list.size) {
             newIndex = list.size
@@ -191,6 +191,7 @@ object Que {
 
     fun load() {
         QueLoader.load()
+        GUI.refreshQueItems()
     }
 
     fun save() {

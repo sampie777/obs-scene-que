@@ -34,6 +34,10 @@ internal object QueLoader {
     }
 
     fun loadQueItemForStringLine(line: String): QueItem? {
+        if (line.isEmpty()) {
+            return null
+        }
+
         val pluginName = line.substringBefore("|")
         val data = line.substringAfter("|")
 
@@ -75,7 +79,9 @@ internal object QueLoader {
 
     fun queToString(): String {
         return Que.getList().joinToString("\n") {
-            it.plugin.name + "|" + it.toConfigString()
+            queItemToConfigString(it)
         }
     }
+
+    fun queItemToConfigString(it: QueItem) = it.plugin.name + "|" + it.toConfigString()
 }

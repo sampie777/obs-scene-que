@@ -1,5 +1,6 @@
 package handles
 
+import gui.quickAccessButtons.QuickAccessButton
 import plugins.common.QueItem
 import java.awt.Component
 import java.awt.datatransfer.DataFlavor
@@ -46,6 +47,9 @@ class QueItemTransferHandler(private val queItem: QueItem? = null) : TransferHan
             // Get data that needs to be dragged
             item = component.selectedValue as QueItem
             fromIndex = component.selectedIndex
+        } else if (component is QuickAccessButton) {
+            // Get data that needs to be dragged
+            item = component.getQueItem() ?: throw IllegalArgumentException("QueItem is null")
         } else {
             logger.severe("Failed to get a valid QueItem from transfer handler")
             throw IllegalArgumentException("Failed to get a valid QueItem from transfer handler")
@@ -79,14 +83,20 @@ class QueItemTransferHandler(private val queItem: QueItem? = null) : TransferHan
 
         val transferable = info.transferable
 
-        val dropComponent = SwingUtilities.getAncestorOfClass(
-            QueItemDropComponent::class.java,
-            info.component
-        ) as QueItemDropComponent
+        val dropComponent =
+            if (info.component is QueItemDropComponent) {
+                info.component as QueItemDropComponent
+            } else {
+                SwingUtilities.getAncestorOfClass(
+                    QueItemDropComponent::class.java,
+                    info.component
+                ) as QueItemDropComponent
+            }
 
-        // Get drop index
-        val dropList = info.dropLocation as JList.DropLocation
-        dropIndex = dropList.index
+        if (info.dropLocation is JList.DropLocation) {
+            val dropList = info.dropLocation as JList.DropLocation
+            dropIndex = dropList.index
+        }
 
         // Get the object that is being dropped.
         val transferablePackage: QueItemTransferablePackage = try {
@@ -97,14 +107,25 @@ class QueItemTransferHandler(private val queItem: QueItem? = null) : TransferHan
         }
 
         if (transferablePackage.isCopyingToQueItemDropComponent) {
-            dropped = dropComponent.dropMoveItem(transferablePackage.fromIndex, dropIndex)
+            try {
+                dropped = dropComponent.dropMoveItem(transferablePackage.item, transferablePackage.fromIndex, dropIndex)
+            } catch (e: Exception) {
+                logger.warning("Failed to drop Move Item")
+                e.printStackTrace()
+            }
         } else {
-            dropped = dropComponent.dropNewItem(transferablePackage.item, dropIndex)
+            try {
+                dropped = dropComponent.dropNewItem(transferablePackage.item, dropIndex)
+            } catch (e: Exception) {
+                logger.warning("Failed to drop New Item")
+                e.printStackTrace()
+            }
         }
         return dropped
     }
 
     private fun isParentAQueItemDropComponent(component: Component): Boolean {
-        return SwingUtilities.getAncestorOfClass(QueItemDropComponent::class.java, component) != null
+        return component is QueItemDropComponent
+                || SwingUtilities.getAncestorOfClass(QueItemDropComponent::class.java, component) != null
     }
 }

@@ -135,7 +135,7 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
         return true
     }
 
-    override fun dropMoveItem(fromIndex: Int, toIndex: Int): Boolean {
+    override fun dropMoveItem(item: QueItem, fromIndex: Int, toIndex: Int): Boolean {
         logger.info("Dropped moving QueItem at index: $toIndex")
 
         val result = Que.move(fromIndex, toIndex)

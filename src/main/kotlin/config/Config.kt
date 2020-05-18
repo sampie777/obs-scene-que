@@ -29,6 +29,9 @@ object Config {
     var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "default.osq"
     var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"
 
+    var quickAccessButtonCount: Int = 6
+    var quickAccessButtonQueItems: ArrayList<String> = ArrayList()
+
     fun load() {
         try {
             PropertyLoader.load()

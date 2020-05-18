@@ -1,8 +1,10 @@
 package gui
 
 import GUI
+import gui.quickAccessButtons.QuickAccessButtonPanel
 import objects.que.Que
 import java.awt.BorderLayout
+import java.awt.Component
 import java.awt.Dimension
 import java.util.logging.Logger
 import javax.swing.*
@@ -35,10 +37,17 @@ class MainPanelControlPanel : JPanel(), Refreshable {
 
         val buttonPanel = JPanel()
         buttonPanel.layout = BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS)
+        buttonPanel.alignmentX = Component.LEFT_ALIGNMENT
         buttonPanel.add(previousQueItemButton)
         buttonPanel.add(Box.createRigidArea(Dimension(0, 20)))
         buttonPanel.add(nextQueItemButton)
-        add(buttonPanel, BorderLayout.CENTER)
+
+        val controlsPanel = JPanel()
+        controlsPanel.layout = BoxLayout(controlsPanel, BoxLayout.PAGE_AXIS)
+        controlsPanel.add(buttonPanel)
+        controlsPanel.add(Box.createRigidArea(Dimension(0, 20)))
+        controlsPanel.add(QuickAccessButtonPanel(), Component.LEFT_ALIGNMENT)
+        add(controlsPanel, BorderLayout.CENTER)
     }
 
     override fun removeNotify() {
