@@ -22,7 +22,8 @@ object Config {
     var controlWindowLocation: Point = Point(-1, -1)
     var controlWindowSize: Dimension = Dimension(500, 250)
     var controlWindowsIsMaximized: Boolean = false
-    var mainPanelDividerLocation: Int = 370
+    var mainPanelDividerLeftLocation: Int = 370
+    var mainPanelDividerRightLocation: Int = 400
 
     var sourcePanelLastOpenedTab: String = "OBS"
 
