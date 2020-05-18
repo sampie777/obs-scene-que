@@ -12,3 +12,4 @@ out/
 releases/
 snapshots/
 *.xcf
+tmp/

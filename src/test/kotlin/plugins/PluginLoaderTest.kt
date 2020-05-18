@@ -10,6 +10,6 @@ class PluginLoaderTest {
         PluginLoader.plugins.clear()
         PluginLoader.loadInternalPlugins()
 
-        assertEquals(3, PluginLoader.plugins.size)
+        assertEquals(2, PluginLoader.plugins.size)
     }
 }

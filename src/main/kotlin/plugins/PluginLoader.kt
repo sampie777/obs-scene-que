@@ -16,11 +16,9 @@ object PluginLoader {
     private val logger = Logger.getLogger(PluginLoader.toString())
     private val pluginDirectory = Config.pluginDirectory
     private val internalPluginClasses = listOf(
-        "/plugins/easyworship/EasyWorshipPlugin",
         "/plugins/obs/ObsPlugin",
         "/plugins/text/TextPlugin"
     )
-    private const val pluginExtensionName = "Plugin.jar"
     private const val pluginEntryFileExtensionName = "Plugin.class"
 
     // Available plugins
@@ -74,10 +72,10 @@ object PluginLoader {
     }
 
     private fun getExternalPluginFiles(): Array<URL?> {
-        val pluginFiles = File(pluginDirectory).listFiles { file -> file.name.endsWith(pluginExtensionName) }
+        val pluginFiles = File(pluginDirectory).listFiles { file -> file.name.endsWith(".jar") }
             ?: return emptyArray()
 
-        logger.info("External plugin files found: " + pluginFiles.joinToString { it.name })
+        logger.info("External jar files found in plugin dir: " + pluginFiles.joinToString { it.name })
 
         return fileArrayToUrlArray(pluginFiles)
     }
@@ -130,7 +128,7 @@ object PluginLoader {
             val pluginMainClass: JarEntry? = jarFileEntries.asSequence()
                 .find { !it.isDirectory && it.name.endsWith(pluginEntryFileExtensionName) }
             if (pluginMainClass == null) {
-                logger.warning("No entry file found in directory: ${url.path}")
+                logger.warning("No plugin entry file found in directory: ${url.path}")
                 continue
             }
 
