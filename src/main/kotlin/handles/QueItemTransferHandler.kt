@@ -11,7 +11,7 @@ import javax.swing.JList
 import javax.swing.SwingUtilities
 import javax.swing.TransferHandler
 
-class QueItemTransferHandler(private val queItem: QueItem? = null) : TransferHandler() {
+class QueItemTransferHandler(var queItem: QueItem? = null) : TransferHandler() {
 
     private val logger = Logger.getLogger(QueItemTransferHandler::class.java.name)
 
@@ -42,7 +42,7 @@ class QueItemTransferHandler(private val queItem: QueItem? = null) : TransferHan
         val item: QueItem
 
         if (queItem != null) {
-            item = queItem
+            item = queItem!!
         } else if (component is JList<*>) {
             // Get data that needs to be dragged
             item = component.selectedValue as QueItem
