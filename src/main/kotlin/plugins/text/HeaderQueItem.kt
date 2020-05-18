@@ -3,8 +3,10 @@ package plugins.text
 import GUI
 import objects.que.Que
 import plugins.common.QueItem
+import themes.Theme
 import java.awt.BorderLayout
 import java.awt.Color
+import java.awt.Font
 import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
@@ -55,7 +57,14 @@ class HeaderQueItem(override val plugin: TextPlugin, override val name: String) 
 
     override fun getListCellRendererComponent(cell: JLabel, index: Int, isSelected: Boolean, cellHasFocus: Boolean) {
         super.getListCellRendererComponent(cell, index, isSelected = false, cellHasFocus = false)
-        cell.background = Color(200, 200, 200)
+        cell.border = CompoundBorder(
+            CompoundBorder(
+                EmptyBorder(10, 1, 0, 0),
+                BorderFactory.createMatteBorder(2, 0, 0, 0, Color(180, 180, 180))
+            ),
+            EmptyBorder(2, 0, 2, 0)
+        )
+        cell.font = Font(Theme.get.FONT_FAMILY, Font.BOLD, cell.font.size)
     }
 
 }
