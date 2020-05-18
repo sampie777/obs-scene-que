@@ -1,8 +1,8 @@
 package gui
 
 import GUI
-import GuiComponentMock
 import gui.notifications.NotificationListPanel
+import mocks.GuiComponentMock
 import objects.notifications.Notifications
 import kotlin.test.Test
 import kotlin.test.assertEquals

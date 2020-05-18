@@ -2,8 +2,10 @@ package themes
 
 import config.Config
 import objects.notifications.Notifications
+import java.awt.Insets
 import java.util.logging.Logger
 import javax.swing.UIManager
+
 
 object Theme {
     private val logger = Logger.getLogger(Theme::class.java.name)
@@ -119,5 +121,7 @@ object Theme {
         UIManager.put("Viewport.foreground", get.FONT_COLOR)
         UIManager.put("Spinner.background", get.TEXT_FIELD_BACKGROUND_COLOR)
         UIManager.put("Spinner.foreground", get.FONT_COLOR)
+
+        UIManager.getDefaults()["TabbedPane.contentBorderInsets"] = Insets(1, 0, 0, 0)
     }
 }

@@ -19,7 +19,7 @@ class DarkTheme : BaseTheme() {
     override val LIST_SELECTION_FONT_COLOR_LIGHT = Color(200, 200, 200)
     override val LIST_SELECTION_FONT_COLOR_DARK = Color(51, 51, 51)
     override val LIST_SELECTION_BACKGROUND_COLOR = Color(79, 84, 90)
-    override val LIST_SELECTION_FONT_COLOR_DEFAULT = LIST_SELECTION_FONT_COLOR_DARK
+    override val LIST_SELECTION_FONT_COLOR_DEFAULT = LIST_SELECTION_FONT_COLOR_LIGHT
 
     override val ACTIVE_OBS_COLOR = Color(70, 79, 89)
     override val ACTIVE_OBS_SELECTED_COLOR = Color(85, 95, 107)

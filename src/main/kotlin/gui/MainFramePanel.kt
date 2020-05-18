@@ -22,6 +22,7 @@ class MainFramePanel : JSplitPane(), Refreshable {
     private val logger = Logger.getLogger(MainFramePanel::class.java.name)
 
     val notificationsButton = JButton()
+    private val rightPanel = JSplitPane()
 
     private val notificationsButtonIconDefault: Icon? = createImageIcon(Theme.get.NOTIFICATIONS_BUTTON_ICON_DEFAULT)
     private val notificationsButtonIconYellow: Icon? = createImageIcon(Theme.get.NOTIFICATIONS_BUTTON_ICON_ALERT)
@@ -51,21 +52,20 @@ class MainFramePanel : JSplitPane(), Refreshable {
         leftBottomPanel.add(OBSStatusPanel(), BorderLayout.LINE_START)
         leftBottomPanel.add(notificationsButton, BorderLayout.LINE_END)
 
-        val leftPanel = JPanel()
-        leftPanel.layout = BorderLayout(10, 10)
-        leftPanel.add(SceneListPanel(), BorderLayout.CENTER)
+        val leftPanel = JPanel(BorderLayout(10, 10))
+        leftPanel.add(SourcesPanel(), BorderLayout.CENTER)
         leftPanel.add(leftBottomPanel, BorderLayout.PAGE_END)
 
-        val rightPanel = JPanel()
-        rightPanel.layout = BorderLayout(10, 10)
-        rightPanel.add(SceneQuePanel(), BorderLayout.LINE_START)
-        rightPanel.add(SceneLiveControlPanel(), BorderLayout.CENTER)
+        rightPanel.border = null
+        rightPanel.leftComponent = QuePanel()
+        rightPanel.rightComponent = MainPanelControlPanel()
 
         setLeftComponent(leftPanel)
         setRightComponent(rightPanel)
 
         if (Config.windowRestoreLastPosition) {
-            dividerLocation = Config.mainPanelDividerLocation
+            dividerLocation = Config.mainPanelDividerLeftLocation
+            rightPanel.dividerLocation = Config.mainPanelDividerRightLocation
         }
     }
 
@@ -75,7 +75,8 @@ class MainFramePanel : JSplitPane(), Refreshable {
     }
 
     override fun windowClosing(window: Component?) {
-        Config.mainPanelDividerLocation = dividerLocation
+        Config.mainPanelDividerLeftLocation = dividerLocation
+        Config.mainPanelDividerRightLocation = rightPanel.dividerLocation
     }
 
     override fun refreshNotifications() {

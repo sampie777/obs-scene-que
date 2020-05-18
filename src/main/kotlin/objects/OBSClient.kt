@@ -10,6 +10,8 @@ import net.twasi.obsremotejava.requests.GetCurrentScene.GetCurrentSceneResponse
 import net.twasi.obsremotejava.requests.GetSceneList.GetSceneListResponse
 import net.twasi.obsremotejava.requests.ResponseBase
 import objects.notifications.Notifications
+import objects.que.Que
+import plugins.obs.ObsSceneQueItem
 import java.util.*
 import java.util.logging.Logger
 
@@ -199,7 +201,7 @@ object OBSClient {
         logger.info("New scene: " + OBSState.currentSceneName)
 
         GUI.switchedScenes()
-        setPreviewScene(Que.previewNext() ?: return)
+        setPreviewScene(getNextQueScene()?.scene ?: return)
     }
 
     private fun getScenes() {
@@ -243,12 +245,21 @@ object OBSClient {
         logger.info("Setting new current scene to: $scene")
         controller!!.setCurrentScene(scene.name) {
             GUI.switchedScenes()
-            setPreviewScene(Que.previewNext() ?: return@setCurrentScene)
+            setPreviewScene(getNextQueScene()?.scene ?: return@setCurrentScene)
         }
     }
 
     private fun setPreviewScene(scene: TScene) {
         logger.info("Setting new preview scene to: $scene")
         controller!!.setPreviewScene(scene.name) { }
+    }
+
+    private fun getNextQueScene(): ObsSceneQueItem? {
+        for (i in (Que.currentIndex() + 1)..Que.getList().size) {
+            if (Que.getAt(i) is ObsSceneQueItem) {
+                return Que.getAt(i) as ObsSceneQueItem
+            }
+        }
+        return null
     }
 }

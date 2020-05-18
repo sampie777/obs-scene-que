@@ -1,4 +1,4 @@
-package config
+package mocks
 
 import java.awt.Color
 import java.awt.Dimension

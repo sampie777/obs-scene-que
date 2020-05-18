@@ -1,4 +1,6 @@
 import config.Config
+import objects.que.Que
+import plugins.PluginLoader
 import java.awt.Color
 import java.io.File
 import java.io.UnsupportedEncodingException
@@ -35,13 +37,26 @@ fun isAddressLocalhost(address: String): Boolean {
 }
 
 fun exitApplication() {
-    logger.info("Shutting down application...")
+    logger.info("Shutting down application")
+
     try {
-        Config.save()
+        logger.info("Disabling plugins...")
+        PluginLoader.disableAll()
     } catch (t: Throwable) {
-        logger.warning("Failed to properly shut down the application")
+        logger.warning("Failed to disable plugins")
         t.printStackTrace()
     }
+
+    try {
+        logger.info("Saving configuration...")
+        Config.save()
+        Que.save()
+    } catch (t: Throwable) {
+        logger.warning("Failed to save configuration")
+        t.printStackTrace()
+    }
+
+    logger.info("Shutdown finished")
     exitProcess(0)
 }
 

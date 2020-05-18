@@ -27,18 +27,18 @@ class MainFramePanelTest {
 
     @Test
     fun testSavingDividerPositionOnWindowClosing() {
-        Config.mainPanelDividerLocation = 0
+        Config.mainPanelDividerLeftLocation = 0
         val panel = MainFramePanel()
         panel.dividerLocation = 100
 
         panel.windowClosing(null)
 
-        assertEquals(100, Config.mainPanelDividerLocation)
+        assertEquals(100, Config.mainPanelDividerLeftLocation)
     }
 
     @Test
     fun testRestoringDividerPosition() {
-        Config.mainPanelDividerLocation = 1
+        Config.mainPanelDividerLeftLocation = 1
         Config.windowRestoreLastPosition = true
 
         val panel = MainFramePanel()
@@ -48,7 +48,7 @@ class MainFramePanelTest {
 
     @Test
     fun testNotRestoringDividerPosition() {
-        Config.mainPanelDividerLocation = 1
+        Config.mainPanelDividerLeftLocation = 1
         Config.windowRestoreLastPosition = false
 
         val panel = MainFramePanel()

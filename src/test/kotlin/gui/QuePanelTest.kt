@@ -1,13 +1,17 @@
 package gui
 
+import mocks.MockPlugin
 import objects.OBSState
-import objects.Que
 import objects.TScene
+import objects.que.Que
+import plugins.obs.ObsPlugin
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SceneQuePanelTest {
+class QuePanelTest {
+    
+    private val mockPlugin = MockPlugin()
 
     @BeforeTest
     fun before() {
@@ -17,11 +21,11 @@ class SceneQuePanelTest {
 
     @Test
     fun testRemoveItemButtonRemovesSelectedItem() {
-        Que.add(TScene("1"))
-        Que.add(TScene("2"))
-        Que.add(TScene("3"))
+        Que.add(mockPlugin.configStringToQueItem("1"))
+        Que.add(mockPlugin.configStringToQueItem("2"))
+        Que.add(mockPlugin.configStringToQueItem("3"))
 
-        val panel = SceneQuePanel()
+        val panel = QuePanel()
         panel.list.selectedIndex = 1
 
         // When
@@ -34,11 +38,11 @@ class SceneQuePanelTest {
 
     @Test
     fun testRemoveItemButtonRemovesNothingWhenNothingSelected() {
-        Que.add(TScene("1"))
-        Que.add(TScene("2"))
-        Que.add(TScene("3"))
+        Que.add(mockPlugin.configStringToQueItem("1"))
+        Que.add(mockPlugin.configStringToQueItem("2"))
+        Que.add(mockPlugin.configStringToQueItem("3"))
 
-        val panel = SceneQuePanel()
+        val panel = QuePanel()
         panel.list.selectedIndex = -1
 
         // When
@@ -52,11 +56,11 @@ class SceneQuePanelTest {
 
     @Test
     fun testRemoveAllButtonClearsQue() {
-        Que.add(TScene("1"))
-        Que.add(TScene("2"))
-        Que.add(TScene("3"))
+        Que.add(mockPlugin.configStringToQueItem("1"))
+        Que.add(mockPlugin.configStringToQueItem("2"))
+        Que.add(mockPlugin.configStringToQueItem("3"))
 
-        val panel = SceneQuePanel()
+        val panel = QuePanel()
 
         // When
         panel.removeAllButton.doClick()
@@ -65,16 +69,17 @@ class SceneQuePanelTest {
     }
 
     @Test
-    fun testRemoveInvalidItemsButtonRemovesInvalidItems() {
+    fun testRemoveInvalidObsSceneItemsButtonRemovesInvalidItems() {
         OBSState.scenes.add(TScene("1"))
         OBSState.scenes.add(TScene("2"))
         OBSState.scenes.add(TScene("3"))
-        Que.add(TScene("1"))
-        Que.add(TScene("invalid 1"))
-        Que.add(TScene("3"))
-        Que.add(TScene("invalid 2"))
+        val obsPlugin = ObsPlugin()
+        Que.add(obsPlugin.configStringToQueItem("1"))
+        Que.add(obsPlugin.configStringToQueItem("invalid 1"))
+        Que.add(obsPlugin.configStringToQueItem("3"))
+        Que.add(obsPlugin.configStringToQueItem("invalid 2"))
 
-        val panel = SceneQuePanel()
+        val panel = QuePanel()
 
         // When
         panel.removeInvalidItemsButton.doClick()
@@ -86,10 +91,10 @@ class SceneQuePanelTest {
 
     @Test
     fun testSwitchedScenesClearsSelection() {
-        Que.add(TScene("1"))
-        Que.add(TScene("2"))
-        Que.add(TScene("3"))
-        val panel = SceneQuePanel()
+        Que.add(mockPlugin.configStringToQueItem("1"))
+        Que.add(mockPlugin.configStringToQueItem("2"))
+        Que.add(mockPlugin.configStringToQueItem("3"))
+        val panel = QuePanel()
         assertEquals(3, panel.list.model.size)
         panel.list.selectedIndex = 1
 
@@ -101,20 +106,20 @@ class SceneQuePanelTest {
 
     @Test
     fun testRefreshQueScenesLoadsNewQueIntoList() {
-        Que.add(TScene("1"))
-        val panel = SceneQuePanel()
+        Que.add(mockPlugin.configStringToQueItem("1"))
+        val panel = QuePanel()
         assertEquals(1, panel.list.model.size)
 
         // When
-        Que.add(TScene("2"))
-        Que.add(TScene("3"))
-        panel.refreshQueScenes()
+        Que.add(mockPlugin.configStringToQueItem("2"))
+        Que.add(mockPlugin.configStringToQueItem("3"))
+        panel.refreshQueItems()
 
         assertEquals(3, panel.list.model.size)
 
         // When
         Que.clear()
-        panel.refreshQueScenes()
+        panel.refreshQueItems()
 
         assertEquals(0, panel.list.model.size)
     }

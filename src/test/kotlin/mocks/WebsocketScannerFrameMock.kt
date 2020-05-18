@@ -1,6 +1,7 @@
-package objects.websocketScanner
+package mocks
 
 import gui.websocketScanner.WebsocketScannerFrame
+import objects.websocketScanner.ScanResult
 
 class WebsocketScannerFrameMock : WebsocketScannerFrame(null, visible = false) {
     var isProcessScanStatusCalled = false

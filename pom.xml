@@ -6,7 +6,7 @@
 
     <groupId>nl.sajansen</groupId>
     <artifactId>obs-scene-que</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>OBS Scene Que</name>
@@ -20,6 +20,7 @@
         <junit.version>4.12</junit.version>
         <twasi.version>1.0.5</twasi.version>
         <launch4j.version>1.7.25</launch4j.version>
+        <jna.version>5.5.0</jna.version>
     </properties>
 
     <dependencies>
@@ -39,6 +40,16 @@
             <groupId>net.twasi</groupId>
             <artifactId>obs-websocket-java</artifactId>
             <version>${twasi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform</artifactId>
+            <version>${jna.version}</version>
         </dependency>
     </dependencies>
 

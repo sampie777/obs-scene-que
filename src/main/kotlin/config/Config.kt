@@ -1,10 +1,10 @@
 package config
 
-import objects.Que
-import objects.TScene
+import getCurrentJarDirectory
 import objects.notifications.Notifications
 import java.awt.Dimension
 import java.awt.Point
+import java.io.File
 import java.util.logging.Logger
 
 object Config {
@@ -14,8 +14,6 @@ object Config {
     var obsPassword: String = ""
     var obsReconnectionTimeout: Long = 3000
 
-    var queSceneNames: ArrayList<String> = ArrayList()
-
     var theme: String = "LightTheme"
     var windowRestoreLastPosition: Boolean = true
     var mainWindowLocation: Point = Point(0, 0)
@@ -24,19 +22,21 @@ object Config {
     var controlWindowLocation: Point = Point(-1, -1)
     var controlWindowSize: Dimension = Dimension(500, 250)
     var controlWindowsIsMaximized: Boolean = false
-    var mainPanelDividerLocation: Int = 370
+    var mainPanelDividerLeftLocation: Int = 370
+    var mainPanelDividerRightLocation: Int = 400
+
+    var sourcePanelLastOpenedTab: String = "OBS"
+
+    var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "default.osq"
+    var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"
+
+    var quickAccessButtonCount: Int = 6
+    var quickAccessButtonQueItems: ArrayList<String> = ArrayList()
 
     fun load() {
         try {
             PropertyLoader.load()
             PropertyLoader.loadConfig(this::class.java)
-
-            Que.clear()
-            queSceneNames.forEach {
-                val scene = TScene()
-                scene.name = it
-                Que.add(scene)
-            }
         } catch (e: Exception) {
             logger.severe("Failed to load Config")
             e.printStackTrace()
@@ -46,11 +46,6 @@ object Config {
 
     fun save() {
         try {
-            queSceneNames.clear()
-            Que.getList().forEach {
-                queSceneNames.add(it.name)
-            }
-
             if (PropertyLoader.saveConfig(this::class.java)) {
                 PropertyLoader.save()
             }

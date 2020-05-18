@@ -5,9 +5,9 @@ import java.awt.datatransfer.Transferable
 import java.awt.datatransfer.UnsupportedFlavorException
 import java.io.IOException
 
-class SceneTransferable(
+class QueItemTransferable(
     private val objectFlavor: DataFlavor,
-    private val sceneTransferablePackage: SceneTransferablePackage
+    private val queItemTransferablePackage: QueItemTransferablePackage
 ) : Transferable {
 
     override fun getTransferDataFlavors(): Array<DataFlavor> {
@@ -19,10 +19,10 @@ class SceneTransferable(
     }
 
     @Throws(UnsupportedFlavorException::class, IOException::class)
-    override fun getTransferData(dataFlavor: DataFlavor): SceneTransferablePackage {
+    override fun getTransferData(dataFlavor: DataFlavor): QueItemTransferablePackage {
         if (!isDataFlavorSupported(dataFlavor)) {
             throw UnsupportedFlavorException(dataFlavor)
         }
-        return sceneTransferablePackage
+        return queItemTransferablePackage
     }
 }

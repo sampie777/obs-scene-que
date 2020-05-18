@@ -16,6 +16,11 @@ class ControlFrameWindowAdapter(private val frame: ControlFrame) : WindowAdapter
         GUI.windowClosing(frame)
         frame.saveWindowPosition()
     }
+
+    override fun windowActivated(e: WindowEvent?) {
+        super.windowActivated(e)
+        GUI.currentFrame = frame
+    }
 }
 
 class ControlFrame(private val parentFrame: Component?) : JFrame() {

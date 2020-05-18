@@ -1,8 +1,8 @@
 package objects
 
 import GUI
-import GuiComponentMock
 import config.Config
+import mocks.GuiComponentMock
 import net.twasi.obsremotejava.objects.Scene
 import kotlin.test.*
 

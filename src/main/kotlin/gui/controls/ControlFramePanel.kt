@@ -2,9 +2,7 @@ package gui.controls
 
 import GUI
 import gui.Refreshable
-import objects.OBSClient
-import objects.OBSState
-import objects.Que
+import objects.que.Que
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Font
@@ -20,12 +18,11 @@ class ControlFramePanel : JPanel(), Refreshable {
 
     private val logger = Logger.getLogger(ControlFramePanel::class.java.name)
 
-    private val previousSceneButton = JButton("Previous")
-    private val currentSceneLabel = JLabel()
-    private val nextSceneButton = JButton("Next")
+    private val previousQueItemButton = JButton("Previous")
+    private val currentQueItemLabel = JLabel()
+    private val nextQueItemButton = JButton("Next")
 
     init {
-        name = "ControlFramePanel"
         GUI.register(this)
 
         initGui()
@@ -37,27 +34,27 @@ class ControlFramePanel : JPanel(), Refreshable {
         layout = BorderLayout(10, 10)
         border = EmptyBorder(5, 5, 5, 5)
 
-        currentSceneLabel.toolTipText = "Current scene"
-        currentSceneLabel.font = Font("Dialog", Font.PLAIN, 26)
-        currentSceneLabel.horizontalAlignment = SwingConstants.CENTER
-        currentSceneLabel.alignmentX = Component.CENTER_ALIGNMENT
+        currentQueItemLabel.toolTipText = "Current que item"
+        currentQueItemLabel.font = Font("Dialog", Font.PLAIN, 26)
+        currentQueItemLabel.horizontalAlignment = SwingConstants.CENTER
+        currentQueItemLabel.alignmentX = Component.CENTER_ALIGNMENT
 
-        previousSceneButton.horizontalAlignment = SwingConstants.CENTER
-        previousSceneButton.alignmentX = Component.CENTER_ALIGNMENT
-        previousSceneButton.font = Font("Dialog", Font.PLAIN, 22)
+        previousQueItemButton.horizontalAlignment = SwingConstants.CENTER
+        previousQueItemButton.alignmentX = Component.CENTER_ALIGNMENT
+        previousQueItemButton.font = Font("Dialog", Font.PLAIN, 22)
 
-        nextSceneButton.horizontalAlignment = SwingConstants.CENTER
-        nextSceneButton.alignmentX = Component.CENTER_ALIGNMENT
-        nextSceneButton.font = Font("Dialog", Font.PLAIN, 26)
+        nextQueItemButton.horizontalAlignment = SwingConstants.CENTER
+        nextQueItemButton.alignmentX = Component.CENTER_ALIGNMENT
+        nextQueItemButton.font = Font("Dialog", Font.PLAIN, 26)
 
-        previousSceneButton.addActionListener { setPreviousQueSceneLive() }
-        nextSceneButton.addActionListener { setNextQueSceneLive() }
+        previousQueItemButton.addActionListener { activatePreviousQueItem() }
+        nextQueItemButton.addActionListener { activateNextQueItem() }
 
         val buttonPanel = JPanel()
         buttonPanel.layout = GridLayout(0, 1)
-        buttonPanel.add(previousSceneButton)
-        buttonPanel.add(currentSceneLabel)
-        buttonPanel.add(nextSceneButton)
+        buttonPanel.add(previousQueItemButton)
+        buttonPanel.add(currentQueItemLabel)
+        buttonPanel.add(nextQueItemButton)
         add(buttonPanel, BorderLayout.CENTER)
     }
 
@@ -74,42 +71,42 @@ class ControlFramePanel : JPanel(), Refreshable {
         GUI.unregister(this)
     }
 
-    override fun refreshQueScenes() {
+    override fun refreshQueItems() {
         switchedScenes()
     }
 
     override fun switchedScenes() {
         refreshButtonsState()
 
-        val previousScene = Que.previewPrevious()
-        if (previousScene == null) {
-            previousSceneButton.text = "Previous: none"
+        val previousQueItem = Que.previewPrevious()
+        if (previousQueItem == null) {
+            previousQueItemButton.text = "Previous: none"
         } else {
-            previousSceneButton.text = "Previous: ${previousScene.name}"
+            previousQueItemButton.text = "Previous: ${previousQueItem.name}"
         }
 
-        val nextScene = Que.previewNext()
-        if (nextScene == null) {
-            nextSceneButton.text = "Next: none"
+        val nextQueItem = Que.previewNext()
+        if (nextQueItem == null) {
+            nextQueItemButton.text = "Next: none"
         } else {
-            nextSceneButton.text = "Next: ${nextScene.name}"
+            nextQueItemButton.text = "Next: ${nextQueItem.name}"
         }
 
-        currentSceneLabel.text = "Current: ${OBSState.currentSceneName}"
+        currentQueItemLabel.text = "Current: ${Que.current()?.name}"
     }
 
     private fun refreshButtonsState() {
-        previousSceneButton.isEnabled = !Que.isFirstItem()
-        nextSceneButton.isEnabled = !Que.isLastItem()
+        previousQueItemButton.isEnabled = !Que.isFirstItem()
+        nextQueItemButton.isEnabled = !Que.isLastItem()
     }
 
-    private fun setNextQueSceneLive() {
-        logger.info("Set next scene to live")
-        OBSClient.setActiveScene(Que.next() ?: return)
+    private fun activateNextQueItem() {
+        logger.info("Activate next que item")
+        Que.next()
     }
 
-    private fun setPreviousQueSceneLive() {
-        logger.info("Set previous scene to live")
-        OBSClient.setActiveScene(Que.previous() ?: return)
+    private fun activatePreviousQueItem() {
+        logger.info("Activate previous que item")
+        Que.previous()
     }
 }
