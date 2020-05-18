@@ -15,13 +15,13 @@ import javax.swing.border.EmptyBorder
 abstract class TextPluginCompanion(private val queItemClass: Class<*>, private val itemTitle: String) {
 
     open fun createPanelForQueItem(plugin: TextPlugin): JComponent {
-        val panel = JPanel(BorderLayout(10, 10))
+        val panel = JPanel(BorderLayout(5, 5))
         panel.border = CompoundBorder(
             CompoundBorder(
                 EmptyBorder(5, 0, 5, 0),
-                BorderFactory.createLineBorder(Color(180, 180, 180))
+                BorderFactory.createMatteBorder(1, 1, 0, 1, Color(180, 180, 180))
             ),
-            EmptyBorder(10, 10, 10, 10)
+            EmptyBorder(8, 10, 10, 10)
         )
 
         val textField = JTextField()
