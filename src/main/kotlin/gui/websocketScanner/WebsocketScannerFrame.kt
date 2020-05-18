@@ -45,12 +45,12 @@ open class WebsocketScannerFrame(private val parentFrame: JFrame?, private val v
         isVisible = visible
     }
 
-    fun scan() {
+    fun scan(timeout: Int) {
         websocketScannerActionPanel.buttonsEnable(false)
 
         websocketScannerTable.clearTable()
 
-        worker = WebsocketScannerSwingWorker(this)
+        worker = WebsocketScannerSwingWorker(this, timeout)
         worker!!.execute()
     }
 

@@ -6,13 +6,16 @@ import java.beans.PropertyChangeListener
 import java.util.logging.Logger
 import javax.swing.SwingWorker
 
-class WebsocketScannerSwingWorker(private val component: WebsocketScannerFrame) : SwingWorker<Boolean, Void>(),
+class WebsocketScannerSwingWorker(
+    private val component: WebsocketScannerFrame,
+    private val timeout: Int = 200
+) : SwingWorker<Boolean, Void>(),
     PropertyChangeListener {
     private val logger = Logger.getLogger(WebsocketScannerSwingWorker::class.java.name)
 
     override fun doInBackground(): Boolean {
         val processStatus = WebsocketScannerProcessStatus(this)
-        val websocketScanner = WebsocketScanner(processStatus)
+        val websocketScanner = WebsocketScanner(processStatus, timeout)
         websocketScanner.scan()
 
         component.processScanStatus("Scan finished")

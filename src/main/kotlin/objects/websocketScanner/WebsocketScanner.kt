@@ -21,13 +21,13 @@ class ScanResult(
 }
 
 
-class WebsocketScanner(private val processStatus: WebsocketScannerProcessStatus, private val port: Int = 4444) {
+class WebsocketScanner(private val processStatus: WebsocketScannerProcessStatus, private val timeout: Int = 200, private val port: Int = 4444) {
     private val logger = Logger.getLogger(WebsocketScanner::class.java.name)
 
-    private val timeout = 200
     private val threadPoolSize = 20
 
     fun scan(): List<ScanResult> {
+        logger.info("Creating websocket scanner with timeout: $timeout ms for ports: $port")
         val networkIpAddresses = getNetworkIpAddresses()
 
         val localNetworkIpAddresses = networkIpAddresses
