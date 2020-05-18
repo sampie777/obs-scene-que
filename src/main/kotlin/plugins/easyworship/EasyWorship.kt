@@ -20,8 +20,6 @@ class WindowFinder(private val windowTitle: String) : WNDENUMPROC {
     override fun callback(hWnd: HWND, arg1: Pointer?): Boolean {
         val windowText = CharArray(512)
         User32.INSTANCE.GetWindowText(hWnd, windowText, 512)
-        print("To string: ")
-        println(windowText.toString())
         val wText = Native.toString(windowText)
 
         // get rid of this if block if you want all windows regardless
@@ -31,11 +29,37 @@ class WindowFinder(private val windowTitle: String) : WNDENUMPROC {
             return true
         }
 
-        logger.fine(wText)
-        println(wText)
-
         if (wText.contains(windowTitle)) {
             windowHandle = hWnd
+            return false
+        }
+        return true
+    }
+}
+
+/**
+ * Handler to find an inner element of a window
+ */
+class InnerWindowFinder(private val innerWindowText: String) : WNDENUMPROC {
+    private val logger = Logger.getLogger(InnerWindowFinder::class.java.name)
+
+    var innerWindowHandle: HWND? = null
+    var count: Int = 0
+
+    override fun callback(hWnd: HWND, arg1: Pointer?): Boolean {
+        val windowText = CharArray(512)
+        User32.INSTANCE.GetWindowText(hWnd, windowText, 512)
+        val wText = Native.toString(windowText)
+
+        // get rid of this if block if you want all windows regardless
+        // of whether
+        // or not they have text
+        if (wText.isEmpty()) {
+            return true
+        }
+
+        if (wText.contains(innerWindowText)) {
+            innerWindowHandle = hWnd
             return false
         }
         return true
@@ -46,6 +70,7 @@ object EasyWorship {
     private val logger = Logger.getLogger(EasyWorship::class.java.name)
 
     private const val windowContainsText = "EasyWorship 2009"
+    private const val innerWindowContainsText = "Genesis 1:1"
 
     private var windowHandle: HWND? = null
     private val robot = Robot()
@@ -63,8 +88,13 @@ object EasyWorship {
 
         val windowFinder = WindowFinder(windowTitle)
         User32.INSTANCE.EnumWindows(windowFinder, null)
-
         windowHandle = windowFinder.windowHandle
+
+        val innerWindowFinder = InnerWindowFinder(innerWindowContainsText)
+        User32.INSTANCE.EnumChildWindows(windowHandle, innerWindowFinder, null)
+        if (innerWindowFinder.innerWindowHandle != null) {
+            windowHandle = innerWindowFinder.innerWindowHandle
+        }
 
         if (windowHandle == null) {
             logger.warning("Failed to find window: $windowTitle")
