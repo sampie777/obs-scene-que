@@ -6,7 +6,7 @@ import handles.QueItemTransferHandler
 import objects.notifications.Notifications
 import objects.que.QueLoader
 import plugins.common.QueItem
-import java.awt.Color
+import themes.Theme
 import java.awt.Dimension
 import java.awt.event.ActionEvent
 import java.util.logging.Logger
@@ -59,7 +59,7 @@ class QuickAccessButton(
         }
 
         text = "<html><center>${queItem?.name}</center></html>"
-        background = Color(221, 232, 243)
+        background = Theme.get.BUTTON_BACKGROUND_COLOR
         isEnabled = true
     }
 
