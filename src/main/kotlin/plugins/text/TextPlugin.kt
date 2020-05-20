@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder
 class TextPlugin : BasePlugin {
     override val name = "TextPlugin"
     override val description = "Que items for just displaying text"
+    override val version: String = "0.0.0"
 
     override val icon: Icon? = createImageIcon("/plugins/text/icon-14.png")
 

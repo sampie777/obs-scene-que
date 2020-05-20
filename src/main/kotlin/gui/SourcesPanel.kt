@@ -1,6 +1,7 @@
 package gui
 
 import config.Config
+import objects.notifications.Notifications
 import plugins.PluginLoader
 import java.awt.BorderLayout
 import java.util.logging.Logger
@@ -37,7 +38,17 @@ class SourcesPanel : JPanel() {
             val tabComponent: JComponent
             try {
                 tabComponent = plugin.sourcePanel()
-                tabbedPane.addTab(plugin.tabName, plugin.icon, tabComponent, plugin.description)
+                tabbedPane.addTab(
+                    plugin.tabName,
+                    plugin.icon,
+                    tabComponent,
+                    "${plugin.description} [${plugin.version}]"
+                )
+            } catch (e: AbstractMethodError) {
+                logger.warning("Failed to load panel for plugin: ${plugin.name}")
+                e.printStackTrace()
+                Notifications.add("Plugin ${plugin.name} is missing required data fields", "Plugins")
+                continue
             } catch (e: Exception) {
                 logger.warning("Failed to load panel for plugin: ${plugin.name}")
                 e.printStackTrace()

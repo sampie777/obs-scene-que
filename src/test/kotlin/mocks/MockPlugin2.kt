@@ -9,6 +9,7 @@ import javax.swing.JPanel
 class MockPlugin2 : BasePlugin {
     override val name: String = "MockPlugin2"
     override val description: String = "description"
+    override val version: String = "0.0.0"
     override val icon: Icon? = null
     override val tabName: String = "MockPlugin2TabName"
 

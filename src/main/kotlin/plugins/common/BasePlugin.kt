@@ -7,6 +7,7 @@ interface BasePlugin {
 
     val name: String
     val description: String
+    val version: String
 
     val icon: Icon?
 
