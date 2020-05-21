@@ -5,6 +5,7 @@ import mocks.MockPlugin2
 import mocks.QueItemMock
 import kotlin.test.*
 
+@Suppress("DEPRECATION")
 class QueTest {
     
     private val mockPlugin = MockPlugin()

@@ -5,6 +5,7 @@ import mocks.MockPlugin
 import mocks.QueItemMock
 import kotlin.test.*
 
+@Suppress("DEPRECATION")
 class QuickAccessButtonTest {
 
     private val plugin = MockPlugin()
@@ -19,7 +20,7 @@ class QuickAccessButtonTest {
         button.dropNewItem(queItem, 0)
 
         assertEquals(queItem, button.getQueItem())
-        assertEquals("MockPlugin|false|item1", Config.quickAccessButtonQueItems[0])
+        assertEquals("""{"pluginName":"MockPlugin","className":"QueItemMock","name":"item1","executeAfterPrevious":false,"data":{}}""", Config.quickAccessButtonQueItems[0])
     }
 
     @Test

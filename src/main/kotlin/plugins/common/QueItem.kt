@@ -1,5 +1,6 @@
 package plugins.common
 
+import objects.que.JsonQue
 import objects.que.Que
 import themes.Theme
 import java.awt.Color
@@ -17,7 +18,22 @@ interface QueItem {
     fun activate()
     fun deactivate()
 
+    @Deprecated(
+        "Use JSON converter instead of this plane text converter",
+        ReplaceWith("toJson()", "")
+    )
     fun toConfigString(): String
+    fun toJson(): JsonQue.QueItem = JsonQue.QueItem(
+        pluginName = plugin.name,
+        className = javaClass.simpleName,
+        name = name,
+        executeAfterPrevious = executeAfterPrevious,
+        data = HashMap()
+    )
+
+    fun dataFromJson(jsonQueItem: JsonQue.QueItem) {
+        executeAfterPrevious = jsonQueItem.executeAfterPrevious
+    }
 
     fun getListCellRendererComponent(
         cell: JLabel,

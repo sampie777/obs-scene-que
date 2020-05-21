@@ -6,6 +6,7 @@ import gui.utils.createImageIcon
 import handles.QueItemTransferHandler
 import objects.OBSState
 import objects.TScene
+import objects.que.JsonQue
 import plugins.common.BasePlugin
 import plugins.common.QueItem
 import java.awt.*
@@ -61,6 +62,10 @@ class ObsPlugin : BasePlugin, Refreshable {
 
     override fun configStringToQueItem(value: String): QueItem {
         return ObsSceneQueItem(this, TScene(value))
+    }
+
+    override fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem {
+        return ObsSceneQueItem(this, TScene(jsonQueItem.name))
     }
 
     override fun refreshScenes() {

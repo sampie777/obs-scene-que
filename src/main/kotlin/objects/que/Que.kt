@@ -1,6 +1,7 @@
 package objects.que
 
 import GUI
+import objects.ApplicationInfo
 import objects.OBSState
 import objects.notifications.Notifications
 import plugins.common.QueItem
@@ -10,6 +11,9 @@ import java.util.logging.Logger
 object Que {
 
     private val logger = Logger.getLogger(Que.toString())
+
+    var name: String = "default-que"
+    var applicationVersion: String = ApplicationInfo.version
 
     private var list: ArrayList<QueItem> = ArrayList()
     private var currentIndex: Int = -1

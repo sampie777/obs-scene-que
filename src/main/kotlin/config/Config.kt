@@ -2,6 +2,7 @@ package config
 
 import getCurrentJarDirectory
 import objects.notifications.Notifications
+import objects.que.Que
 import java.awt.Dimension
 import java.awt.Point
 import java.io.File
@@ -27,7 +28,7 @@ object Config {
 
     var sourcePanelLastOpenedTab: String = "OBS"
 
-    var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "default.osq"
+    var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + Que.name + ".json"
     var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"
 
     var quickAccessButtonCount: Int = 6

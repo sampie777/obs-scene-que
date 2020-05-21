@@ -1,5 +1,6 @@
 package plugins.common
 
+import objects.que.JsonQue
 import javax.swing.Icon
 import javax.swing.JComponent
 
@@ -24,5 +25,10 @@ interface BasePlugin {
      */
     fun sourcePanel(): JComponent
 
+    @Deprecated(
+        "Use JSON converter instead of this plane text converter",
+        ReplaceWith("jsonToQueItem(jsonQueItem: JsonQue.QueItem)", "objects.que.JsonQue")
+    )
     fun configStringToQueItem(value: String): QueItem
+    fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem
 }

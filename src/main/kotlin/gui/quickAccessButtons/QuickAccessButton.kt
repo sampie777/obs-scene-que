@@ -1,10 +1,10 @@
 package gui.quickAccessButtons
 
+import com.google.gson.Gson
 import config.Config
 import handles.QueItemDropComponent
 import handles.QueItemTransferHandler
 import objects.notifications.Notifications
-import objects.que.QueLoader
 import plugins.common.QueItem
 import themes.Theme
 import java.awt.Dimension
@@ -46,7 +46,7 @@ class QuickAccessButton(
         if (item == null) {
             Config.quickAccessButtonQueItems[index] = ""
         } else {
-            Config.quickAccessButtonQueItems[this.index] = QueLoader.queItemToConfigString(item)
+            Config.quickAccessButtonQueItems[this.index] = Gson().toJson(item.toJson())
         }
     }
 

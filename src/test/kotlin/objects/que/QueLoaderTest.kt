@@ -2,6 +2,7 @@ package objects.que
 
 import config.Config
 import mocks.MockPlugin
+import objects.notifications.Notifications
 import plugins.PluginLoader
 import plugins.obs.ObsPlugin
 import plugins.obs.ObsSceneQueItem
@@ -10,6 +11,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@Suppress("DEPRECATION")
 class QueLoaderTest {
 
     private val mockPlugin = MockPlugin()
@@ -17,6 +19,8 @@ class QueLoaderTest {
     @BeforeTest
     fun before() {
         Que.clear()
+        Notifications.clear()
+        PluginLoader.plugins.clear()
     }
 
     @Test
@@ -51,5 +55,90 @@ class QueLoaderTest {
         QueLoader.load()
 
         assertEquals(0, Que.size())
+    }
+
+    @Test
+    fun testSaveQueToJson() {
+        Que.name = "testQue"
+        Que.applicationVersion = "0.1.0"
+        Que.add(mockPlugin.configStringToQueItem("1"))
+        Que.add(mockPlugin.configStringToQueItem("2"))
+
+        val json = QueLoader.queToJson()
+
+        assertEquals("""
+            {
+              "name": "testQue",
+              "applicationVersion": "0.1.0",
+              "queItems": [
+                {
+                  "pluginName": "MockPlugin",
+                  "className": "QueItemMock",
+                  "name": "1",
+                  "executeAfterPrevious": false,
+                  "data": {}
+                },
+                {
+                  "pluginName": "MockPlugin",
+                  "className": "QueItemMock",
+                  "name": "2",
+                  "executeAfterPrevious": false,
+                  "data": {}
+                }
+              ]
+            }
+        """.trimIndent(), json)
+    }
+
+    @Test
+    fun testLoadQueFromJson() {
+        PluginLoader.plugins.add(mockPlugin)
+        val json = """
+            {
+              "name": "testQue",
+              "applicationVersion": "0.1.0",
+              "queItems": [
+                {
+                  "pluginName": "MockPlugin",
+                  "className": "QueItemMock",
+                  "name": "1",
+                  "executeAfterPrevious": false,
+                  "data": {}
+                },
+                {
+                  "pluginName": "MockPlugin",
+                  "className": "QueItemMock",
+                  "name": "2",
+                  "executeAfterPrevious": false,
+                  "data": {}
+                }
+              ]
+            }
+        """
+
+        QueLoader.fromJson(json)
+
+        assertEquals("testQue", Que.name)
+        assertEquals("0.1.0", Que.applicationVersion)
+        assertEquals("1", Que.getAt(0)?.name)
+        assertEquals("2", Que.getAt(1)?.name)
+    }
+
+    @Test
+    fun testLoadQueFromJsonGivesError() {
+        PluginLoader.plugins.add(mockPlugin)
+        Que.name = "testQue"
+        Que.applicationVersion = "0.1.0"
+        Que.add(mockPlugin.configStringToQueItem("1"))
+        Que.add(mockPlugin.configStringToQueItem("2"))
+
+        val json = "invalid"
+        QueLoader.fromJson(json)
+
+        assertEquals(1, Notifications.unreadNotifications)
+        assertEquals("testQue", Que.name)
+        assertEquals("0.1.0", Que.applicationVersion)
+        assertEquals("1", Que.getAt(0)?.name)
+        assertEquals("2", Que.getAt(1)?.name)
     }
 }

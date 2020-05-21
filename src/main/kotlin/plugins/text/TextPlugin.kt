@@ -1,6 +1,7 @@
 package plugins.text
 
 import gui.utils.createImageIcon
+import objects.que.JsonQue
 import plugins.common.BasePlugin
 import plugins.common.QueItem
 import plugins.text.queItems.HeaderQueItem
@@ -45,9 +46,17 @@ class TextPlugin : BasePlugin {
         val className = value.substringBefore(configStringSeparator)
         val text = value.substringAfter(configStringSeparator)
         return when (className) {
-            "HeaderQueItem" -> HeaderQueItem(this, text)
-            "PlainTextQueItem" -> PlainTextQueItem(this, text)
+            HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, text)
+            PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, text)
             else -> throw IllegalArgumentException("Invalid TextPlugin que item: $value")
+        }
+    }
+
+    override fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem {
+        return when (jsonQueItem.className) {
+            HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, jsonQueItem.name)
+            PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, jsonQueItem.name)
+            else -> throw IllegalArgumentException("Invalid TextPlugin que item: ${jsonQueItem.className}")
         }
     }
 }

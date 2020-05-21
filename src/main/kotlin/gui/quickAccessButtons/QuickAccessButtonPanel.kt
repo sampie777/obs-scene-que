@@ -29,6 +29,7 @@ class QuickAccessButtonPanel : JPanel() {
         if (stringSourceList.size - 1 < index) {
             stringSourceList.add("")
         }
-        return QueLoader.loadQueItemForStringLine(stringSourceList[index])
+        val jsonQueItem = QueLoader.jsonQueItemFromJson(stringSourceList[index]) ?: return null
+        return QueLoader.loadQueItemFromJson(jsonQueItem)
     }
 }
