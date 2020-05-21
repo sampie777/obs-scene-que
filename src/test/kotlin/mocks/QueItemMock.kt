@@ -26,4 +26,6 @@ class QueItemMock(override val plugin: BasePlugin, override val name: String) : 
         cellRendererIsCalled = true
         super.getListCellRendererComponent(cell, index, isSelected, cellHasFocus)
     }
+
+    override fun toString(): String = "QueItemMock[name=$name]"
 }

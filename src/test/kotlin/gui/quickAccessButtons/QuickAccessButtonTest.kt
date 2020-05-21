@@ -19,13 +19,13 @@ class QuickAccessButtonTest {
         button.dropNewItem(queItem, 0)
 
         assertEquals(queItem, button.getQueItem())
-        assertEquals("MockPlugin|item1", Config.quickAccessButtonQueItems[0])
+        assertEquals("MockPlugin|false|item1", Config.quickAccessButtonQueItems[0])
     }
 
     @Test
     fun testSetNewEmptyItemSavesToConfig() {
         Config.quickAccessButtonQueItems = ArrayList()
-        Config.quickAccessButtonQueItems.add("MockPlugin|item1")
+        Config.quickAccessButtonQueItems.add("MockPlugin|false|item1")
         val queItem = plugin.configStringToQueItem("item1")
         val button = QuickAccessButton(0, queItem = queItem)
 
@@ -51,7 +51,7 @@ class QuickAccessButtonTest {
     @Test
     fun testSetNewEmptyItemGetsDisplayed() {
         Config.quickAccessButtonQueItems = ArrayList()
-        Config.quickAccessButtonQueItems.add("MockPlugin|item1")
+        Config.quickAccessButtonQueItems.add("MockPlugin|false|item1")
         val queItem = plugin.configStringToQueItem("item1")
         val button = QuickAccessButton(0, queItem = queItem)
 

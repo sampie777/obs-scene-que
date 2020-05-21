@@ -119,6 +119,70 @@ class QueTest {
     }
 
     @Test
+    fun testNextWithExecuteAfterPreviousItems() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        item2.executeAfterPrevious = true
+        val item3 = mockPlugin.configStringToQueItem("3") as QueItemMock
+        item3.executeAfterPrevious = true
+        val item4 = mockPlugin.configStringToQueItem("4") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.add(item3)
+        Que.add(item4)
+
+        assertEquals(-1, Que.currentIndex())
+        assertNull(Que.current())
+
+        Que.next()
+        assertEquals(2, Que.currentIndex())
+        assertEquals(item3, Que.current())
+        assertTrue(item1.isActivated)
+        assertTrue(item2.isActivated)
+        assertTrue(item3.isActivated)
+        assertFalse(item4.isActivated)
+
+        Que.next()
+        assertEquals(3, Que.currentIndex())
+        assertEquals(item4, Que.current())
+        assertTrue(item4.isActivated)
+    }
+
+    @Test
+    fun testPreviousWithExecuteAfterPreviousItems() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        item2.executeAfterPrevious = true
+        val item3 = mockPlugin.configStringToQueItem("3") as QueItemMock
+        item3.executeAfterPrevious = true
+        val item4 = mockPlugin.configStringToQueItem("4") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.add(item3)
+        Que.add(item4)
+
+        Que.setCurrentQueItemByIndex(3)
+        assertEquals(3, Que.currentIndex())
+        assertEquals(item4, Que.current())
+
+        Que.previous()
+        assertEquals(2, Que.currentIndex())
+        assertEquals(item3, Que.current())
+
+        Que.previous()
+        assertEquals(1, Que.currentIndex())
+        assertEquals(item2, Que.current())
+
+        Que.previous()
+        assertEquals(0, Que.currentIndex())
+        assertEquals(item1, Que.current())
+
+        Que.previous()
+        assertEquals(0, Que.currentIndex())
+        assertEquals(item1, Que.current())
+    }
+
+    @Test
     fun testGetAt() {
         val item1 = mockPlugin.configStringToQueItem("1")
         val item2 = mockPlugin.configStringToQueItem("2")

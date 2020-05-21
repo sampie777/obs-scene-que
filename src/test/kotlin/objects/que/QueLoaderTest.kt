@@ -23,7 +23,7 @@ class QueLoaderTest {
     fun testStringToQueItem() {
         val obsPlugin = ObsPlugin()
         PluginLoader.plugins.add(obsPlugin)
-        val string = obsPlugin.name + "|Scene 1"
+        val string = obsPlugin.name + "|false|Scene 1"
         val item = QueLoader.loadQueItemForStringLine(string)
 
         assertTrue(item is ObsSceneQueItem)
@@ -38,7 +38,7 @@ class QueLoaderTest {
 
         val string = QueLoader.queToString()
 
-        assertEquals("MockPlugin|1\nMockPlugin|2\nMockPlugin|3", string)
+        assertEquals("MockPlugin|false|1\nMockPlugin|false|2\nMockPlugin|false|3", string)
     }
 
     @Test

@@ -25,7 +25,7 @@ class QuickAccessButtonPanelTest {
     @Test
     fun testGetStringQueItemFromQueDoesNotExpandsArrayIfNotNeeded() {
         val list = ArrayList<String>()
-        list.add("MockPlugin|item1")
+        list.add("MockPlugin|false|item1")
         val panel = QuickAccessButtonPanel()
         PluginLoader.plugins.add(plugin)
         val queItem = plugin.configStringToQueItem("item1")
@@ -33,7 +33,7 @@ class QuickAccessButtonPanelTest {
         val item = panel.getStringQueItemFromQue(list, 0)
 
         assertEquals(1, list.size)
-        assertEquals("MockPlugin|item1", list[0])
+        assertEquals("MockPlugin|false|item1", list[0])
         assertEquals(queItem.name, item!!.name)
     }
 }

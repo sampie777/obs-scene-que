@@ -122,10 +122,11 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
 
         Que.save()
 
-        switchedScenes()
+        list.repaint()
     }
 
     override fun switchedScenes() {
+        list.clearSelection()
         list.repaint()
     }
 
