@@ -29,6 +29,7 @@ internal object QueLoader {
             return
         }
 
+        // Create backwards compatibility
         if (queFile.extension == "osq") {
             @Suppress("DEPRECATION")
             val queList = queFile.readLines()
@@ -168,6 +169,11 @@ internal object QueLoader {
         }
 
         val stringData = line.split("|", limit = 3)
+        if (stringData.size != 3) {
+            logger.info("Invalid que item string line: $line")
+            return null
+        }
+
         val pluginName = stringData[0]
         val executeAfterPrevious = stringData[1] == "true"
         val data = stringData[2]
