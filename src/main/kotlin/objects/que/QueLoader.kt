@@ -30,6 +30,7 @@ internal object QueLoader {
         }
 
         if (queFile.extension == "osq") {
+            @Suppress("DEPRECATION")
             val queList = queFile.readLines()
                 .mapNotNull { loadQueItemForStringLine(it) } as ArrayList<QueItem>
             Que.setList(queList)
@@ -85,6 +86,7 @@ internal object QueLoader {
         }
 
         val fileName = File(Config.queFile).parentFile.absolutePath + File.separatorChar + Que.name + ".json"
+        Config.queFile = fileName
         logger.info("Saving que to file: $fileName")
         File(fileName).writeText(json)
 

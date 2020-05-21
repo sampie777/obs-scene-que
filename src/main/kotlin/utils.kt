@@ -49,8 +49,8 @@ fun exitApplication() {
 
     try {
         logger.info("Saving configuration...")
-        Config.save()
         Que.save()
+        Config.save()
     } catch (t: Throwable) {
         logger.warning("Failed to save configuration")
         t.printStackTrace()
