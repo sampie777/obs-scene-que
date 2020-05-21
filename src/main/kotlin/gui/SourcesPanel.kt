@@ -6,8 +6,10 @@ import plugins.PluginLoader
 import java.awt.BorderLayout
 import java.util.logging.Logger
 import javax.swing.JComponent
+import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JTabbedPane
+import javax.swing.border.EmptyBorder
 
 class SourcesPanel : JPanel() {
     private val logger = Logger.getLogger(SourcesPanel::class.java.name)
@@ -18,6 +20,10 @@ class SourcesPanel : JPanel() {
 
     private fun initGui() {
         layout = BorderLayout()
+
+        val titleLabel = JLabel("Sources")
+        titleLabel.border = EmptyBorder(7, 10, 7, 10)
+        add(titleLabel, BorderLayout.PAGE_START)
 
         val tabbedPane = JTabbedPane()
         tabbedPane.tabPlacement = JTabbedPane.TOP
