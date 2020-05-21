@@ -38,8 +38,11 @@ internal object QueLoader {
             return null
         }
 
-        val pluginName = line.substringBefore("|")
-        val data = line.substringAfter("|")
+        val stringData = line.split("|", limit = 3)
+        val pluginName = stringData[0]
+        val executeAfterPrevious = stringData[1] == "true"
+        val data = stringData[2]
+
 
         val plugin = PluginLoader.plugins.find { plugin -> plugin.name == pluginName }
 
@@ -49,7 +52,9 @@ internal object QueLoader {
         }
 
         try {
-            return plugin.configStringToQueItem(data)
+            val item = plugin.configStringToQueItem(data)
+            item.executeAfterPrevious = executeAfterPrevious
+            return item
         } catch (e: Exception) {
             logger.warning("Failed to load que item $line")
             e.printStackTrace()
@@ -83,5 +88,6 @@ internal object QueLoader {
         }
     }
 
-    fun queItemToConfigString(it: QueItem) = it.plugin.name + "|" + it.toConfigString()
+    fun queItemToConfigString(queItem: QueItem) =
+        queItem.plugin.name + "|" + queItem.executeAfterPrevious + "|" + queItem.toConfigString()
 }

@@ -1,7 +1,9 @@
-package plugins.text
+package plugins.text.queItems
 
 import objects.que.Que
 import plugins.common.QueItem
+import plugins.text.TextPlugin
+import plugins.text.TextPluginQueItemCompanion
 import themes.Theme
 import java.awt.Color
 import java.awt.Font
@@ -12,7 +14,9 @@ import javax.swing.border.EmptyBorder
 
 class HeaderQueItem(override val plugin: TextPlugin, override val name: String) : QueItem {
 
-    companion object : TextPluginCompanion(HeaderQueItem::class.java, "Header");
+    override var executeAfterPrevious = false
+
+    companion object QueItemCompanion : TextPluginQueItemCompanion(HeaderQueItem::class.java, "Header");
 
     override fun activate() {
         // Skip this que item by going to the next one

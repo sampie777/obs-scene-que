@@ -11,6 +11,7 @@ import javax.swing.JLabel
 
 class ObsSceneQueItem(override val plugin: BasePlugin, val scene: TScene) : QueItem {
     override val name: String = scene.name
+    override var executeAfterPrevious = false
 
     override fun activate() {
         OBSClient.setActiveScene(scene)

@@ -1,7 +1,6 @@
 import config.Config
 import gui.MainFrame
 import objects.ApplicationInfo
-import objects.OBSClient
 import objects.que.Que
 import plugins.PluginLoader
 import themes.Theme
@@ -29,5 +28,5 @@ fun main(args: Array<String>) {
         MainFrame.createAndShow()
     }
 
-    OBSClient.start()
+//    OBSClient.start()
 }

@@ -2,6 +2,7 @@ package gui
 
 import GUI
 import config.Config
+import gui.list.QuePanel
 import gui.notifications.NotificationFrame
 import gui.utils.createImageIcon
 import gui.utils.getMainFrameComponent

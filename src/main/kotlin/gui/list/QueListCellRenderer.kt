@@ -1,4 +1,4 @@
-package gui
+package gui.list
 
 import brightness
 import plugins.common.QueItem
@@ -7,7 +7,6 @@ import java.awt.Component
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JLabel
 import javax.swing.JList
-import javax.swing.border.EmptyBorder
 
 class QueListCellRenderer : DefaultListCellRenderer() {
 
@@ -19,8 +18,6 @@ class QueListCellRenderer : DefaultListCellRenderer() {
         cellHasFocus: Boolean
     ): Component {
         val cell = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus) as JLabel
-        cell.border = EmptyBorder(1, 10, 1, 10)
-
         if (value == null) {
             return cell
         }

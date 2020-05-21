@@ -1,5 +1,6 @@
 package gui
 
+import gui.list.QuePanel
 import mocks.MockPlugin
 import objects.OBSState
 import objects.TScene

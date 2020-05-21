@@ -1,5 +1,6 @@
 package gui
 
+import gui.list.QueListCellRenderer
 import mocks.MockPlugin
 import mocks.QueItemMock
 import objects.OBSState

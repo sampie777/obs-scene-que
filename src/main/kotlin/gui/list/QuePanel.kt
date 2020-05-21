@@ -1,6 +1,7 @@
-package gui
+package gui.list
 
 import GUI
+import gui.Refreshable
 import handles.QueItemDropComponent
 import handles.QueItemTransferHandler
 import objects.que.Que
@@ -64,11 +65,12 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
         list.cellRenderer = QueListCellRenderer()
         list.background = Theme.get.QUE_LIST_BACKGROUND_COLOR
 
+        list.addKeyListener(QueListKeyListener(list))
         list.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
-                val selectedIndex = (e.source as JList<*>).selectedIndex
-
-                if (e.clickCount == 2) {   // On double click
+                // On double click
+                if (e.clickCount == 2) {
+                    val selectedIndex = (e.source as JList<*>).selectedIndex
                     Que.setCurrentQueItemByIndex(selectedIndex)
                     Que.activateCurrent()
                 }
@@ -114,7 +116,9 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
     }
 
     override fun refreshQueItems() {
+        val selectedIndex = list.selectedIndex
         list.setListData(Que.getList().toTypedArray())
+        list.selectedIndex = selectedIndex
 
         Que.save()
 
@@ -122,7 +126,6 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
     }
 
     override fun switchedScenes() {
-        list.clearSelection()
         list.repaint()
     }
 

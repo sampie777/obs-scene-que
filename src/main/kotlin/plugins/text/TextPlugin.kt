@@ -3,6 +3,8 @@ package plugins.text
 import gui.utils.createImageIcon
 import plugins.common.BasePlugin
 import plugins.common.QueItem
+import plugins.text.queItems.HeaderQueItem
+import plugins.text.queItems.PlainTextQueItem
 import java.awt.BorderLayout
 import java.awt.GridLayout
 import javax.swing.*

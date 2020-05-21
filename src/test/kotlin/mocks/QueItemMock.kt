@@ -8,6 +8,7 @@ class QueItemMock(override val plugin: BasePlugin, override val name: String) : 
     var isActivated = false
     var isDeactivated = false
     var cellRendererIsCalled = false
+    override var executeAfterPrevious = false
 
     override fun activate() {
         isActivated = true

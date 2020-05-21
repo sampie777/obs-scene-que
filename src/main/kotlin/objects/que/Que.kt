@@ -43,8 +43,8 @@ object Que {
         }
 
         deactivateCurrent()
-        activateItem(list.getOrNull(--currentIndex))
-        GUI.refreshQueItems()
+        currentIndex--
+        activateCurrent()
     }
 
     fun current(): QueItem? {
@@ -62,8 +62,12 @@ object Que {
         }
 
         deactivateCurrent()
-        activateItem(list.getOrNull(++currentIndex))
-        GUI.refreshQueItems()
+        currentIndex++
+        activateCurrent()
+
+        if (previewNext() != null && previewNext()!!.executeAfterPrevious) {
+            next()
+        }
     }
 
     fun getAt(index: Int): QueItem? {
@@ -173,7 +177,7 @@ object Que {
         try {
             item!!.activate()
         } catch (e: Exception) {
-            logger.warning("Failed to activate current que item")
+            logger.warning("Exception occurred when activating current que item: ${item?.name}")
             e.printStackTrace()
             Notifications.add("Failed to activate current que item '${item?.name}'", "Que")
         }

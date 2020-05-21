@@ -12,7 +12,7 @@ import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
-abstract class TextPluginCompanion(private val queItemClass: Class<*>, private val itemTitle: String) {
+abstract class TextPluginQueItemCompanion(private val queItemClass: Class<*>, private val itemTitle: String) {
 
     open fun createPanelForQueItem(plugin: TextPlugin): JComponent {
         val panel = JPanel(BorderLayout(5, 5))

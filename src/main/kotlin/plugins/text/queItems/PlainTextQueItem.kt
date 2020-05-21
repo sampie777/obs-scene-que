@@ -1,10 +1,14 @@
-package plugins.text
+package plugins.text.queItems
 
 import plugins.common.QueItem
+import plugins.text.TextPlugin
+import plugins.text.TextPluginQueItemCompanion
 
 class PlainTextQueItem(override val plugin: TextPlugin, override val name: String) : QueItem {
 
-    companion object : TextPluginCompanion(PlainTextQueItem::class.java, "Plain text");
+    override var executeAfterPrevious = false
+
+    companion object QueItemCompanion : TextPluginQueItemCompanion(PlainTextQueItem::class.java, "Plain text");
 
     override fun activate() {}
 
