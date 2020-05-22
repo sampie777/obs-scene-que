@@ -45,6 +45,7 @@ class QuickAccessButtonPanel : JPanel() {
 
         // Create backwards compatibility
         try {
+            @Suppress("DEPRECATION")
             val queItem = QueLoader.loadQueItemForStringLine(stringSourceList[index])
             if (queItem != null) {
                 Config.quickAccessButtonQueItems[index] = Gson().toJson(queItem.toJson())
