@@ -20,13 +20,13 @@ class QueLoaderTest {
     fun before() {
         Que.clear()
         Notifications.clear()
-        PluginLoader.plugins.clear()
+        PluginLoader.queItemPlugins.clear()
     }
 
     @Test
     fun testStringToQueItem() {
         val obsPlugin = ObsPlugin()
-        PluginLoader.plugins.add(obsPlugin)
+        PluginLoader.registerQueItemPlugin(obsPlugin)
         val string = obsPlugin.name + "|false|Scene 1"
         val item = QueLoader.loadQueItemForStringLine(string)
 
@@ -92,7 +92,7 @@ class QueLoaderTest {
 
     @Test
     fun testLoadQueFromJson() {
-        PluginLoader.plugins.add(mockPlugin)
+        PluginLoader.registerQueItemPlugin(mockPlugin)
         val json = """
             {
               "name": "testQue",
@@ -126,7 +126,7 @@ class QueLoaderTest {
 
     @Test
     fun testLoadQueFromJsonGivesError() {
-        PluginLoader.plugins.add(mockPlugin)
+        PluginLoader.registerQueItemPlugin(mockPlugin)
         Que.name = "testQue"
         Que.applicationVersion = "0.1.0"
         Que.add(mockPlugin.configStringToQueItem("1"))

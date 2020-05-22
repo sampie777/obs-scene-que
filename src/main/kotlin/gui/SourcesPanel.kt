@@ -40,7 +40,7 @@ class SourcesPanel : JPanel() {
     }
 
     private fun addPluginsToTabbedPane(tabbedPane: JTabbedPane) {
-        for (plugin in PluginLoader.plugins.sortedBy { it.name }) {
+        for (plugin in PluginLoader.queItemPlugins.sortedBy { it.name }) {
             val tabComponent: JComponent
             try {
                 tabComponent = plugin.sourcePanel()

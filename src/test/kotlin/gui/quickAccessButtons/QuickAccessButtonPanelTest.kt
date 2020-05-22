@@ -28,7 +28,7 @@ class QuickAccessButtonPanelTest {
         val list = ArrayList<String>()
         list.add("""{"pluginName":"MockPlugin","className":"QueItemMock","name":"item1","executeAfterPrevious":false,"data":{}}""")
         val panel = QuickAccessButtonPanel()
-        PluginLoader.plugins.add(plugin)
+        PluginLoader.registerQueItemPlugin(plugin)
         val queItem = plugin.configStringToQueItem("item1")
 
         val item = panel.getStringQueItemFromQue(list, 0)

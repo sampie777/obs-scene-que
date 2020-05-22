@@ -42,7 +42,7 @@ internal object QueLoader {
     }
 
     fun loadQueItemFromJson(jsonQueItem: JsonQue.QueItem): QueItem? {
-        val plugin = PluginLoader.plugins.find { plugin -> plugin.name == jsonQueItem.pluginName }
+        val plugin = PluginLoader.queItemPlugins.find { plugin -> plugin.name == jsonQueItem.pluginName }
 
         if (plugin == null) {
             Notifications.add("Plugin '${jsonQueItem.pluginName}' not found", "Que")
@@ -179,7 +179,7 @@ internal object QueLoader {
         val data = stringData[2]
 
 
-        val plugin = PluginLoader.plugins.find { plugin -> plugin.name == pluginName }
+        val plugin = PluginLoader.queItemPlugins.find { plugin -> plugin.name == pluginName }
 
         if (plugin == null) {
             Notifications.add("Plugin '$pluginName' not found", "Que")

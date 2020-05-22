@@ -14,6 +14,7 @@ import kotlin.collections.HashSet
 
 object PluginLoader {
     private val logger = Logger.getLogger(PluginLoader.toString())
+
     private val pluginDirectory = Config.pluginDirectory
     private val internalPluginClasses = listOf(
         "/plugins/obs/ObsPlugin",
@@ -22,15 +23,17 @@ object PluginLoader {
     private const val pluginEntryFileExtensionName = "Plugin.class"
 
     // Available plugins
-    val plugins = HashSet<BasePlugin>()
+    val allPlugins = HashSet<BasePlugin>()
+    val queItemPlugins = HashSet<BasePlugin>()
 
     fun loadAll() {
-        plugins.clear()
+        allPlugins.clear()
+        queItemPlugins.clear()
 
         loadInternalPlugins()
         loadExternalPlugins()
 
-        logger.info("${plugins.size} loaded")
+        logger.info("${allPlugins.size} loaded")
     }
 
     fun loadInternalPlugins() {
@@ -155,7 +158,7 @@ object PluginLoader {
                     continue
                 }
 
-                plugins.add(instance)
+                allPlugins.add(instance)
 
             } catch (e: Exception) {
                 logger.severe("Failed to load plugin: $className")
@@ -177,7 +180,7 @@ object PluginLoader {
                     continue
                 }
 
-                plugins.add(instance)
+                allPlugins.add(instance)
 
             } catch (e: Exception) {
                 logger.severe("Failed to load plugin: $className")
@@ -195,13 +198,13 @@ object PluginLoader {
     }
 
     fun enableAll() {
-        for (plugin in plugins) {
+        for (plugin in allPlugins) {
             enable(plugin)
         }
     }
 
     fun disableAll() {
-        for (plugin in plugins) {
+        for (plugin in allPlugins) {
             disable(plugin)
         }
     }
@@ -214,5 +217,13 @@ object PluginLoader {
     fun disable(plugin: BasePlugin) {
         logger.info("Disabling plugin ${plugin.name}")
         plugin.disable()
+    }
+
+    fun registerQueItemPlugin(plugin: BasePlugin) {
+        queItemPlugins.add(plugin)
+    }
+
+    fun unregisterQueItemPlugin(plugin: BasePlugin) {
+        queItemPlugins.remove(plugin)
     }
 }
