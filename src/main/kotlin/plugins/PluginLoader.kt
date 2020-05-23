@@ -1,6 +1,8 @@
 package plugins
 
 import config.Config
+import decodeURI
+import objects.notifications.Notifications
 import plugins.common.BasePlugin
 import java.io.File
 import java.net.URL
@@ -128,7 +130,7 @@ object PluginLoader {
             val pluginMainClass: JarEntry? = jarFileEntries.asSequence()
                 .find { !it.isDirectory && it.name.endsWith(pluginEntryFileExtensionName) }
             if (pluginMainClass == null) {
-                logger.warning("No plugin entry file found in directory: ${url.path}")
+                logger.warning("No plugin entry file found in directory: $url")
                 continue
             }
 
@@ -179,9 +181,14 @@ object PluginLoader {
 
                 plugins.add(instance)
 
+            } catch (e: ExceptionInInitializerError) {
+                logger.severe("Failed to create plugin instance: $className")
+                e.printStackTrace()
+                Notifications.add("Failed to load plugin: $className", "Plugin")
             } catch (e: Exception) {
                 logger.severe("Failed to load plugin: $className")
                 e.printStackTrace()
+                Notifications.add("Failed to load plugin: $className", "Plugin")
             }
         }
     }
@@ -189,7 +196,7 @@ object PluginLoader {
     private fun fileArrayToUrlArray(pluginDirectories: Array<File>): Array<URL?> {
         val pluginURLs: Array<URL?> = arrayOfNulls(pluginDirectories.size)
         for (i in pluginDirectories.indices) {
-            pluginURLs[i] = pluginDirectories[i].toURI().toURL()
+            pluginURLs[i] = URL(decodeURI(pluginDirectories[i].toURI().toString()))
         }
         return pluginURLs
     }
