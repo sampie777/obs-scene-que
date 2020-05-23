@@ -2,6 +2,7 @@ package gui.quickAccessButtons
 
 import com.google.gson.Gson
 import config.Config
+import gui.utils.isCtrlClick
 import handles.QueItemDropComponent
 import handles.QueItemTransferHandler
 import objects.notifications.Notifications
@@ -66,7 +67,7 @@ class QuickAccessButton(
     fun getQueItem(): QueItem? = queItem
 
     private fun onClick(e: ActionEvent) {
-        if (e.modifiers.and(ActionEvent.CTRL_MASK) != 0) {
+        if (isCtrlClick(e.modifiers)) {
             clearItem()
         } else {
             activate()

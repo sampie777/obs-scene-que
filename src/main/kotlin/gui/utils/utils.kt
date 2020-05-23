@@ -2,6 +2,7 @@ package gui.utils
 
 import gui.MainFrame
 import java.awt.*
+import java.awt.event.ActionEvent
 import java.awt.image.BufferedImage
 import java.net.URL
 import java.util.logging.Logger
@@ -75,3 +76,5 @@ fun createImageIcon(path: String): ImageIcon? {
     logger.severe("Couldn't find imageIcon: $path")
     return null
 }
+
+fun isCtrlClick(modifiers: Int): Boolean = modifiers.and(ActionEvent.CTRL_MASK) != 0
