@@ -2,7 +2,6 @@ package plugins.text
 
 import gui.utils.createImageIcon
 import objects.que.JsonQue
-import plugins.PluginLoader
 import plugins.common.QueItem
 import plugins.common.QueItemBasePlugin
 import plugins.text.queItems.HeaderQueItem
@@ -23,16 +22,6 @@ class TextPlugin : QueItemBasePlugin {
     override val tabName = "Text"
 
     internal val configStringSeparator = "|"
-
-    override fun enable() {
-        super.enable()
-        PluginLoader.registerQueItemPlugin(this)
-    }
-
-    override fun disable() {
-        super.disable()
-        PluginLoader.unregisterQueItemPlugin(this)
-    }
 
     override fun sourcePanel(): JComponent {
         val panel = JPanel(BorderLayout(10, 10))

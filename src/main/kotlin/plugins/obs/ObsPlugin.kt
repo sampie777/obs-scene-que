@@ -7,7 +7,6 @@ import handles.QueItemTransferHandler
 import objects.OBSState
 import objects.TScene
 import objects.que.JsonQue
-import plugins.PluginLoader
 import plugins.common.QueItem
 import plugins.common.QueItemBasePlugin
 import java.awt.*
@@ -29,14 +28,12 @@ class ObsPlugin : QueItemBasePlugin, Refreshable {
 
     override fun enable() {
         super.enable()
-        PluginLoader.registerQueItemPlugin(this)
         GUI.register(this)
     }
 
     override fun disable() {
         super.disable()
         GUI.unregister(this)
-        PluginLoader.unregisterQueItemPlugin(this)
     }
 
     override fun sourcePanel(): JComponent {
