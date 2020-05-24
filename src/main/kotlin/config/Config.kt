@@ -28,6 +28,7 @@ object Config {
     var rightMainPanelDividerLocation: Int = 400
 
     var sourcePanelLastOpenedTab: String = "OBS"
+    var detailPanelLastOpenedTab: String = ""
 
     var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + Que.name + ".json"
     var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"

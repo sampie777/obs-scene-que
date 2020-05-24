@@ -5,6 +5,11 @@ import javax.swing.JComponent
 
 interface DetailPanelBasePlugin : BasePlugin {
 
+    /**
+     * The name to display in the detail panel tabs
+     */
+    val tabName: String
+
     override fun enable() {
         super.enable()
         PluginLoader.registerDetailPanelPlugin(this)
