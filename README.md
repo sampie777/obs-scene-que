@@ -86,6 +86,11 @@ Plugins can be added to enable the use of different que item types which can per
 
 To install new plugins, just place their .jar file in the plugin directory (see settings for where this directory is).
 
+Some known external plugins are:
+
+- [EasyWorshipPlugin](https://github.com/sampie777/osq-easyworship-plugin): controls EasyWorship projection software
+- [SceneTimerPlugin](https://github.com/sampie777/osq-scenetimer-plugin): currently just a simple scene duration timer
+
 ### Settings
 
 Most settings can be changed using the GUI. All settings are visible (and configurable) in the settings file: _obs-scene-que.properties_. Some of these settings will be explained below. 
