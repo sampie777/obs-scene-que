@@ -50,6 +50,10 @@ class MainPanelControlPanel : JPanel(), Refreshable {
         add(controlsPanel, BorderLayout.CENTER)
     }
 
+    override fun getPreferredSize(): Dimension {
+        return Dimension(parent.size.width, super.getPreferredSize().height)
+    }
+
     override fun removeNotify() {
         super.removeNotify()
         GUI.unregister(this)
