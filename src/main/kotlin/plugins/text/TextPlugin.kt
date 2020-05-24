@@ -3,8 +3,8 @@ package plugins.text
 import gui.utils.createImageIcon
 import objects.que.JsonQue
 import plugins.PluginLoader
-import plugins.common.BasePlugin
 import plugins.common.QueItem
+import plugins.common.QueItemBasePlugin
 import plugins.text.queItems.HeaderQueItem
 import plugins.text.queItems.PlainTextQueItem
 import java.awt.BorderLayout
@@ -13,7 +13,7 @@ import javax.swing.*
 import javax.swing.border.EmptyBorder
 
 @Suppress("unused")
-class TextPlugin : BasePlugin {
+class TextPlugin : QueItemBasePlugin {
     override val name = "TextPlugin"
     override val description = "Que items for just displaying text"
     override val version: String = "0.0.0"

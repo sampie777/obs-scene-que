@@ -2,6 +2,8 @@ package plugins
 
 import config.Config
 import plugins.common.BasePlugin
+import plugins.common.DetailPanelBasePlugin
+import plugins.common.QueItemBasePlugin
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
@@ -24,11 +26,13 @@ object PluginLoader {
 
     // Available plugins
     val allPlugins = HashSet<BasePlugin>()
-    val queItemPlugins = HashSet<BasePlugin>()
+    val queItemPlugins = HashSet<QueItemBasePlugin>()
+    val detailPanelPlugins = HashSet<DetailPanelBasePlugin>()
 
     fun loadAll() {
         allPlugins.clear()
         queItemPlugins.clear()
+        detailPanelPlugins.clear()
 
         loadInternalPlugins()
         loadExternalPlugins()
@@ -219,11 +223,19 @@ object PluginLoader {
         plugin.disable()
     }
 
-    fun registerQueItemPlugin(plugin: BasePlugin) {
+    fun registerQueItemPlugin(plugin: QueItemBasePlugin) {
         queItemPlugins.add(plugin)
     }
 
-    fun unregisterQueItemPlugin(plugin: BasePlugin) {
+    fun unregisterQueItemPlugin(plugin: QueItemBasePlugin) {
         queItemPlugins.remove(plugin)
+    }
+
+    fun registerDetailPanelPlugin(plugin: DetailPanelBasePlugin) {
+        detailPanelPlugins.add(plugin)
+    }
+
+    fun unregisterDetailPanelPlugin(plugin: DetailPanelBasePlugin) {
+        detailPanelPlugins.remove(plugin)
     }
 }

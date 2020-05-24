@@ -1,13 +1,13 @@
 package mocks
 
 import objects.que.JsonQue
-import plugins.common.BasePlugin
 import plugins.common.QueItem
+import plugins.common.QueItemBasePlugin
 import javax.swing.Icon
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class MockPlugin : BasePlugin {
+class MockPlugin : QueItemBasePlugin {
     override val name: String = "MockPlugin"
     override val description: String = "description"
     override val version: String = "0.0.0"

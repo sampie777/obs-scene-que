@@ -25,6 +25,7 @@ object Config {
     var controlWindowsIsMaximized: Boolean = false
     var mainPanelDividerLeftLocation: Int = 370
     var mainPanelDividerRightLocation: Int = 400
+    var rightMainPanelDividerLocation: Int = 400
 
     var sourcePanelLastOpenedTab: String = "OBS"
 

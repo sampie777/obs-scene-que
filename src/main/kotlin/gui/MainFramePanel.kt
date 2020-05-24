@@ -59,7 +59,7 @@ class MainFramePanel : JSplitPane(), Refreshable {
 
         rightPanel.border = null
         rightPanel.leftComponent = QuePanel()
-        rightPanel.rightComponent = MainPanelControlPanel()
+        rightPanel.rightComponent = RightMainPanel()
 
         setLeftComponent(leftPanel)
         setRightComponent(rightPanel)

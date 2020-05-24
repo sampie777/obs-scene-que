@@ -8,15 +8,15 @@ import objects.OBSState
 import objects.TScene
 import objects.que.JsonQue
 import plugins.PluginLoader
-import plugins.common.BasePlugin
 import plugins.common.QueItem
+import plugins.common.QueItemBasePlugin
 import java.awt.*
 import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
 @Suppress("unused")
-class ObsPlugin : BasePlugin, Refreshable {
+class ObsPlugin : QueItemBasePlugin, Refreshable {
     override val name = "ObsPlugin"
     override val description = "Que items for integration with OBS"
     override val version: String = "0.0.0"
