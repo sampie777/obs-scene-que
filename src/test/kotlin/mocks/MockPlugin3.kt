@@ -8,12 +8,12 @@ import javax.swing.JComponent
 import javax.swing.JMenu
 import javax.swing.JPanel
 
-class MockPlugin2 : QueItemBasePlugin {
-    override val name: String = "MockPlugin2"
+class MockPlugin3 : QueItemBasePlugin {
+    override val name: String = "MockPlugin3"
     override val description: String = "description"
     override val version: String = "0.0.0"
     override val icon: Icon? = null
-    override val tabName: String = "MockPlugin2TabName"
+    override val tabName: String = "MockPlugin3TabName"
 
     override fun sourcePanel(): JComponent {
         return JPanel()
@@ -28,6 +28,7 @@ class MockPlugin2 : QueItemBasePlugin {
     }
 
     override fun createMenu(menu: JMenu): Boolean {
-        throw Exception("Woops")
+        super.createMenu(menu)
+        return true
     }
 }

@@ -1,6 +1,7 @@
 package plugins.common
 
 import javax.swing.Icon
+import javax.swing.JMenu
 
 interface BasePlugin {
 
@@ -12,4 +13,9 @@ interface BasePlugin {
 
     fun enable() {}
     fun disable() {}
+
+    /**
+     * A optional menu item in the Plugins menu
+     */
+    fun createMenu(menu: JMenu): Boolean = false
 }
