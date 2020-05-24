@@ -2,6 +2,7 @@ package gui.list
 
 import GUI
 import gui.Refreshable
+import gui.utils.isCtrlClick
 import handles.QueItemDropComponent
 import handles.QueItemTransferHandler
 import objects.que.Que
@@ -73,6 +74,12 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
                     val selectedIndex = (e.source as JList<*>).selectedIndex
                     Que.setCurrentQueItemByIndex(selectedIndex)
                     Que.activateCurrent()
+                }
+
+                if (isCtrlClick(e.modifiers)) {
+                    val selectedIndex = (e.source as JList<*>).selectedIndex
+                    Que.setCurrentQueItemByIndex(selectedIndex)
+                    GUI.refreshQueItems()
                 }
             }
         })

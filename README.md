@@ -42,6 +42,8 @@ Control the que by using the control buttons "Previous" and "Next". These button
 
 When a que item becomes active (thus the new current que index), it will be executed. This execution is different for each que item type. 
 
+To set the current que index to a specific que item, use `MOUSE CLICK` to activate that item and set is as the new current que index. To set this item as the new que index, but without activating that item, use `CTRL + MOUSE CLICK` on that item. 
+
 #### Execute After Previous
 Mark a que item to be executed after the previous que item is executed. In this way, when a que item becomes active, all the directly following que items which are marked as Execute After Previous, will also be activated and executed in order.
  

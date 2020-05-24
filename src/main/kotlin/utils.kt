@@ -5,6 +5,7 @@ import java.awt.Color
 import java.io.File
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import java.util.logging.Logger
 import kotlin.system.exitProcess
 
@@ -62,4 +63,8 @@ fun exitApplication() {
 
 fun brightness(color: Color): Double {
     return 0.2126 * color.red + 0.7152 * color.green + 0.0722 * color.blue
+}
+
+fun decodeURI(uri: String): String {
+    return URLDecoder.decode(uri, StandardCharsets.UTF_8.name())
 }
