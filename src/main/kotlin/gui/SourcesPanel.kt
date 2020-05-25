@@ -53,11 +53,12 @@ class SourcesPanel : JPanel() {
             } catch (e: AbstractMethodError) {
                 logger.warning("Failed to load panel for plugin: ${plugin.name}")
                 e.printStackTrace()
-                Notifications.add("Plugin ${plugin.name} is missing required data fields", "Plugins")
+                Notifications.add("Failed to load sources panel for ${plugin.name}", "Plugins")
                 continue
             } catch (e: Exception) {
                 logger.warning("Failed to load panel for plugin: ${plugin.name}")
                 e.printStackTrace()
+                Notifications.add("Failed to load sources panel for ${plugin.name}", "Plugins")
                 continue
             }
 

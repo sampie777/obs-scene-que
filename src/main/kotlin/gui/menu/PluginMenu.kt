@@ -23,6 +23,10 @@ class PluginMenu : JMenu("Plugins") {
                 if (it.createMenu(menu)) {
                     add(menu)
                 }
+            } catch (e: AbstractMethodError) {
+                logger.warning("Failed to create menu(items) for plugin: ${it.name}")
+                e.printStackTrace()
+                Notifications.add("Failed to create menu(items) for plugin: ${it.name}", "Plugins")
             } catch (e: Exception) {
                 logger.warning("Failed to create menu(items) for plugin: ${it.name}")
                 e.printStackTrace()

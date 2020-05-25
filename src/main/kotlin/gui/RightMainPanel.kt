@@ -64,10 +64,15 @@ class RightMainPanel : JPanel(), Refreshable {
             val detailPanel = detailPanelPlugin.detailPanel()
             detailPanel.toolTipText = "${detailPanelPlugin.name} [${detailPanelPlugin.version}]"
             detailPanel
-        } catch (e: Exception) {
-            logger.warning("Failed to load panel for plugin: ${detailPanelPlugin.name}")
+        } catch (e: AbstractMethodError) {
+            logger.warning("Failed to load detail panel for plugin: ${detailPanelPlugin.name}")
             e.printStackTrace()
-            Notifications.add("Failed to load panel for plugin: ${detailPanelPlugin.name}", "Plugins")
+            Notifications.add("Failed to load detail panel for plugin: ${detailPanelPlugin.name}", "Plugins")
+            JPanel()
+        } catch (e: Exception) {
+            logger.warning("Failed to load detail panel for plugin: ${detailPanelPlugin.name}")
+            e.printStackTrace()
+            Notifications.add("Failed to load detail panel for plugin: ${detailPanelPlugin.name}", "Plugins")
             JPanel()
         }
     }
@@ -91,10 +96,15 @@ class RightMainPanel : JPanel(), Refreshable {
                         tabComponent,
                         "${it.description} [${it.version}]"
                     )
-                } catch (e: Exception) {
-                    logger.warning("Failed to load panel for plugin: ${it.name}")
+                } catch (e: AbstractMethodError) {
+                    logger.warning("Failed to load detail panel for plugin: ${it.name}")
                     e.printStackTrace()
-                    Notifications.add("Failed to load panel for plugin: ${it.name}", "Plugins")
+                    Notifications.add("Failed to load detail panel for plugin: ${it.name}", "Plugins")
+                    return@forEach
+                } catch (e: Exception) {
+                    logger.warning("Failed to load detail panel for plugin: ${it.name}")
+                    e.printStackTrace()
+                    Notifications.add("Failed to load detail panel for plugin: ${it.name}", "Plugins")
                     return@forEach
                 }
 
