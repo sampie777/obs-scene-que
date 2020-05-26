@@ -15,6 +15,8 @@ interface QueItem {
 
     var executeAfterPrevious: Boolean
 
+    fun renderText(): String = name
+
     fun activate()
     fun deactivate()
 
@@ -41,7 +43,7 @@ interface QueItem {
         isSelected: Boolean,
         cellHasFocus: Boolean
     ) {
-        cell.text = name
+        cell.text = renderText()
         cell.icon = plugin.icon
 
         if (!executeAfterPrevious) {

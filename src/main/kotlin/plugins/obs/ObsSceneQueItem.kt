@@ -23,8 +23,6 @@ class ObsSceneQueItem(override val plugin: BasePlugin, val scene: TScene) : QueI
         return scene.name
     }
 
-    override fun toString(): String = name
-
     override fun getListCellRendererComponent(
         cell: JLabel,
         index: Int,
