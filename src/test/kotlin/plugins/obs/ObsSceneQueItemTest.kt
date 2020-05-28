@@ -34,6 +34,7 @@ class ObsSceneQueItemTest {
         // When
         queItem.getListCellRendererComponent(cell, 0, isSelected = false, cellHasFocus = false)
         assertEquals(Theme.get.ACTIVE_OBS_COLOR, cell.background)
+        assertEquals("1", cell.text)
     }
 
     @Test
