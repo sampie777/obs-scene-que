@@ -19,6 +19,10 @@ class ObsSceneQueItem(override val plugin: BasePlugin, val scene: TScene) : QueI
 
     override fun deactivate() {}
 
+    override fun renderText() = scene.name
+
+    override fun toString() = scene.name
+
     override fun toConfigString(): String {
         return scene.name
     }
