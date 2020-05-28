@@ -92,6 +92,7 @@ Some known external plugins are:
 
 - [EasyWorshipPlugin](https://github.com/sampie777/osq-easyworship-plugin): controls EasyWorship projection software
 - [SceneTimerPlugin](https://github.com/sampie777/osq-scenetimer-plugin): currently just a simple scene duration timer
+- [KeyStrokePlugin](https://github.com/sampie777/osq-keystroke-plugin): focus windows and send key combinations to them
 
 ### Settings
 
