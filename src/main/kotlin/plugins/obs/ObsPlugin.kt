@@ -17,7 +17,7 @@ import javax.swing.border.EmptyBorder
 @Suppress("unused")
 class ObsPlugin : QueItemBasePlugin, Refreshable {
     override val name = "ObsPlugin"
-    override val description = "Que items for integration with OBS"
+    override val description = "Queue items for integration with OBS"
     override val version: String = "0.0.0"
 
     override val icon: Icon? = createImageIcon("/plugins/obs/icon-14.png")

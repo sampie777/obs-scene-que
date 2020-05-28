@@ -87,12 +87,12 @@ class MainPanelControlPanel : JPanel(), Refreshable {
     }
 
     private fun activateNextQueItem() {
-        logger.info("Activate next que item")
+        logger.info("Activate next queue item")
         Que.next()
     }
 
     private fun activatePreviousQueItem() {
-        logger.info("Activate previous que item")
+        logger.info("Activate previous queue item")
         Que.previous()
     }
 }

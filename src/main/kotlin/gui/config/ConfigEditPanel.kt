@@ -32,8 +32,8 @@ class ConfigEditPanel : JPanel() {
         formComponents.add(BooleanFormInput("windowRestoreLastPosition", "Restore window position on start up"))
         formComponents.add(NumberFormInput<Int>("quickAccessButtonCount", "Quick Access buttons amount", min = 0, max = Int.MAX_VALUE))
 
-        formComponents.add(HeaderFormComponent("Que"))
-        formComponents.add(StringFormInput("queFile", "Que file", false))
+        formComponents.add(HeaderFormComponent("Queue"))
+        formComponents.add(StringFormInput("queFile", "Queue file", false))
         formComponents.add(StringFormInput("pluginDirectory", "Plugin directory", false))
     }
 

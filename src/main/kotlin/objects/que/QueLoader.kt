@@ -20,11 +20,11 @@ internal object QueLoader {
     private var lastSavedData: String = ""
 
     fun load() {
-        logger.info("Loading que from file")
+        logger.info("Loading queue from file")
         val queFile = File(Config.queFile)
 
         if (!queFile.exists()) {
-            logger.info("Que file not found")
+            logger.info("Queue file not found")
             Que.clear()
             return
         }
@@ -45,7 +45,7 @@ internal object QueLoader {
         val plugin = PluginLoader.queItemPlugins.find { plugin -> plugin.name == jsonQueItem.pluginName }
 
         if (plugin == null) {
-            Notifications.add("Plugin '${jsonQueItem.pluginName}' not found", "Que")
+            Notifications.add("Plugin '${jsonQueItem.pluginName}' not found", "Queue")
             return null
         }
 
@@ -53,11 +53,11 @@ internal object QueLoader {
         try {
             item = plugin.jsonToQueItem(jsonQueItem)
         } catch (e: Exception) {
-            logger.warning("Failed to load que item $jsonQueItem")
+            logger.warning("Failed to load queue item $jsonQueItem")
             e.printStackTrace()
             Notifications.add(
-                "Failed to load que item '${jsonQueItem}' for plugin '${jsonQueItem.pluginName}': $e",
-                "Que"
+                "Failed to load queue item '${jsonQueItem}' for plugin '${jsonQueItem.pluginName}': $e",
+                "Queue"
             )
             return null
         }
@@ -68,27 +68,27 @@ internal object QueLoader {
 
     fun save() {
         if (!writeToFile) {
-            logger.info("writeToFile is turned off, so not saving que to file")
+            logger.info("writeToFile is turned off, so not saving queue to file")
             return
         }
 
         val json = try {
             queToJson()
         } catch (e: Exception) {
-            logger.warning("Failed to save Que to file")
+            logger.warning("Failed to save Queue to file")
             e.printStackTrace()
-            Notifications.add("Failed to save Que to file", "Que")
+            Notifications.add("Failed to save Queue to file", "Queue")
             return
         }
 
         if (json == lastSavedData) {
-            logger.fine("No changes in que, so skipping save")
+            logger.fine("No changes in queue, so skipping save")
             return
         }
 
         val fileName = File(Config.queFile).parentFile.absolutePath + File.separatorChar + Que.name + ".json"
         Config.queFile = fileName
-        logger.info("Saving que to file: $fileName")
+        logger.info("Saving queue to file: $fileName")
         File(fileName).writeText(json)
 
         lastSavedData = json
@@ -101,7 +101,7 @@ internal object QueLoader {
             } catch (e: Exception) {
                 logger.warning("Failed to convert QueItem '${it.name}' to JsonQue.QueItem")
                 e.printStackTrace()
-                Notifications.add("Failed to save que item ${it.name}", "Que")
+                Notifications.add("Failed to save queue item ${it.name}", "Queue")
                 null
             }
         }
@@ -137,9 +137,9 @@ internal object QueLoader {
         return try {
             Gson().fromJson(json, JsonQue.Que::class.java)
         } catch (e: Exception) {
-            logger.warning("Failed to load Que from json: $json")
+            logger.warning("Failed to load Queue from json: $json")
             e.printStackTrace()
-            Notifications.add("Failed to load Que from json", "Que")
+            Notifications.add("Failed to load Queue from json", "Queue")
             null
         }
     }
@@ -148,9 +148,9 @@ internal object QueLoader {
         return try {
             Gson().fromJson(json, JsonQue.QueItem::class.java)
         } catch (e: Exception) {
-            logger.warning("Failed to load Que Item from json: $json")
+            logger.warning("Failed to load Queue Item from json: $json")
             e.printStackTrace()
-            Notifications.add("Failed to load Que Item from json", "Que")
+            Notifications.add("Failed to load Queue Item from json", "Queue")
             null
         }
     }
@@ -170,7 +170,7 @@ internal object QueLoader {
 
         val stringData = line.split("|", limit = 3)
         if (stringData.size != 3) {
-            logger.info("Invalid que item string line: $line")
+            logger.info("Invalid queue item string line: $line")
             return null
         }
 
@@ -182,7 +182,7 @@ internal object QueLoader {
         val plugin = PluginLoader.queItemPlugins.find { plugin -> plugin.name == pluginName }
 
         if (plugin == null) {
-            Notifications.add("Plugin '$pluginName' not found", "Que")
+            Notifications.add("Plugin '$pluginName' not found", "Queue")
             return null
         }
 
@@ -191,9 +191,9 @@ internal object QueLoader {
             item.executeAfterPrevious = executeAfterPrevious
             return item
         } catch (e: Exception) {
-            logger.warning("Failed to load que item $line")
+            logger.warning("Failed to load queue item $line")
             e.printStackTrace()
-            Notifications.add("Failed to load que item '$data' for '$pluginName': $e", "Que")
+            Notifications.add("Failed to load queue item '$data' for '$pluginName': $e", "Queue")
             return null
         }
     }

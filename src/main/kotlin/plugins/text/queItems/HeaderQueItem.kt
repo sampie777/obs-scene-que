@@ -19,7 +19,7 @@ class HeaderQueItem(override val plugin: TextPlugin, override val name: String) 
     companion object QueItemCompanion : TextPluginQueItemCompanion(HeaderQueItem::class.java, "Header");
 
     override fun activate() {
-        // Skip this que item by going to the next one
+        // Skip this queue item by going to the next one
         Que.next()
     }
 

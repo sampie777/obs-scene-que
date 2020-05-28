@@ -42,7 +42,7 @@ object Que {
 
     fun previous() {
         if (currentIndex <= 0) {
-            logger.info("Reached start of que")
+            logger.info("Reached start of queue")
             return
         }
 
@@ -61,7 +61,7 @@ object Que {
 
     fun next() {
         if (currentIndex >= list.size - 1) {
-            logger.info("Reached end of que")
+            logger.info("Reached end of queue")
             return
         }
 
@@ -97,7 +97,7 @@ object Que {
     }
 
     /**
-     * Set the current que pointer to this index. This does not activate the que item!
+     * Set the current queue pointer to this index. This does not activate the queue item!
      */
     fun setCurrentQueItemByIndex(index: Int) {
         currentIndex = index
@@ -113,7 +113,7 @@ object Que {
     }
 
     fun add(index: Int, item: QueItem) {
-        logger.info("Adding que item at: $index")
+        logger.info("Adding queue item at: $index")
         var newIndex = index
         if (index > list.size) {
             newIndex = list.size
@@ -181,9 +181,9 @@ object Que {
         try {
             item!!.activate()
         } catch (e: Exception) {
-            logger.warning("Exception occurred when activating current que item: ${item?.name}")
+            logger.warning("Exception occurred when activating current queue item: ${item?.name}")
             e.printStackTrace()
-            Notifications.add("Failed to activate current que item '${item?.name}'", "Que")
+            Notifications.add("Failed to activate current queue item '${item?.name}'", "Queue")
         }
     }
 
@@ -191,9 +191,9 @@ object Que {
         try {
             item!!.deactivate()
         } catch (e: Exception) {
-            logger.warning("Failed to deactivate current que item")
+            logger.warning("Failed to deactivate current queue item")
             e.printStackTrace()
-            Notifications.add("Failed to deactivate current que item '${item?.name}'", "Que")
+            Notifications.add("Failed to deactivate current queue item '${item?.name}'", "Queue")
         }
     }
 

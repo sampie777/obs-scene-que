@@ -14,7 +14,7 @@ import javax.swing.border.EmptyBorder
 @Suppress("unused")
 class TextPlugin : QueItemBasePlugin {
     override val name = "TextPlugin"
-    override val description = "Que items for just displaying text"
+    override val description = "Queue items for just displaying text"
     override val version: String = "0.0.0"
 
     override val icon: Icon? = createImageIcon("/plugins/text/icon-14.png")
@@ -48,7 +48,7 @@ class TextPlugin : QueItemBasePlugin {
         return when (className) {
             HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, text)
             PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, text)
-            else -> throw IllegalArgumentException("Invalid TextPlugin que item: $value")
+            else -> throw IllegalArgumentException("Invalid TextPlugin queue item: $value")
         }
     }
 
@@ -56,7 +56,7 @@ class TextPlugin : QueItemBasePlugin {
         return when (jsonQueItem.className) {
             HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, jsonQueItem.name)
             PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, jsonQueItem.name)
-            else -> throw IllegalArgumentException("Invalid TextPlugin que item: ${jsonQueItem.className}")
+            else -> throw IllegalArgumentException("Invalid TextPlugin queue item: ${jsonQueItem.className}")
         }
     }
 }

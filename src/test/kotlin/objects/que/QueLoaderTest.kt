@@ -59,7 +59,7 @@ class QueLoaderTest {
 
     @Test
     fun testSaveQueToJson() {
-        Que.name = "testQue"
+        Que.name = "testQueue"
         Que.applicationVersion = "0.1.0"
         Que.add(mockPlugin.configStringToQueItem("1"))
         Que.add(mockPlugin.configStringToQueItem("2"))
@@ -68,7 +68,7 @@ class QueLoaderTest {
 
         assertEquals("""
             {
-              "name": "testQue",
+              "name": "testQueue",
               "applicationVersion": "0.1.0",
               "queItems": [
                 {
@@ -95,7 +95,7 @@ class QueLoaderTest {
         PluginLoader.registerQueItemPlugin(mockPlugin)
         val json = """
             {
-              "name": "testQue",
+              "name": "testQueue",
               "applicationVersion": "0.1.0",
               "queItems": [
                 {
@@ -118,7 +118,7 @@ class QueLoaderTest {
 
         QueLoader.fromJson(json)
 
-        assertEquals("testQue", Que.name)
+        assertEquals("testQueue", Que.name)
         assertEquals("0.1.0", Que.applicationVersion)
         assertEquals("1", Que.getAt(0)?.name)
         assertEquals("2", Que.getAt(1)?.name)
@@ -127,7 +127,7 @@ class QueLoaderTest {
     @Test
     fun testLoadQueFromJsonGivesError() {
         PluginLoader.registerQueItemPlugin(mockPlugin)
-        Que.name = "testQue"
+        Que.name = "testQueue"
         Que.applicationVersion = "0.1.0"
         Que.add(mockPlugin.configStringToQueItem("1"))
         Que.add(mockPlugin.configStringToQueItem("2"))
@@ -136,7 +136,7 @@ class QueLoaderTest {
         QueLoader.fromJson(json)
 
         assertEquals(1, Notifications.unreadNotifications)
-        assertEquals("testQue", Que.name)
+        assertEquals("testQueue", Que.name)
         assertEquals("0.1.0", Que.applicationVersion)
         assertEquals("1", Que.getAt(0)?.name)
         assertEquals("2", Que.getAt(1)?.name)

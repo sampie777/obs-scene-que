@@ -34,7 +34,7 @@ class ControlFramePanel : JPanel(), Refreshable {
         layout = BorderLayout(10, 10)
         border = EmptyBorder(5, 5, 5, 5)
 
-        currentQueItemLabel.toolTipText = "Current que item"
+        currentQueItemLabel.toolTipText = "Current queue item"
         currentQueItemLabel.font = Font("Dialog", Font.PLAIN, 26)
         currentQueItemLabel.horizontalAlignment = SwingConstants.CENTER
         currentQueItemLabel.alignmentX = Component.CENTER_ALIGNMENT
@@ -101,12 +101,12 @@ class ControlFramePanel : JPanel(), Refreshable {
     }
 
     private fun activateNextQueItem() {
-        logger.info("Activate next que item")
+        logger.info("Activate next queue item")
         Que.next()
     }
 
     private fun activatePreviousQueItem() {
-        logger.info("Activate previous que item")
+        logger.info("Activate previous queue item")
         Que.previous()
     }
 }

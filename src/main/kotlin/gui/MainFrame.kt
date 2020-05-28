@@ -5,6 +5,7 @@ import config.Config
 import exitApplication
 import gui.menu.MenuBar
 import gui.utils.loadIcon
+import objects.ApplicationInfo
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.util.logging.Logger
@@ -59,7 +60,7 @@ class MainFrame : JFrame(), Refreshable {
         }
 
         jMenuBar = MenuBar()
-        title = "OBS Scene Que"
+        title = ApplicationInfo.name
         defaultCloseOperation = EXIT_ON_CLOSE
         iconImage = loadIcon("/icon-512.png")
     }

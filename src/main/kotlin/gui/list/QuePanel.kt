@@ -39,7 +39,7 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
         layout = BorderLayout(10, 10)
         border = EmptyBorder(10, 10, 10, 10)
 
-        val titleLabel = JLabel("Que")
+        val titleLabel = JLabel("Queue")
 
         add(titleLabel, BorderLayout.PAGE_START)
         add(createQueListPanel(), BorderLayout.CENTER)
