@@ -198,8 +198,6 @@ object OBSClient {
         logger.info("New scene: $sceneName")
         OBSState.currentSceneName = sceneName
 
-        logger.info("New scene: " + OBSState.currentSceneName)
-
         GUI.switchedScenes()
         setPreviewScene(getNextQueScene()?.scene ?: return)
     }
