@@ -11,7 +11,7 @@ import javax.swing.JList
 import javax.swing.SwingUtilities
 import javax.swing.TransferHandler
 
-class QueItemTransferHandler(var queItem: QueItem? = null) : TransferHandler() {
+open class QueItemTransferHandler(var queItem: QueItem? = null) : TransferHandler() {
 
     private val logger = Logger.getLogger(QueItemTransferHandler::class.java.name)
 
