@@ -93,6 +93,8 @@ Some known external plugins are:
 - [EasyWorshipPlugin](https://github.com/sampie777/osq-easyworship-plugin): controls EasyWorship projection software
 - [SceneTimerPlugin](https://github.com/sampie777/osq-scenetimer-plugin): currently just a simple scene duration timer
 - [KeyStrokePlugin](https://github.com/sampie777/osq-keystroke-plugin): focus windows and send key combinations to them
+- [IpCameraPlugin](https://github.com/sampie777/osq-ipcamera-plugin): lets you control your IP camera using its own presets
+- [MidiControlPlugin](https://github.com/sampie777/osq-midicontrol-plugin): use a MIDI device to switch between queue items
 
 ### Settings
 

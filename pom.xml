@@ -73,7 +73,7 @@
                         <configuration>
                             <name>project.baseVersion</name>
                             <value>${project.version}</value>
-                            <regex>-SNAPSHOT</regex>
+                            <regex>-.*</regex>
                             <failIfNoMatch>false</failIfNoMatch>
                         </configuration>
                     </execution>
