@@ -24,6 +24,7 @@ class ObsPlugin : QueItemBasePlugin, Refreshable {
 
     override val tabName = "OBS"
 
+    internal val quickAccessColor = Color(229, 238, 255)
     private val list: JList<QueItem> = JList()
 
     override fun enable() {

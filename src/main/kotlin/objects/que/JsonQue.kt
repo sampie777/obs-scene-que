@@ -1,5 +1,7 @@
 package objects.que
 
+import java.awt.Color
+
 class JsonQue {
     data class Que(
         val name: String,
@@ -12,6 +14,7 @@ class JsonQue {
         val className: String,
         val name: String,
         val executeAfterPrevious: Boolean,
+        val quickAccessColor: Color?,
         val data: HashMap<String, String>
     ) {
         override fun toString(): String = "JsonQue.QueItem[pluginName=$pluginName; className=$className; name=$name]"

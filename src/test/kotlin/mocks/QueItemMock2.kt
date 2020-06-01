@@ -2,6 +2,7 @@ package mocks
 
 import objects.que.QueItem
 import plugins.common.BasePlugin
+import java.awt.Color
 import javax.swing.JLabel
 
 class QueItemMock2(override val plugin: BasePlugin, override val name: String) : QueItem {
@@ -11,6 +12,7 @@ class QueItemMock2(override val plugin: BasePlugin, override val name: String) :
     var isDeactivatedAsPrevious = false
     var cellRendererIsCalled = false
     override var executeAfterPrevious = false
+    override var quickAccessColor: Color? = Color(0, 100, 200)
 
     override fun activate() {
         isActivated = true

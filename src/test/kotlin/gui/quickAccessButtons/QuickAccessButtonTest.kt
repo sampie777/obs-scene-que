@@ -3,6 +3,8 @@ package gui.quickAccessButtons
 import config.Config
 import mocks.MockPlugin
 import mocks.QueItemMock
+import themes.Theme
+import java.awt.Color
 import kotlin.test.*
 
 @Suppress("DEPRECATION")
@@ -47,6 +49,22 @@ class QuickAccessButtonTest {
 
         assertTrue(button.text.contains("item1"))
         assertTrue(button.isEnabled)
+        assertEquals(Theme.get.BUTTON_BACKGROUND_COLOR, button.background)
+    }
+
+    @Test
+    fun testSetNewItemWithColorGetsDisplayedWithColor() {
+        Config.quickAccessButtonQueItems = ArrayList()
+        Config.quickAccessButtonQueItems.add("")
+        val button = QuickAccessButton(0, queItem = null)
+        val queItem = plugin.configStringToQueItem("item1")
+        queItem.quickAccessColor = Color(0, 100, 200)
+
+        button.dropNewItem(queItem, 0)
+
+        assertTrue(button.text.contains("item1"))
+        assertTrue(button.isEnabled)
+        assertEquals(Color(0, 100, 200), button.background)
     }
 
     @Test

@@ -13,6 +13,7 @@ interface QueItem {
     val plugin: BasePlugin
 
     var executeAfterPrevious: Boolean
+    var quickAccessColor: Color?
 
     fun renderText(): String = name
 
@@ -31,11 +32,13 @@ interface QueItem {
         className = javaClass.simpleName,
         name = name,
         executeAfterPrevious = executeAfterPrevious,
+        quickAccessColor = quickAccessColor,
         data = HashMap()
     )
 
     fun dataFromJson(jsonQueItem: JsonQue.QueItem) {
         executeAfterPrevious = jsonQueItem.executeAfterPrevious
+        quickAccessColor = jsonQueItem.quickAccessColor
     }
 
     fun getListCellRendererComponent(

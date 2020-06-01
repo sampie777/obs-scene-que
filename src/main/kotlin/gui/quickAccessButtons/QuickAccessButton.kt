@@ -1,5 +1,6 @@
 package gui.quickAccessButtons
 
+import brightness
 import com.google.gson.Gson
 import config.Config
 import gui.utils.isCtrlClick
@@ -8,10 +9,13 @@ import handles.QueItemTransferHandler
 import objects.notifications.Notifications
 import objects.que.QueItem
 import themes.Theme
+import java.awt.Cursor
 import java.awt.Dimension
 import java.awt.event.ActionEvent
 import java.util.logging.Logger
 import javax.swing.JButton
+import javax.swing.border.CompoundBorder
+import javax.swing.border.LineBorder
 
 class QuickAccessButton(
     private val index: Int,
@@ -54,14 +58,33 @@ class QuickAccessButton(
     private fun refreshLayout() {
         if (queItem == null) {
             text = "empty"
+            toolTipText = "Assign queue item by drag-and-drop"
             background = null
             isEnabled = false
+            cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)
             return
         }
 
         text = "<html><center>${queItem?.name}</center></html>"
-        background = Theme.get.BUTTON_BACKGROUND_COLOR
+        toolTipText = queItem?.plugin?.name
         isEnabled = true
+        cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+
+        if (queItem?.quickAccessColor == null) {
+            background = Theme.get.BUTTON_BACKGROUND_COLOR
+        } else {
+            // Check for light/dark theme
+            if (brightness(Theme.get.BUTTON_BACKGROUND_COLOR) > 110) {
+                background = queItem?.quickAccessColor
+            } else {
+                background = Theme.get.BUTTON_BACKGROUND_COLOR
+                foreground = queItem?.quickAccessColor
+                border = CompoundBorder(
+                    LineBorder(queItem?.quickAccessColor?.darker()),
+                    LineBorder(queItem?.quickAccessColor?.darker()?.darker())
+                )
+            }
+        }
     }
 
     fun getQueItem(): QueItem? = queItem

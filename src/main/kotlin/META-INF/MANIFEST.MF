@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 Main-Class: ApplicationKt
-
+Implementation-Title: OBS Scene Queue
+Implementation-Vendor-Id: obs-scene-que

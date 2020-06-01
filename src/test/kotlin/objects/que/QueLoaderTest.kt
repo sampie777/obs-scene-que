@@ -6,10 +6,8 @@ import objects.notifications.Notifications
 import plugins.PluginLoader
 import plugins.obs.ObsPlugin
 import plugins.obs.ObsSceneQueItem
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import java.awt.Color
+import kotlin.test.*
 
 @Suppress("DEPRECATION")
 class QueLoaderTest {
@@ -61,7 +59,9 @@ class QueLoaderTest {
     fun testSaveQueToJson() {
         Que.name = "testQueue"
         Que.applicationVersion = "0.1.0"
-        Que.add(mockPlugin.configStringToQueItem("1"))
+        val item1 = mockPlugin.configStringToQueItem("1")
+        item1.quickAccessColor = Color(0, 100, 200)
+        Que.add(item1)
         Que.add(mockPlugin.configStringToQueItem("2"))
 
         val json = QueLoader.queToJson()
@@ -76,6 +76,10 @@ class QueLoaderTest {
                   "className": "QueItemMock",
                   "name": "1",
                   "executeAfterPrevious": false,
+                  "quickAccessColor": {
+                    "value": -16751416,
+                    "falpha": 0.0
+                  },
                   "data": {}
                 },
                 {
@@ -103,6 +107,10 @@ class QueLoaderTest {
                   "className": "QueItemMock",
                   "name": "1",
                   "executeAfterPrevious": false,
+                  "quickAccessColor": {
+                    "value": -16751416,
+                    "falpha": 0.0
+                  },
                   "data": {}
                 },
                 {
@@ -121,7 +129,9 @@ class QueLoaderTest {
         assertEquals("testQueue", Que.name)
         assertEquals("0.1.0", Que.applicationVersion)
         assertEquals("1", Que.getAt(0)?.name)
+        assertEquals(Color(0, 100, 200), Que.getAt(0)?.quickAccessColor)
         assertEquals("2", Que.getAt(1)?.name)
+        assertNull(Que.getAt(2)?.quickAccessColor)
     }
 
     @Test

@@ -7,6 +7,7 @@ import plugins.common.QueItemBasePlugin
 import plugins.text.queItems.HeaderQueItem
 import plugins.text.queItems.PlainTextQueItem
 import java.awt.BorderLayout
+import java.awt.Color
 import java.awt.GridLayout
 import javax.swing.*
 import javax.swing.border.EmptyBorder
@@ -22,6 +23,7 @@ class TextPlugin : QueItemBasePlugin {
     override val tabName = "Text"
 
     internal val configStringSeparator = "|"
+    internal val quickAccessColor = Color(231, 231, 231)
 
     override fun sourcePanel(): JComponent {
         val panel = JPanel(BorderLayout(10, 10))

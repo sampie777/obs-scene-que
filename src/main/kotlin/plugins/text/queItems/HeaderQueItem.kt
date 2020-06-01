@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder
 class HeaderQueItem(override val plugin: TextPlugin, override val name: String) : QueItem {
 
     override var executeAfterPrevious = false
+    override var quickAccessColor: Color? = plugin.quickAccessColor
 
     companion object QueItemCompanion : TextPluginQueItemCompanion(HeaderQueItem::class.java, "Header");
 
