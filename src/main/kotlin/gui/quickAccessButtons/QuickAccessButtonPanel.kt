@@ -2,8 +2,8 @@ package gui.quickAccessButtons
 
 import com.google.gson.Gson
 import config.Config
+import objects.que.QueItem
 import objects.que.QueLoader
-import plugins.common.QueItem
 import java.awt.Component
 import java.awt.Dimension
 import java.awt.FlowLayout

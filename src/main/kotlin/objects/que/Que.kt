@@ -4,7 +4,6 @@ import GUI
 import objects.ApplicationInfo
 import objects.OBSState
 import objects.notifications.Notifications
-import plugins.common.QueItem
 import plugins.obs.ObsSceneQueItem
 import java.util.logging.Logger
 

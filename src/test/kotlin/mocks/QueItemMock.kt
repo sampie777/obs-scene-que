@@ -1,7 +1,7 @@
 package mocks
 
+import objects.que.QueItem
 import plugins.common.BasePlugin
-import plugins.common.QueItem
 import javax.swing.JLabel
 
 class QueItemMock(override val plugin: BasePlugin, override val name: String) : QueItem {

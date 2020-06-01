@@ -1,6 +1,7 @@
 package plugins.common
 
 import objects.que.JsonQue
+import objects.que.QueItem
 import plugins.PluginLoader
 import javax.swing.JComponent
 

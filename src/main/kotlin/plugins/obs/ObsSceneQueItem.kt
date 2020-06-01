@@ -4,8 +4,8 @@ import objects.OBSClient
 import objects.OBSState
 import objects.TScene
 import objects.que.Que
+import objects.que.QueItem
 import plugins.common.BasePlugin
-import plugins.common.QueItem
 import themes.Theme
 import javax.swing.JLabel
 

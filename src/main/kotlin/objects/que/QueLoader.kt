@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder
 import config.Config
 import objects.notifications.Notifications
 import plugins.PluginLoader
-import plugins.common.QueItem
 import java.io.File
 import java.util.logging.Logger
 

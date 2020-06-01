@@ -1,7 +1,7 @@
 package plugins.text.queItems
 
 import objects.que.Que
-import plugins.common.QueItem
+import objects.que.QueItem
 import plugins.text.TextPlugin
 import plugins.text.TextPluginQueItemCompanion
 import themes.Theme

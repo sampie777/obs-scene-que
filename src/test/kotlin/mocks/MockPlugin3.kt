@@ -1,7 +1,7 @@
 package mocks
 
 import objects.que.JsonQue
-import plugins.common.QueItem
+import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import javax.swing.Icon
 import javax.swing.JComponent

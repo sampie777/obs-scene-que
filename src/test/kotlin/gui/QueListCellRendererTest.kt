@@ -5,7 +5,7 @@ import mocks.MockPlugin
 import mocks.QueItemMock
 import objects.OBSState
 import objects.que.Que
-import plugins.common.QueItem
+import objects.que.QueItem
 import themes.Theme
 import java.awt.Color
 import javax.swing.JLabel

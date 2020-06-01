@@ -90,9 +90,9 @@ Plugins can be added to enable the use of different queue item types which can p
 - `OBSPlugin`: lets you activate OBS scenes
 - `TextPlugin`: doesn't really do anything. It's just there to create some clarity and order in your queue
 
-To install new plugins, just place their .jar file in the plugin directory (see settings for where this directory is).
+To install new plugins, just place their .jar file in the plugin directory (see settings for where this directory is). You can create your own plugins using [this guide](plugin_development.md).
 
-Some known external plugins are:
+Some known external plugins are (mostly still under development):
 
 - [EasyWorshipPlugin](https://github.com/sampie777/osq-easyworship-plugin): controls EasyWorship projection software
 - [SceneTimerPlugin](https://github.com/sampie777/osq-scenetimer-plugin): currently just a simple scene duration timer

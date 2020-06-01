@@ -3,7 +3,7 @@ package plugins.text
 import GUI
 import handles.QueItemTransferHandler
 import objects.que.Que
-import plugins.common.QueItem
+import objects.que.QueItem
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.event.MouseAdapter

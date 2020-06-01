@@ -2,7 +2,7 @@ package plugins.text
 
 import gui.utils.createImageIcon
 import objects.que.JsonQue
-import plugins.common.QueItem
+import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import plugins.text.queItems.HeaderQueItem
 import plugins.text.queItems.PlainTextQueItem

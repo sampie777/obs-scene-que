@@ -1,7 +1,7 @@
 package gui.list
 
 import brightness
-import plugins.common.QueItem
+import objects.que.QueItem
 import themes.Theme
 import java.awt.*
 import javax.swing.DefaultListCellRenderer

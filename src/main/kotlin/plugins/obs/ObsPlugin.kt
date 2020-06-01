@@ -7,7 +7,7 @@ import handles.QueItemTransferHandler
 import objects.OBSState
 import objects.TScene
 import objects.que.JsonQue
-import plugins.common.QueItem
+import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import java.awt.*
 import javax.swing.*

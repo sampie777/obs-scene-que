@@ -2,7 +2,7 @@ package gui.list
 
 import GUI
 import objects.que.Que
-import plugins.common.QueItem
+import objects.que.QueItem
 import java.awt.event.ActionEvent
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent

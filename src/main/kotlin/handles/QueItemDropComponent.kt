@@ -1,6 +1,6 @@
 package handles
 
-import plugins.common.QueItem
+import objects.que.QueItem
 
 interface QueItemDropComponent {
     fun dropNewItem(item: QueItem, index: Int): Boolean

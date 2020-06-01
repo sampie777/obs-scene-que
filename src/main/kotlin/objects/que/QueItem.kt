@@ -1,7 +1,6 @@
-package plugins.common
+package objects.que
 
-import objects.que.JsonQue
-import objects.que.Que
+import plugins.common.BasePlugin
 import themes.Theme
 import java.awt.Color
 import javax.swing.BorderFactory

@@ -1,6 +1,6 @@
 package handles
 
-import plugins.common.QueItem
+import objects.que.QueItem
 
 class QueItemTransferablePackage(
     val item: QueItem,

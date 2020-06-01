@@ -6,7 +6,7 @@ import gui.utils.isCtrlClick
 import handles.QueItemDropComponent
 import handles.QueItemTransferHandler
 import objects.notifications.Notifications
-import plugins.common.QueItem
+import objects.que.QueItem
 import themes.Theme
 import java.awt.Dimension
 import java.awt.event.ActionEvent

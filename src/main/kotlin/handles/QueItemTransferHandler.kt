@@ -1,7 +1,7 @@
 package handles
 
 import gui.quickAccessButtons.QuickAccessButton
-import plugins.common.QueItem
+import objects.que.QueItem
 import java.awt.Component
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.Transferable
