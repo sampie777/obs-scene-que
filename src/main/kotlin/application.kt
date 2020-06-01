@@ -29,5 +29,7 @@ fun main(args: Array<String>) {
         MainFrame.createAndShow()
     }
 
-     OBSClient.start()
+    if ("--offline" !in args) {
+        OBSClient.start()
+    }
 }

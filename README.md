@@ -44,12 +44,14 @@ Control the queue by using the control buttons "Previous" and "Next". These butt
 
 When a queue item becomes active (thus the new current queue index), it will be executed. This execution is different for each queue item type. 
 
-To set the current queue index to a specific queue item, use `MOUSE CLICK` to activate that item and set is as the new current queue index. To set this item as the new queue index, but without activating that item, use `CTRL + MOUSE CLICK` on that item. 
+To set the current queue index to a specific queue item, use `MOUSE DOUBLE CLICK` to activate that item and set is as the new current queue index. You can also use `ENTER` key on a selected queue item. To set this item as the new queue index, but without activating that item, use `CTRL + MOUSE CLICK` on that item. 
 
 #### Execute After Previous
-Mark a queue item to be executed after the previous queue item is executed. In this way, when a queue item becomes active, all the directly following queue items which are marked as Execute After Previous, will also be activated and executed in order.
+Mark a queue item to be executed after the previous queue item is executed. In this way, when a queue item becomes active, all the directly following queue items which are marked as Execute After Previous, will also be activated and executed in order. 
+
+When using the `ENTER` key on a selected queue item, the Execute After Previous items will be activated in order, as normal behaviour. When activating an queue item by `DOUBLE CLICK`, it will only activate that item and NOT it's Execute After Previous items. 
  
-Marking a queue item as Execte After Previous: 
+Marking a queue item as Execute After Previous: 
 - `SHIFT + RIGHT ARROW` will mark a queue item to be executed after the execution of the previous queue item.
 - `SHIFT + LEFT ARROW` will unmark a queue item to be executed after the execution of the previous queue item.
 
@@ -72,8 +74,10 @@ When connection to OBS is lost, OBS Scene Queue will continue keeping track of t
 
 OBS Scene Queue will not attempt to reconnect immediately, but during a continuous interval of 3 seconds (as specified in the properties).
 
+> If you want to start OBS Scene Queue in 'offline' mode, thus without trying to connect to OBS: use the `--offline` command line argument like so: `java -jar obs-scene-queue.jar --offline`.
+
 #### Themes
-A application theme can be set in Application menu -> Settings. Currently, only Light theme is available and Dark theme is experimental. You can develop your own theme by extending the BaseTheme class and creating a pull request to the `develop` branch. 
+An application theme can be set in Application menu -> Settings. Currently, only Light theme is available and Dark theme is experimental. You can develop your own theme by extending the BaseTheme class and creating a pull request to the `develop` branch. 
 
 #### Notifications
 
