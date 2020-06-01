@@ -69,17 +69,18 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
         list.addKeyListener(QueListKeyListener(list))
         list.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
+                if (isCtrlClick(e.modifiers)) {
+                    val selectedIndex = (e.source as JList<*>).selectedIndex
+                    Que.setCurrentQueItemByIndex(selectedIndex)
+                    GUI.refreshQueItems()
+                    return
+                }
+
                 // On double click
                 if (e.clickCount == 2) {
                     val selectedIndex = (e.source as JList<*>).selectedIndex
                     Que.setCurrentQueItemByIndex(selectedIndex)
                     Que.activateCurrent()
-                }
-
-                if (isCtrlClick(e.modifiers)) {
-                    val selectedIndex = (e.source as JList<*>).selectedIndex
-                    Que.setCurrentQueItemByIndex(selectedIndex)
-                    GUI.refreshQueItems()
                 }
             }
         })

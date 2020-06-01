@@ -3,6 +3,7 @@ package objects.que
 import mocks.MockPlugin
 import mocks.MockPlugin2
 import mocks.QueItemMock
+import mocks.QueItemMock2
 import kotlin.test.*
 
 @Suppress("DEPRECATION")
@@ -356,5 +357,33 @@ class QueTest {
 
         assertFalse(item1.isActivated)
         assertFalse(item2.isDeactivated)
+    }
+
+    @Test
+    fun testActivatePreviousItemAsPrevious() {
+        val item1 = QueItemMock2(mockPlugin, "1")
+        val item2 = QueItemMock2(mockPlugin, "2")
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(1)
+
+        Que.previous()
+        assertTrue(item1.isActivatedAsPrevious)
+        assertFalse(item1.isActivated)
+        assertFalse(item2.isActivatedAsPrevious)
+        assertFalse(item2.isActivated)
+    }
+
+    @Test
+    fun testActivatePreviousItemAsPreviousWithDefaultMethod() {
+        val item1 = QueItemMock(mockPlugin, "1")
+        val item2 = QueItemMock(mockPlugin, "2")
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(1)
+
+        Que.previous()
+        assertTrue(item1.isActivated)
+        assertFalse(item2.isActivated)
     }
 }

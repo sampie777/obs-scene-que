@@ -34,7 +34,7 @@ class QueListKeyListener(private val list: JList<QueItem>) : KeyListener {
         keyEvents[KeyEvent.VK_ENTER] = {
             logger.info("[KeyEvent] Enter key pressed")
             Que.setCurrentQueItemByIndex(list.selectedIndex)
-            Que.activateCurrent()
+            Que.activateCurrent(executeExecuteAfterPrevious = true)
         }
         keyEvents[KeyEvent.VK_DELETE] = {
             logger.info("[KeyEvent] Delete key pressed")

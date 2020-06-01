@@ -26,10 +26,25 @@ object Que {
         this.list = list
     }
 
-    fun activateCurrent() {
+    fun activateCurrent(executeExecuteAfterPrevious: Boolean = false) {
         val current = current() ?: return
 
         activateItem(current)
+        GUI.refreshQueItems()
+
+        if (!executeExecuteAfterPrevious) {
+            return
+        }
+
+        if (previewNext() != null && previewNext()!!.executeAfterPrevious) {
+            next()
+        }
+    }
+
+    fun activateCurrentAsPrevious() {
+        val current = current() ?: return
+
+        activateItemAsPrevious(current)
         GUI.refreshQueItems()
     }
 
@@ -40,15 +55,22 @@ object Que {
         GUI.refreshQueItems()
     }
 
+    fun deactivateCurrentAsPrevious() {
+        val current = current() ?: return
+
+        deactivateItemAsPrevious(current)
+        GUI.refreshQueItems()
+    }
+
     fun previous() {
         if (currentIndex <= 0) {
             logger.info("Reached start of queue")
             return
         }
 
-        deactivateCurrent()
+        deactivateCurrentAsPrevious()
         currentIndex--
-        activateCurrent()
+        activateCurrentAsPrevious()
     }
 
     fun current(): QueItem? {
@@ -67,11 +89,7 @@ object Que {
 
         deactivateCurrent()
         currentIndex++
-        activateCurrent()
-
-        if (previewNext() != null && previewNext()!!.executeAfterPrevious) {
-            next()
-        }
+        activateCurrent(executeExecuteAfterPrevious = true)
     }
 
     fun getAt(index: Int): QueItem? {
@@ -187,11 +205,31 @@ object Que {
         }
     }
 
+    private fun activateItemAsPrevious(item: QueItem?) {
+        try {
+            item!!.activateAsPrevious()
+        } catch (e: Exception) {
+            logger.warning("Exception occurred when activating current queue item as previous: ${item?.name}")
+            e.printStackTrace()
+            Notifications.add("Failed to activate current queue item '${item?.name}'", "Queue")
+        }
+    }
+
     private fun deactivateItem(item: QueItem?) {
         try {
             item!!.deactivate()
         } catch (e: Exception) {
-            logger.warning("Failed to deactivate current queue item")
+            logger.warning("Failed to deactivate current queue item: ${item?.name}")
+            e.printStackTrace()
+            Notifications.add("Failed to deactivate current queue item '${item?.name}'", "Queue")
+        }
+    }
+
+    private fun deactivateItemAsPrevious(item: QueItem?) {
+        try {
+            item!!.deactivateAsPrevious()
+        } catch (e: Exception) {
+            logger.warning("Failed to deactivate current queue item as previous: ${item?.name}")
             e.printStackTrace()
             Notifications.add("Failed to deactivate current queue item '${item?.name}'", "Queue")
         }

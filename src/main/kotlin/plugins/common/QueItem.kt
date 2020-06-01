@@ -17,7 +17,9 @@ interface QueItem {
 
     fun renderText(): String = name
 
+    fun activateAsPrevious() = activate()
     fun activate()
+    fun deactivateAsPrevious() = deactivate()
     fun deactivate()
 
     @Deprecated(
