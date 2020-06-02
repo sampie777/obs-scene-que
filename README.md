@@ -13,7 +13,7 @@ _Screenshot which shows scene "Another screen" as the current active queue item.
 #### Requirements
 
 - Installation of OBS
-- Installation of OBS Websocket (at least v4.0.0)
+- Installation of OBS Websocket (at least v4.1.0)
 - Installation of Java (at least Java 1.8 / Java 8) on the computer where OBS Scene Queue will be running
 
 If OBS is running on another computer, make sure the computer where OBS Scene Queue is running on can reach the other computer. Use the Websocket Scanner built in OBS Scene Queue to quickly identify the other computer where OBS is running.
