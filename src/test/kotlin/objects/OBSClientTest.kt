@@ -4,6 +4,7 @@ import GUI
 import config.Config
 import mocks.GuiComponentMock
 import net.twasi.obsremotejava.objects.Scene
+import objects.notifications.Notifications
 import kotlin.test.*
 
 class OBSClientTest {
@@ -11,6 +12,7 @@ class OBSClientTest {
     @BeforeTest
     fun before() {
         OBSState.scenes.clear()
+        Notifications.clear()
     }
 
     @Test
@@ -24,7 +26,8 @@ class OBSClientTest {
         // When
         try {
             OBSClient.processNewScene("scene1")
-        } catch (e: NullPointerException) {}
+        } catch (e: NullPointerException) {
+        }
 
         assertFalse(panelMock.refreshScenesCalled)
         assertTrue(panelMock.switchedScenesCalled)
@@ -55,5 +58,17 @@ class OBSClientTest {
         assertTrue(panelMock.refreshOBSStatusCalled)
         assertEquals(3, OBSState.scenes.size)
         assertNull(OBSState.clientActivityStatus)
+    }
+
+    @Test
+    fun testPreregisterCallbacks() {
+        OBSClient.clearPreregisteredCallbacks()
+        OBSClient.preregisterCallback("mycallback") {
+            /* this will fail because the controller argrument will be null which is not permitted */
+        }
+
+        OBSClient.registerPreregisteredCallbacks()
+
+        assertTrue(Notifications.list[0].message.contains("mycallback"))
     }
 }

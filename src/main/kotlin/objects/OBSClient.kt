@@ -11,15 +11,19 @@ import net.twasi.obsremotejava.requests.GetSceneList.GetSceneListResponse
 import net.twasi.obsremotejava.requests.ResponseBase
 import objects.notifications.Notifications
 import objects.que.Que
-import plugins.obs.ObsSceneQueItem
+import plugins.obs.queItems.ObsSceneQueItem
 import java.util.*
 import java.util.logging.Logger
+import kotlin.collections.HashMap
 
 object OBSClient {
     private var logger = Logger.getLogger(OBSClient::class.java.name)
 
-    private var controller: OBSRemoteController? = null
     private var reconnecting: Boolean = false
+    private var controller: OBSRemoteController? = null
+    fun getController() = controller
+
+    private val preregisteredCallbacks = HashMap<String, (controller: OBSRemoteController) -> Unit>()
 
     fun start() {
         logger.info("Connecting to OBS on: ${Config.obsAddress}")
@@ -66,6 +70,17 @@ object OBSClient {
                 start()
             }
         }, Config.obsReconnectionTimeout)
+    }
+
+    fun preregisterCallback(callbackId: String, callback: (controller: OBSRemoteController) -> Unit) {
+        if (preregisteredCallbacks.containsKey(callbackId)) {
+            logger.warning("Callback ID '$callbackId' already exist in preregistered callbacks. This will be overwritten.")
+        }
+        preregisteredCallbacks[callbackId] = callback
+    }
+
+    fun clearPreregisteredCallbacks() {
+        preregisteredCallbacks.clear()
     }
 
     private fun registerCallbacks() {
@@ -176,6 +191,23 @@ object OBSClient {
                 "Failed to register switchScenes callback: cannot detect scene changes",
                 "OBS"
             )
+        }
+
+        registerPreregisteredCallbacks()
+    }
+
+    fun registerPreregisteredCallbacks() {
+        preregisteredCallbacks.forEach { (callbackId, callback) ->
+            try {
+                callback.invoke(controller!!)
+            } catch (t: Throwable) {
+                logger.severe("Failed to register preregistered OBS callback: $callbackId")
+                t.printStackTrace()
+                Notifications.add(
+                    "Failed to register a callback '$callbackId': ${t.localizedMessage}",
+                    "OBS"
+                )
+            }
         }
     }
 
