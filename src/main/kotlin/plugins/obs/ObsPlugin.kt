@@ -9,9 +9,9 @@ import objects.TScene
 import objects.que.JsonQue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
+import plugins.obs.queItems.*
 import java.awt.*
 import javax.swing.*
-import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
 @Suppress("unused")
@@ -47,18 +47,43 @@ class ObsPlugin : QueItemBasePlugin, Refreshable {
         list.selectionMode = ListSelectionModel.SINGLE_SELECTION
         list.dragEnabled = true
         list.transferHandler = QueItemTransferHandler()
-        list.background = null
         list.font = Font("Dialog", Font.PLAIN, 14)
         list.cursor = Cursor(Cursor.HAND_CURSOR)
-        list.border = CompoundBorder(
-            BorderFactory.createLineBorder(Color(180, 180, 180)),
-            EmptyBorder(10, 10, 0, 10)
-        )
+        list.border = EmptyBorder(10, 10, 0, 10)
 
         val scrollPanel = JScrollPane(list)
         scrollPanel.preferredSize = Dimension(300, 500)
-        scrollPanel.border = null
+        scrollPanel.border = BorderFactory.createLineBorder(Color(180, 180, 180))
         panel.add(scrollPanel, BorderLayout.CENTER)
+
+        panel.add(createActionPanel(), BorderLayout.PAGE_END)
+
+        return panel
+    }
+
+    private fun createActionPanel(): JPanel {
+        val panel = JPanel(BorderLayout(10, 10))
+        panel.add(JLabel("Other actions"), BorderLayout.PAGE_START)
+
+        val queItems = arrayOf(
+            ObsStartStreamingQueItem(this),
+            ObsStopStreamingQueItem(this),
+            ObsStartRecordingQueItem(this),
+            ObsStopRecordingQueItem(this)
+        )
+
+        val actionsList: JList<QueItem> = JList(queItems)
+        actionsList.selectionMode = ListSelectionModel.SINGLE_SELECTION
+        actionsList.dragEnabled = true
+        actionsList.transferHandler = ObsActionQueItemTransferHandler(this)
+        actionsList.font = Font("Dialog", Font.PLAIN, 14)
+        actionsList.cursor = Cursor(Cursor.HAND_CURSOR)
+        actionsList.border = EmptyBorder(10, 10, 0, 10)
+
+        val actionListScrollPanel = JScrollPane(actionsList)
+        actionListScrollPanel.preferredSize = Dimension(100, 100)
+        actionListScrollPanel.border = BorderFactory.createLineBorder(Color(180, 180, 180))
+        panel.add(actionListScrollPanel, BorderLayout.CENTER)
 
         return panel
     }
@@ -68,7 +93,14 @@ class ObsPlugin : QueItemBasePlugin, Refreshable {
     }
 
     override fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem {
-        return ObsSceneQueItem(this, TScene(jsonQueItem.name))
+        return when (jsonQueItem.className) {
+            ObsSceneQueItem::class.java.simpleName -> ObsSceneQueItem(this, TScene(jsonQueItem.name))
+            ObsStartStreamingQueItem::class.java.simpleName -> ObsStartStreamingQueItem(this)
+            ObsStopStreamingQueItem::class.java.simpleName -> ObsStopStreamingQueItem(this)
+            ObsStartRecordingQueItem::class.java.simpleName -> ObsStartRecordingQueItem(this)
+            ObsStopRecordingQueItem::class.java.simpleName -> ObsStopRecordingQueItem(this)
+            else -> throw IllegalArgumentException("Invalid OBS Plugin queue item: ${jsonQueItem.className}")
+        }
     }
 
     override fun refreshScenes() {

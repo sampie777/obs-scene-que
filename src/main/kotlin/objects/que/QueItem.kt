@@ -20,13 +20,16 @@ interface QueItem {
     fun activateAsPrevious() = activate()
     fun activate()
     fun deactivateAsPrevious() = deactivate()
-    fun deactivate()
+    fun deactivate() {}
 
     @Deprecated(
         "Use JSON converter instead of this plane text converter",
         ReplaceWith("toJson()", "")
     )
-    fun toConfigString(): String
+    fun toConfigString(): String {
+        throw NotImplementedError("This method is deprecated. Please use the latest version of the application.")
+    }
+
     fun toJson(): JsonQue.QueItem = JsonQue.QueItem(
         pluginName = plugin.name,
         className = javaClass.simpleName,

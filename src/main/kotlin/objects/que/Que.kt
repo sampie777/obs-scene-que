@@ -4,7 +4,7 @@ import GUI
 import objects.ApplicationInfo
 import objects.OBSState
 import objects.notifications.Notifications
-import plugins.obs.ObsSceneQueItem
+import plugins.obs.queItems.ObsSceneQueItem
 import java.util.logging.Logger
 
 object Que {
@@ -196,6 +196,7 @@ object Que {
 
     private fun activateItem(item: QueItem?) {
         try {
+            logger.info("Activating queue item: ${item?.name}")
             item!!.activate()
         } catch (e: Exception) {
             logger.warning("Exception occurred when activating current queue item: ${item?.name}")
@@ -206,6 +207,7 @@ object Que {
 
     private fun activateItemAsPrevious(item: QueItem?) {
         try {
+            logger.info("Activating as previous queue item: ${item?.name}")
             item!!.activateAsPrevious()
         } catch (e: Exception) {
             logger.warning("Exception occurred when activating current queue item as previous: ${item?.name}")
@@ -216,6 +218,7 @@ object Que {
 
     private fun deactivateItem(item: QueItem?) {
         try {
+            logger.info("Deactivating queue item: ${item?.name}")
             item!!.deactivate()
         } catch (e: Exception) {
             logger.warning("Failed to deactivate current queue item: ${item?.name}")
@@ -226,6 +229,7 @@ object Que {
 
     private fun deactivateItemAsPrevious(item: QueItem?) {
         try {
+            logger.info("Deactivating as previous queue item: ${item?.name}")
             item!!.deactivateAsPrevious()
         } catch (e: Exception) {
             logger.warning("Failed to deactivate current queue item as previous: ${item?.name}")

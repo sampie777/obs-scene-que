@@ -1,10 +1,11 @@
-package plugins.obs
+package plugins.obs.queItems
 
 import objects.OBSClient
 import objects.OBSState
 import objects.TScene
 import objects.que.Que
 import objects.que.QueItem
+import plugins.obs.ObsPlugin
 import themes.Theme
 import java.awt.Color
 import javax.swing.JLabel

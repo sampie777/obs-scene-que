@@ -5,7 +5,7 @@ import mocks.MockPlugin
 import objects.notifications.Notifications
 import plugins.PluginLoader
 import plugins.obs.ObsPlugin
-import plugins.obs.ObsSceneQueItem
+import plugins.obs.queItems.ObsSceneQueItem
 import java.awt.Color
 import kotlin.test.*
 
