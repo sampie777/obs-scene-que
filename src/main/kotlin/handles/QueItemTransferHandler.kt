@@ -106,7 +106,7 @@ open class QueItemTransferHandler(var queItem: QueItem? = null) : TransferHandle
             return false
         }
 
-        if (transferablePackage.isCopyingToQueItemDropComponent) {
+        if (transferablePackage.isCopyingToQueItemDropComponent && transferablePackage.fromIndex != -1) {
             try {
                 dropped = dropComponent.dropMoveItem(transferablePackage.item, transferablePackage.fromIndex, dropIndex)
             } catch (e: Exception) {

@@ -12,8 +12,12 @@ import themes.Theme
 import java.awt.Cursor
 import java.awt.Dimension
 import java.awt.event.ActionEvent
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.util.logging.Logger
 import javax.swing.JButton
+import javax.swing.JComponent
+import javax.swing.TransferHandler
 import javax.swing.border.CompoundBorder
 import javax.swing.border.LineBorder
 
@@ -30,6 +34,15 @@ class QuickAccessButton(
         preferredSize = Dimension(100, 100)
         transferHandler = QueItemTransferHandler()
         addActionListener { e -> onClick(e) }
+        addMouseMotionListener(object : MouseAdapter() {
+            override fun mouseDragged(e: MouseEvent) {
+                val queItem = queItem ?: return
+
+                val transferHandler = (e.source as JButton).transferHandler as QueItemTransferHandler
+                transferHandler.queItem = queItem
+                transferHandler.exportAsDrag(e.source as JComponent, e, TransferHandler.COPY)
+            }
+        })
 
         refreshLayout()
     }
