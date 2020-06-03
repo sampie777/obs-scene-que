@@ -2,15 +2,17 @@ package plugins.obs
 
 import GUI
 import gui.Refreshable
+import gui.utils.DefaultSourcesList
 import gui.utils.createImageIcon
-import handles.QueItemTransferHandler
 import objects.OBSState
 import objects.TScene
 import objects.que.JsonQue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import plugins.obs.queItems.*
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Dimension
 import javax.swing.*
 import javax.swing.border.EmptyBorder
 
@@ -25,7 +27,7 @@ class ObsPlugin : QueItemBasePlugin, Refreshable {
     override val tabName = "OBS"
 
     internal val quickAccessColor = Color(229, 238, 255)
-    private val list: JList<QueItem> = JList()
+    private val list: JList<QueItem> = DefaultSourcesList()
 
     override fun enable() {
         super.enable()
@@ -43,13 +45,6 @@ class ObsPlugin : QueItemBasePlugin, Refreshable {
 
         val titleLabel = JLabel("Available scenes")
         panel.add(titleLabel, BorderLayout.PAGE_START)
-
-        list.selectionMode = ListSelectionModel.SINGLE_SELECTION
-        list.dragEnabled = true
-        list.transferHandler = QueItemTransferHandler()
-        list.font = Font("Dialog", Font.PLAIN, 14)
-        list.cursor = Cursor(Cursor.HAND_CURSOR)
-        list.border = EmptyBorder(10, 10, 0, 10)
 
         val scrollPanel = JScrollPane(list)
         scrollPanel.preferredSize = Dimension(300, 500)
@@ -72,13 +67,8 @@ class ObsPlugin : QueItemBasePlugin, Refreshable {
             ObsStopRecordingQueItem(this)
         )
 
-        val actionsList: JList<QueItem> = JList(queItems)
-        actionsList.selectionMode = ListSelectionModel.SINGLE_SELECTION
-        actionsList.dragEnabled = true
+        val actionsList: JList<QueItem> = DefaultSourcesList(queItems)
         actionsList.transferHandler = ObsActionQueItemTransferHandler(this)
-        actionsList.font = Font("Dialog", Font.PLAIN, 14)
-        actionsList.cursor = Cursor(Cursor.HAND_CURSOR)
-        actionsList.border = EmptyBorder(10, 10, 0, 10)
 
         val actionListScrollPanel = JScrollPane(actionsList)
         actionListScrollPanel.preferredSize = Dimension(100, 100)
