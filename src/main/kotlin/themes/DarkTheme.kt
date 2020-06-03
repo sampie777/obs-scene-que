@@ -8,6 +8,7 @@ class DarkTheme : BaseTheme() {
     override val LINK_FONT_COLOR = Color(106, 149, 239)
     override val BACKGROUND_COLOR = Color(50, 50, 50)
     override val TEXT_FIELD_BACKGROUND_COLOR = Color(78, 78, 78)
+    override val LIST_BACKGROUND_COLOR = Color(70, 70, 70)
     override val BUTTON_BACKGROUND_COLOR = Color(65, 65, 65)
     override val TABLE_HEADER_BACKGROUND_COLOR = Color(50, 50, 50)
     override val TABLE_BACKGROUND_COLOR = Color(78, 78, 78)

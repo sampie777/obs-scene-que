@@ -67,7 +67,7 @@ object Theme {
         UIManager.put("SplitPane.background", get.BACKGROUND_COLOR)
         UIManager.put("Label.background", get.BACKGROUND_COLOR)
         UIManager.put("Label.foreground", get.FONT_COLOR)
-        UIManager.put("List.background", get.TEXT_FIELD_BACKGROUND_COLOR)
+        UIManager.put("List.background", get.LIST_BACKGROUND_COLOR)
         UIManager.put("List.foreground", get.FONT_COLOR)
         UIManager.put("List.selectionBackground", get.LIST_SELECTION_BACKGROUND_COLOR)
         UIManager.put("List.selectionForeground", get.LIST_SELECTION_FONT_COLOR_DEFAULT)

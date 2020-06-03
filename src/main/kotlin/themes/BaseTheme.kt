@@ -8,6 +8,7 @@ abstract class BaseTheme {
     open val LINK_FONT_COLOR = Color(25, 90, 244)
     open val BACKGROUND_COLOR = Color(238, 238, 238)
     open val TEXT_FIELD_BACKGROUND_COLOR = Color(255, 255, 255)
+    open val LIST_BACKGROUND_COLOR = Color(248, 248, 248)
     open val BUTTON_BACKGROUND_COLOR = Color(221, 232, 243)
     open val TABLE_HEADER_BACKGROUND_COLOR = Color(238, 238, 238)
     open val TABLE_BACKGROUND_COLOR = Color(255, 255, 255)
