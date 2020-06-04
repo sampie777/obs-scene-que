@@ -24,7 +24,11 @@ class MockPlugin2 : QueItemBasePlugin {
     }
 
     override fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem {
-        return QueItemMock(this, jsonQueItem.name)
+        return when(jsonQueItem.className) {
+            QueItemMock::class.java.name -> QueItemMock(this, jsonQueItem.name)
+            QueItemMock2::class.java.name -> QueItemMock2(this, jsonQueItem.name)
+            else -> throw IllegalArgumentException("Unknown class")
+        }
     }
 
     override fun createMenu(menu: JMenu): Boolean {

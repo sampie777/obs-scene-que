@@ -19,8 +19,8 @@ internal object QueLoader {
     private var lastSavedData: String = ""
 
     fun load() {
-        logger.info("Loading queue from file")
         val queFile = File(Config.queFile)
+        logger.info("Loading queue from file: ${queFile.absolutePath}")
 
         if (!queFile.exists()) {
             logger.info("Queue file not found")
@@ -31,12 +31,36 @@ internal object QueLoader {
         // Create backwards compatibility
         if (queFile.extension == "osq") {
             @Suppress("DEPRECATION")
-            val queList = queFile.readLines()
-                .mapNotNull { loadQueItemForStringLine(it) } as ArrayList<QueItem>
+            val queList = try {
+                queFile.readLines()
+                    .mapNotNull { loadQueItemForStringLine(it) } as ArrayList<QueItem>
+            } catch (e: Exception) {
+                logger.severe("Failed to json queue from file")
+                e.printStackTrace()
+                Notifications.add("Failed to read file: ${e.localizedMessage}", "Queue")
+                return
+            }
+
             Que.setList(queList)
         } else {
-            val json = queFile.readText()
-            fromJson(json)
+            val json = try {
+                queFile.readText()
+            } catch (e: Exception) {
+                logger.severe("Failed to json queue from file")
+                e.printStackTrace()
+                Notifications.add("Failed to read file: ${e.localizedMessage}", "Queue")
+                return
+            }
+
+            if (!fromJson(json)) {
+                return
+            }
+        }
+
+        val fileName = File(Config.queFile).nameWithoutExtension
+        if (fileName != Que.name) {
+            logger.info("Renaming que to file name: $fileName")
+            Que.name = fileName
         }
     }
 
@@ -51,6 +75,7 @@ internal object QueLoader {
         val item: QueItem
         try {
             item = plugin.jsonToQueItem(jsonQueItem)
+            item.dataFromJson(jsonQueItem)
         } catch (e: Exception) {
             logger.warning("Failed to load queue item $jsonQueItem")
             e.printStackTrace()
@@ -61,22 +86,18 @@ internal object QueLoader {
             return null
         }
 
-        item.dataFromJson(jsonQueItem)
         return item
     }
 
     fun save() {
-        if (!writeToFile) {
-            logger.info("writeToFile is turned off, so not saving queue to file")
-            return
-        }
+        Que.name = File(Config.queFile).nameWithoutExtension
 
         val json = try {
             queToJson()
         } catch (e: Exception) {
-            logger.warning("Failed to save Queue to file")
+            logger.warning("Failed to convert Queue to json")
             e.printStackTrace()
-            Notifications.add("Failed to save Queue to file", "Queue")
+            Notifications.add("Failed to save Queue to file: ${e.localizedMessage}", "Queue")
             return
         }
 
@@ -85,10 +106,18 @@ internal object QueLoader {
             return
         }
 
-        val fileName = File(Config.queFile).parentFile.absolutePath + File.separatorChar + Que.name + ".json"
-        Config.queFile = fileName
-        logger.info("Saving queue to file: $fileName")
-        File(fileName).writeText(json)
+        if (!writeToFile) {
+            logger.info("writeToFile is turned off, so not saving queue to file")
+        } else {
+            logger.info("Saving queue to file: ${Config.queFile}")
+            try {
+                File(Config.queFile).writeText(json)
+            } catch (e: Exception) {
+                logger.severe("Failed to save json to file")
+                e.printStackTrace()
+                Notifications.add("Failed to save Queue to file: ${e.localizedMessage}", "Queue")
+            }
+        }
 
         lastSavedData = json
     }
@@ -121,15 +150,17 @@ internal object QueLoader {
         }
     }
 
-    fun fromJson(json: String) {
-        val jsonQue = jsonQueFromJson(json) ?: return
+    fun fromJson(json: String): Boolean {
+        val jsonQue = jsonQueFromJson(json) ?: return false
 
         Que.name = jsonQue.name
         Que.applicationVersion = jsonQue.applicationVersion
         Que.clear()
+
         jsonQue.queItems.forEach {
             loadQueItemFromJson(it)?.let { it1 -> Que.add(it1) }
         }
+        return true
     }
 
     private fun jsonQueFromJson(json: String): JsonQue.Que? {

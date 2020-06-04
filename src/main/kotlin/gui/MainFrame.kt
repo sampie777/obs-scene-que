@@ -6,6 +6,7 @@ import exitApplication
 import gui.menu.MenuBar
 import gui.utils.loadIcon
 import objects.ApplicationInfo
+import objects.que.Que
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.util.logging.Logger
@@ -60,7 +61,7 @@ class MainFrame : JFrame(), Refreshable {
         }
 
         jMenuBar = MenuBar()
-        title = ApplicationInfo.name
+        title = ApplicationInfo.name + " - " + Que.name
         defaultCloseOperation = EXIT_ON_CLOSE
         iconImage = loadIcon("/icon-512.png")
     }

@@ -1,0 +1,30 @@
+{
+  "name": "default-que3",
+  "applicationVersion": "2.6.0-snapshot",
+  "queItems": [
+    {
+      "pluginName": "ObsPlugin",
+      "className": "ObsSceneQueItem",
+      "name": "Scene 2",
+      "executeAfterPrevious": false,
+      "quickAccessColor": {
+        "value": -1708289,
+        "falpha": 0.0
+      },
+      "data": {}
+    },
+    {
+      "pluginName": "ObsPlugin",
+      "className": "ObsSceneQueItem",
+      "name": "Scene 3",
+      "executeAfterPreQueItem",
+      "name": "Scene 4",
+      "executeAfterPrevious": false,
+      "quickAccessColor": {
+        "value": -1708289,
+        "falpha": 0.0
+      },
+      "data": {}
+    }
+  ]
+}
