@@ -20,6 +20,7 @@ object Config {
     var mainWindowLocation: Point = Point(0, 0)
     var mainWindowSize: Dimension = Dimension(1060, 600)
     var mainWindowsIsMaximized: Boolean = false
+    var mainWindowsIsFullscreen: Boolean = false
     var controlWindowLocation: Point = Point(-1, -1)
     var controlWindowSize: Dimension = Dimension(500, 250)
     var controlWindowsIsMaximized: Boolean = false

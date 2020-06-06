@@ -6,6 +6,7 @@ import exitApplication
 import gui.menu.MenuBar
 import gui.utils.loadIcon
 import objects.ApplicationInfo
+import objects.notifications.Notifications
 import objects.que.Que
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
@@ -56,6 +57,8 @@ class MainFrame : JFrame(), Refreshable {
             if (Config.mainWindowsIsMaximized) {
                 extendedState = extendedState or MAXIMIZED_BOTH
             }
+
+            setFullscreen(Config.mainWindowsIsFullscreen)
         } else {
             setSize(1000, 600)
         }
@@ -74,6 +77,32 @@ class MainFrame : JFrame(), Refreshable {
         } else {
             Config.mainWindowsIsMaximized = false
             Config.mainWindowSize = size
+        }
+    }
+
+    fun toggleFullscreen() {
+        Config.mainWindowsIsFullscreen = !Config.mainWindowsIsFullscreen
+
+        setFullscreen(Config.mainWindowsIsFullscreen)
+    }
+
+    private fun setFullscreen(value: Boolean) {
+        val graphicsDevice = graphicsConfiguration.device
+
+        if (value) {
+            logger.info("Enabling fullscreen")
+            if (!graphicsDevice.isFullScreenSupported) {
+                logger.info("Fullscreen not supported on this graphics device: $graphicsDevice")
+                Notifications.add("Fullscreen is not supported by your graphics device", "GUI")
+                return
+            }
+
+            graphicsDevice.fullScreenWindow = this
+        } else {
+            logger.info("Disabling fullscreen")
+            if (graphicsDevice.fullScreenWindow == this) {
+                graphicsDevice.fullScreenWindow = null
+            }
         }
     }
 }

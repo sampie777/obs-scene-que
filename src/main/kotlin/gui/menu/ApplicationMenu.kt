@@ -1,6 +1,7 @@
 package gui.menu
 
 import exitApplication
+import gui.MainFrame
 import gui.config.ConfigFrame
 import gui.controls.ControlFrame
 import gui.notifications.NotificationFrame
@@ -26,6 +27,7 @@ class ApplicationMenu : JMenu("Application") {
         val notificationsItem = JMenuItem("Notifications")
         val scannerItem = JMenuItem("Network Scanner")
         val settingsItem = JMenuItem("Settings")
+        val fullscreenItem = JMenuItem("Toggle fullscreen")
         val infoItem = JMenuItem("Info")
         val quitItem = JMenuItem("Quit")
 
@@ -33,6 +35,9 @@ class ApplicationMenu : JMenu("Application") {
         notificationsItem.addActionListener { NotificationFrame(getMainFrameComponent(this)) }
         scannerItem.addActionListener { WebsocketScannerFrame(getMainFrameComponent(this)) }
         settingsItem.addActionListener { ConfigFrame(getMainFrameComponent(this)) }
+        fullscreenItem.addActionListener {
+            (getMainFrameComponent(this) as MainFrame).toggleFullscreen()
+        }
         infoItem.addActionListener { InfoFrame(getMainFrameComponent(this)) }
         quitItem.addActionListener { exitApplication() }
 
@@ -40,6 +45,8 @@ class ApplicationMenu : JMenu("Application") {
         add(notificationsItem)
         add(scannerItem)
         add(settingsItem)
+        addSeparator()
+        add(fullscreenItem)
         add(infoItem)
         add(quitItem)
     }
