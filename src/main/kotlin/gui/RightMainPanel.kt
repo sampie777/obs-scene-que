@@ -6,6 +6,7 @@ import objects.notifications.Notifications
 import plugins.PluginLoader
 import java.awt.BorderLayout
 import java.awt.Component
+import java.awt.Dimension
 import java.util.logging.Logger
 import javax.swing.JComponent
 import javax.swing.JPanel
@@ -38,6 +39,8 @@ class RightMainPanel : JPanel(), Refreshable {
         }
 
         splitPanel.topComponent = MainPanelControlPanel()
+        splitPanel.topComponent.minimumSize = Dimension(10, 10)
+        splitPanel.bottomComponent.minimumSize = Dimension(10, 10)
 
         splitPanel.border = null
         splitPanel.dividerLocation = 300
