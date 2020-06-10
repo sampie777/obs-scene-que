@@ -23,7 +23,7 @@ class BooleanFormInput(
     override fun component(): Component {
         val configValue: Boolean? = Config.get(key) as? Boolean
 
-        val label = JLabel(labelText)
+        val label = JLabel("<html>${labelText.replace("\n", "<br/>&nbsp;")}</html>")
         label.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 12)
 
         input.isSelected = configValue ?: false

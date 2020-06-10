@@ -46,6 +46,8 @@ When a queue item becomes active (thus the new current queue index), it will be 
 
 To set the current queue index to a specific queue item, use `MOUSE DOUBLE CLICK` to activate that item and set is as the new current queue index. You can also use `ENTER` key on a selected queue item. To set this item as the new queue index, but without activating that item, use `CTRL + MOUSE CLICK` on that item. 
 
+Note that settings can be changed in order to adjust the behaviour of activating 'Execute After Previous' queue items after activating a queue item using `MOUSE DOUBLE CLICK` or `ENTER`. 
+
 #### Execute After Previous
 Mark a queue item to be executed after the previous queue item is executed. In this way, when a queue item becomes active, all the directly following queue items which are marked as Execute After Previous, will also be activated and executed in order. 
 

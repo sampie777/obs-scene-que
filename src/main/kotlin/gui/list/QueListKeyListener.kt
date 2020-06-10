@@ -1,6 +1,7 @@
 package gui.list
 
 import GUI
+import config.Config
 import objects.que.Que
 import objects.que.QueItem
 import java.awt.event.ActionEvent
@@ -34,7 +35,14 @@ class QueListKeyListener(private val list: JList<QueItem>) : KeyListener {
         keyEvents[KeyEvent.VK_ENTER] = {
             logger.info("[KeyEvent] Enter key pressed")
             Que.setCurrentQueItemByIndex(list.selectedIndex)
-            Que.activateCurrent(executeExecuteAfterPrevious = true)
+
+            val activateNextSubQueueItems =
+                if (Que.current() != null && Que.current()!!.executeAfterPrevious)
+                    Config.activateNextSubQueueItemsOnMouseActivationSubQueueItem
+                else
+                    Config.activateNextSubQueueItemsOnMouseActivationQueueItem
+
+            Que.activateCurrent(activateNextSubQueueItems)
         }
         keyEvents[KeyEvent.VK_DELETE] = {
             logger.info("[KeyEvent] Delete key pressed")

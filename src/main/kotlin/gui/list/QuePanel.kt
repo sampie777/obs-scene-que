@@ -1,6 +1,7 @@
 package gui.list
 
 import GUI
+import config.Config
 import gui.Refreshable
 import gui.utils.isCtrlClick
 import handles.QueItemDropComponent
@@ -80,7 +81,14 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
                 if (e.clickCount == 2) {
                     val selectedIndex = (e.source as JList<*>).selectedIndex
                     Que.setCurrentQueItemByIndex(selectedIndex)
-                    Que.activateCurrent()
+
+                    val activateNextSubQueueItems =
+                        if (Que.current() != null && Que.current()!!.executeAfterPrevious)
+                            Config.activateNextSubQueueItemsOnMouseActivationSubQueueItem
+                        else
+                            Config.activateNextSubQueueItemsOnMouseActivationQueueItem
+
+                    Que.activateCurrent(activateNextSubQueueItems)
                 }
             }
         })

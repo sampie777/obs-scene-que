@@ -24,17 +24,50 @@ class ConfigEditPanel : JPanel() {
     private fun createFormInputs() {
         formComponents.add(HeaderFormComponent("OBS"))
         formComponents.add(StringFormInput("obsAddress", "OBS websocket address", false))
-        formComponents.add(StringFormInput("obsPassword", "OBS websocket password", true, toolTipText = "This value is not stored encrypted"))
-        formComponents.add(NumberFormInput<Long>("obsReconnectionTimeout", "Connection retry interval (millisec.)", min = 0, max = null))
+        formComponents.add(
+            StringFormInput(
+                "obsPassword",
+                "OBS websocket password",
+                true,
+                toolTipText = "This value is not stored encrypted"
+            )
+        )
+        formComponents.add(
+            NumberFormInput<Long>(
+                "obsReconnectionTimeout",
+                "Connection retry interval (millisec.)",
+                min = 0,
+                max = null
+            )
+        )
 
         formComponents.add(HeaderFormComponent("GUI"))
         formComponents.add(ThemeSelectFormInput("theme", "Theme", Theme.availableThemes()))
         formComponents.add(BooleanFormInput("windowRestoreLastPosition", "Restore window position on start up"))
-        formComponents.add(NumberFormInput<Int>("quickAccessButtonCount", "Quick Access buttons amount", min = 0, max = Int.MAX_VALUE))
+        formComponents.add(
+            NumberFormInput<Int>(
+                "quickAccessButtonCount",
+                "Quick Access buttons amount",
+                min = 0,
+                max = Int.MAX_VALUE
+            )
+        )
 
         formComponents.add(HeaderFormComponent("Queue"))
         formComponents.add(StringFormInput("queFile", "Queue file", false))
         formComponents.add(StringFormInput("pluginDirectory", "Plugin directory", false))
+        formComponents.add(
+            BooleanFormInput(
+                "activateNextSubQueueItemsOnMouseActivationQueueItem",
+                "When activating a Queue Item,\nalso activate the next 'Activate After Previous'-Queue Items"
+            )
+        )
+        formComponents.add(
+            BooleanFormInput(
+                "activateNextSubQueueItemsOnMouseActivationSubQueueItem",
+                "When activating an 'Activate After Previous'-Queue Item,\nalso activate the next 'Activate After Previous'-Queue Items"
+            )
+        )
     }
 
     private fun createGui() {

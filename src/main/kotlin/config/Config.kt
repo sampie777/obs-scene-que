@@ -37,6 +37,9 @@ object Config {
     var quickAccessButtonCount: Int = 6
     var quickAccessButtonQueItems: ArrayList<String> = ArrayList()
 
+    var activateNextSubQueueItemsOnMouseActivationQueueItem: Boolean = true
+    var activateNextSubQueueItemsOnMouseActivationSubQueueItem: Boolean = false
+
     fun load() {
         try {
             PropertyLoader.load()
