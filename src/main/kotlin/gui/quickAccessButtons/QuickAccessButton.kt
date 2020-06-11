@@ -53,7 +53,7 @@ class QuickAccessButton(
     }
 
     override fun dropMoveItem(item: QueItem, fromIndex: Int, toIndex: Int): Boolean {
-        setNewItem(item)
+        setNewItem(item.clone())
         return true
     }
 

@@ -1,6 +1,6 @@
 package objects.que
 
-import plugins.common.BasePlugin
+import plugins.common.QueItemBasePlugin
 import themes.Theme
 import java.awt.Color
 import javax.swing.BorderFactory
@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder
 
 interface QueItem {
     val name: String
-    val plugin: BasePlugin
+    val plugin: QueItemBasePlugin
 
     var executeAfterPrevious: Boolean
     var quickAccessColor: Color?
@@ -21,6 +21,13 @@ interface QueItem {
     fun activate()
     fun deactivateAsPrevious() = deactivate()
     fun deactivate() {}
+
+    fun clone(): QueItem {
+        val jsonQueItem = toJson()
+        val newItem = plugin.jsonToQueItem(jsonQueItem)
+        newItem.dataFromJson(jsonQueItem)
+        return newItem
+    }
 
     @Deprecated(
         "Use JSON converter instead of this plane text converter",

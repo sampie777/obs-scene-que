@@ -2,11 +2,11 @@ package mocks
 
 import objects.que.JsonQue
 import objects.que.QueItem
-import plugins.common.BasePlugin
+import plugins.common.QueItemBasePlugin
 import java.awt.Color
 import javax.swing.JLabel
 
-class QueItemMock2(override val plugin: BasePlugin, override val name: String) : QueItem {
+class QueItemMock2(override val plugin: QueItemBasePlugin, override val name: String) : QueItem {
     var isActivated = false
     var isActivatedAsPrevious = false
     var isDeactivated = false

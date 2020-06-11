@@ -149,7 +149,7 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
     override fun dropNewItem(item: QueItem, index: Int): Boolean {
         logger.info("Dropped new QueItem: $item at index: $index")
 
-        Que.add(index, item)
+        Que.add(index, item.clone())
 
         GUI.refreshQueItems()
         return true
