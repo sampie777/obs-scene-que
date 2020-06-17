@@ -43,6 +43,7 @@ class ConfigActionPanel(private val frame: ConfigFrame) : JPanel() {
         }
 
         Config.save()
+        frame.parentFrame?.repaint()
         frame.dispose()
     }
 }

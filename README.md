@@ -63,6 +63,8 @@ Marking a queue item as Execute After Previous:
 Drag and drop any queue item from the Source or Queue list onto a Quick Access Button to assign this item to this button. Clicking the Quick Access Button will execute the queue item. Note that this will not interfere with the queue at all.
 Use `CTRL + MOUSE CLICK` on a Quick Access Button to clear this button's state. 
 
+Display of the plugin icon in the button can be turned on/off in the settings. 
+
 
 #### Network Scanner
 
@@ -111,6 +113,8 @@ Don't run the application while editing the _obs-scene-que.properties_ file (and
 By deleting this file, all properties are reset to default. 
 
 **Note:** Application restart is required to load any changes to the settings.
+
+##### Some settings explained:
 
 _Connection settings_
  

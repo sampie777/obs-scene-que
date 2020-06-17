@@ -3,17 +3,19 @@ package gui.quickAccessButtons
 import brightness
 import com.google.gson.Gson
 import config.Config
+import gui.utils.createGraphics
 import gui.utils.isCtrlClick
+import gui.utils.setDefaultRenderingHints
 import handles.QueItemDropComponent
 import handles.QueItemTransferHandler
 import objects.notifications.Notifications
 import objects.que.QueItem
 import themes.Theme
-import java.awt.Cursor
-import java.awt.Dimension
+import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import java.awt.image.BufferedImage
 import java.util.logging.Logger
 import javax.swing.JButton
 import javax.swing.JComponent
@@ -28,10 +30,16 @@ class QuickAccessButton(
 
     private val logger = Logger.getLogger(QuickAccessButton::class.java.name)
 
+    private val defaultSize = Dimension(100, 100)
+    private val iconMargin = 5
+    private val iconSize = 15
+    private val iconOpacity = 0.5f
+    private var iconBufferedImage = iconBufferedImage()
+
     init {
-        setSize(100, 100)
-        minimumSize = Dimension(100, 100)
-        preferredSize = Dimension(100, 100)
+        size = defaultSize
+        minimumSize = defaultSize
+        preferredSize = defaultSize
         transferHandler = QueItemTransferHandler()
         addActionListener { e -> onClick(e) }
         addMouseMotionListener(object : MouseAdapter() {
@@ -82,6 +90,7 @@ class QuickAccessButton(
         toolTipText = queItem?.plugin?.name
         isEnabled = true
         cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        iconBufferedImage = iconBufferedImage()
 
         if (queItem?.quickAccessColor == null) {
             background = Theme.get.BUTTON_BACKGROUND_COLOR
@@ -127,5 +136,33 @@ class QuickAccessButton(
             e.printStackTrace()
             Notifications.add("Failed to activate '${queItem?.name}'", "QuickAccessButton")
         }
+    }
+
+    override fun paintComponent(g: Graphics) {
+        super.paintComponent(g)
+
+        if (queItem == null || iconBufferedImage == null || !Config.quickAccessButtonDisplayIcon) {
+            return
+        }
+
+        val g2 = g as Graphics2D
+        setDefaultRenderingHints(g2)
+
+        g2.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, iconOpacity)
+        g2.drawImage(iconBufferedImage, width - iconSize - iconMargin, iconMargin, iconSize, iconSize, null)
+        g2.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F)
+    }
+
+    private fun iconBufferedImage(): BufferedImage? {
+        if (queItem == null) {
+            return null
+        }
+
+        val icon = queItem?.plugin?.icon ?: return null
+
+        val (bufferedImage, g2) = createGraphics(icon.iconWidth, icon.iconHeight)
+        icon.paintIcon(null, g2, 0, 0)
+        g2.dispose()
+        return bufferedImage
     }
 }

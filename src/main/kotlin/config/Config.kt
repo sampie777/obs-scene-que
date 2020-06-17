@@ -34,8 +34,9 @@ object Config {
     var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + Que.name + ".json"
     var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"
 
-    var quickAccessButtonCount: Int = 6
+    var quickAccessButtonCount: Int = 24
     var quickAccessButtonQueItems: ArrayList<String> = ArrayList()
+    var quickAccessButtonDisplayIcon: Boolean = true
 
     var activateNextSubQueueItemsOnMouseActivationQueueItem: Boolean = true
     var activateNextSubQueueItemsOnMouseActivationSubQueueItem: Boolean = false

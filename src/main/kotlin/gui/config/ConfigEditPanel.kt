@@ -52,6 +52,7 @@ class ConfigEditPanel : JPanel() {
                 max = Int.MAX_VALUE
             )
         )
+        formComponents.add(BooleanFormInput("quickAccessButtonDisplayIcon", "Quick Access Button display plugin icon"))
 
         formComponents.add(HeaderFormComponent("Queue"))
         formComponents.add(StringFormInput("queFile", "Queue file", false))
