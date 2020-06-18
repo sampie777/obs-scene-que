@@ -4,6 +4,7 @@ import gui.utils.createImageIcon
 import objects.que.JsonQue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
+import plugins.text.queItems.DelayQueItem
 import plugins.text.queItems.HeaderQueItem
 import plugins.text.queItems.PlainTextQueItem
 import java.awt.BorderLayout
@@ -15,12 +16,12 @@ import javax.swing.border.EmptyBorder
 @Suppress("unused")
 class TextPlugin : QueItemBasePlugin {
     override val name = "TextPlugin"
-    override val description = "Queue items for just displaying text"
+    override val description = "Queue items for just displaying text or adding delay"
     override val version: String = "0.0.0"
 
     override val icon: Icon? = createImageIcon("/plugins/text/icon-14.png")
 
-    override val tabName = "Text"
+    override val tabName = "Text & Delay"
 
     internal val configStringSeparator = "|"
     internal val quickAccessColor = Color(231, 231, 231)
@@ -35,6 +36,7 @@ class TextPlugin : QueItemBasePlugin {
         val itemListPanel = JPanel(GridLayout(0, 1))
         itemListPanel.add(HeaderQueItem.createPanelForQueItem(this))
         itemListPanel.add(PlainTextQueItem.createPanelForQueItem(this))
+        itemListPanel.add(DelayQueItem.createPanelForQueItem(this))
 
         val scrollPanelInnerPanel = JPanel(BorderLayout())
         scrollPanelInnerPanel.add(itemListPanel, BorderLayout.PAGE_START)
@@ -58,6 +60,7 @@ class TextPlugin : QueItemBasePlugin {
         return when (jsonQueItem.className) {
             HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, jsonQueItem.name)
             PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, jsonQueItem.name)
+            DelayQueItem::class.java.simpleName -> DelayQueItem.fromJson(this, jsonQueItem)
             else -> throw IllegalArgumentException("Invalid TextPlugin queue item: ${jsonQueItem.className}")
         }
     }
