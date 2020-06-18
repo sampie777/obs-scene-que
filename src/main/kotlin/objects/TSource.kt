@@ -12,6 +12,10 @@ class TSource {
 
     constructor()
 
+    constructor(name: String) {
+        this.name = name
+    }
+
     constructor(name: String, type: String) {
         this.name = name
         this.type = type

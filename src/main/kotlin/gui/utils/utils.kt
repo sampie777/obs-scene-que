@@ -6,9 +6,7 @@ import java.awt.event.ActionEvent
 import java.awt.image.BufferedImage
 import java.net.URL
 import java.util.logging.Logger
-import javax.swing.ImageIcon
-import javax.swing.JFrame
-import javax.swing.SwingUtilities
+import javax.swing.*
 
 private val logger = Logger.getLogger("utils")
 
@@ -78,3 +76,5 @@ fun createImageIcon(path: String): ImageIcon? {
 }
 
 fun isCtrlClick(modifiers: Int): Boolean = modifiers.and(ActionEvent.CTRL_MASK) != 0
+
+fun getMainMenu(menu: JMenu) = (menu.popupMenu.invoker.parent as JPopupMenu).invoker
