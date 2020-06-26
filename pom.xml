@@ -6,7 +6,7 @@
 
     <groupId>nl.sajansen</groupId>
     <artifactId>obs-scene-que</artifactId>
-    <version>2.6.0-SNAPSHOT-2</version>
+    <version>2.6.0-SNAPSHOT-3</version>
     <packaging>jar</packaging>
 
     <name>OBS Scene Queue</name>

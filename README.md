@@ -91,10 +91,12 @@ When an error or something else interesting occurs, a notification of this event
 
 Plugins can be added to enable the use of different queue item types which can perform different actions on execution/activation. The following plugins are internally installed:
 
-- `OBSPlugin`: lets you activate OBS scenes
+- `OBSPlugin`: lets you activate OBS scenes and do other OBS stuff
 - `TextPlugin`: doesn't really do anything. It's just there to create some clarity and order in your queue
 
-To install new plugins, just place their .jar file in the plugin directory (see settings for where this directory is). You can create your own plugins using [this guide](plugin_development.md).
+To install new plugins, just place their .jar file in the plugin directory (see settings for where this directory is). If this directory doesn't exist, you can create it: create a directory in the same directory as OBS Scene Queue and name it "plugins".
+ 
+ You can also create your own plugins using [this guide](plugin_development.md).
 
 Some known external plugins are (mostly still under development):
 
