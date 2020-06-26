@@ -41,12 +41,6 @@ object OBSClient {
         }
 
         registerCallbacks()
-
-        try {
-            controller!!.await()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
     }
 
     private fun processFailedConnection(message: String, reconnect: Boolean = true) {
