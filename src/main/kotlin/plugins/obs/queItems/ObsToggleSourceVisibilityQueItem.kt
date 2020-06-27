@@ -4,6 +4,8 @@ import net.twasi.obsremotejava.requests.GetCurrentScene.GetCurrentSceneResponse
 import net.twasi.obsremotejava.requests.GetSceneItemProperties.GetSceneItemPropertiesResponse
 import net.twasi.obsremotejava.requests.ResponseBase
 import objects.OBSClient
+import objects.OBSState
+import objects.TScene
 import objects.que.JsonQue
 import objects.que.QueItem
 import plugins.obs.ObsPlugin
@@ -72,15 +74,11 @@ class ObsToggleSourceVisibilityQueItem(
         if (targetState == SourceVisibilityState.TOGGLE) {
             OBSClient.getController()!!.getSceneItemProperties(sceneName, sourceName) { res: ResponseBase ->
                 val source = res as GetSceneItemPropertiesResponse
-                val visibility = !source.visible
-                OBSClient.getController()!!.setSourceVisibility(sceneName, sourceName, visibility) {}
+
+                setSourceVisibility(sceneName, !source.visible)
             }
         } else {
-            OBSClient.getController()!!.setSourceVisibility(
-                sceneName,
-                sourceName,
-                targetState == SourceVisibilityState.SHOW
-            ) {}
+            setSourceVisibility(sceneName, targetState == SourceVisibilityState.SHOW)
         }
     }
 
@@ -95,15 +93,26 @@ class ObsToggleSourceVisibilityQueItem(
                     return@getCurrentScene
                 }
 
-                val visibility = !source.isRender
-                OBSClient.getController()!!.setSourceVisibility(currentScene.name, sourceName, visibility) {}
+                setSourceVisibility(currentScene.name, !source.isRender)
             } else {
-                OBSClient.getController()!!.setSourceVisibility(
-                    currentScene.name,
-                    sourceName,
-                    targetState == SourceVisibilityState.SHOW
-                ) {}
+                setSourceVisibility(currentScene.name, targetState == SourceVisibilityState.SHOW)
             }
         }
+    }
+
+    private fun setSourceVisibility(sceneName: String, visible: Boolean) {
+        OBSClient.getController()!!.setSourceVisibility(
+            sceneName,
+            sourceName,
+            visible
+        ) {
+            if (OBSState.currentSceneName == sceneName) {
+                reactivateScene(sceneName)
+            }
+        }
+    }
+
+    private fun reactivateScene(sceneName: String) {
+        OBSClient.setActiveScene(TScene(sceneName))
     }
 }
