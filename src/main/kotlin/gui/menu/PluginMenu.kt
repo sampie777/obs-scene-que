@@ -20,6 +20,8 @@ class PluginMenu : JMenu("Plugins") {
         PluginLoader.allPlugins.forEach {
             try {
                 val menu = JMenu(it.name)
+                menu.popupMenu.border = BorderFactory.createLineBorder(Theme.get.BORDER_COLOR)
+
                 if (it.createMenu(menu)) {
                     add(menu)
                 }

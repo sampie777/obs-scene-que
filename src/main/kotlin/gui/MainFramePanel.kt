@@ -5,6 +5,7 @@ import config.Config
 import gui.list.QuePanel
 import gui.notifications.NotificationFrame
 import gui.utils.createImageIcon
+import gui.utils.divider
 import gui.utils.getMainFrameComponent
 import objects.notifications.Notifications
 import themes.Theme
@@ -13,11 +14,9 @@ import java.awt.Component
 import java.awt.Cursor
 import java.awt.Dimension
 import java.util.logging.Logger
-import javax.swing.Icon
-import javax.swing.JButton
-import javax.swing.JPanel
-import javax.swing.JSplitPane
+import javax.swing.*
 import javax.swing.border.EmptyBorder
+
 
 class MainFramePanel : JSplitPane(), Refreshable {
     private val logger = Logger.getLogger(MainFramePanel::class.java.name)
@@ -38,6 +37,9 @@ class MainFramePanel : JSplitPane(), Refreshable {
 
     private fun createGui() {
         border = null
+        val divider = divider()
+        divider.border = BorderFactory.createMatteBorder(0, 0, 0, 1, Theme.get.BORDER_COLOR)
+        divider.dividerSize = 6
 
         notificationsButton.isBorderPainted = false
         notificationsButton.isContentAreaFilled = false
@@ -63,6 +65,9 @@ class MainFramePanel : JSplitPane(), Refreshable {
         rightPanel.leftComponent.minimumSize = Dimension(10, 10)
         rightPanel.rightComponent = RightMainPanel()
         rightPanel.rightComponent.minimumSize = Dimension(10, 10)
+        val rightPanelDivider = rightPanel.divider()
+        rightPanelDivider.border = BorderFactory.createMatteBorder(0, 0, 0, 1, Theme.get.BORDER_COLOR)
+        rightPanelDivider.dividerSize = 7
 
         setLeftComponent(leftPanel)
         setRightComponent(rightPanel)

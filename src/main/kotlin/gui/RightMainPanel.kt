@@ -2,16 +2,15 @@ package gui
 
 import GUI
 import config.Config
+import gui.utils.divider
 import objects.notifications.Notifications
 import plugins.PluginLoader
+import themes.Theme
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
 import java.util.logging.Logger
-import javax.swing.JComponent
-import javax.swing.JPanel
-import javax.swing.JSplitPane
-import javax.swing.JTabbedPane
+import javax.swing.*
 
 class RightMainPanel : JPanel(), Refreshable {
 
@@ -44,6 +43,9 @@ class RightMainPanel : JPanel(), Refreshable {
 
         splitPanel.border = null
         splitPanel.dividerLocation = 300
+        val splitPanelDivider = splitPanel.divider()
+        splitPanelDivider.border = BorderFactory.createMatteBorder(0, 0, 1, 0, Theme.get.BORDER_COLOR)
+        splitPanelDivider.dividerSize = 7
         add(splitPanel, BorderLayout.CENTER)
 
         if (Config.windowRestoreLastPosition) {

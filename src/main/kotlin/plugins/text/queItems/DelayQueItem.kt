@@ -9,6 +9,7 @@ import plugins.text.TextPlugin
 import themes.Theme
 import java.awt.BorderLayout
 import java.awt.Color
+import java.awt.Dimension
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.util.*
@@ -44,6 +45,7 @@ class DelayQueItem(override val plugin: TextPlugin, private val delay: Long) : Q
 
             val inputSpinner = JSpinner(SpinnerNumberModel(3000L, 0L, Long.MAX_VALUE, 100L))
             inputSpinner.border = BorderFactory.createLineBorder(Theme.get.BORDER_COLOR)
+            inputSpinner.preferredSize = Dimension(inputSpinner.preferredSize.height, 10)
 
             val addButton = JButton("+")
             addButton.toolTipText = "Click or drag to add"
