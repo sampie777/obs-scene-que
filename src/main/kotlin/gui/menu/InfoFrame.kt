@@ -1,5 +1,7 @@
 package gui.menu
 
+import LogService
+import config.Config
 import gui.utils.ClickableLinkComponent
 import objects.ApplicationInfo
 import themes.Theme
@@ -9,6 +11,16 @@ import javax.swing.*
 import javax.swing.border.EmptyBorder
 
 class InfoFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
+
+    companion object {
+        fun create(parentFrame: JFrame?): InfoFrame = InfoFrame(parentFrame)
+
+        fun createAndShow(parentFrame: JFrame?): InfoFrame {
+            val frame = create(parentFrame)
+            frame.isVisible = true
+            return frame
+        }
+    }
 
     init {
         createGui()
@@ -34,15 +46,20 @@ class InfoFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
         )
         sourceCodeLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 14)
 
+        val applicationLoggingInfoLabel = JLabel("<html>Application log file location: ${LogService.getLogFile()?.absolutePath}</html>")
+        applicationLoggingInfoLabel.font = Font(Theme.get.FONT_FAMILY, Font.ITALIC, 12)
+
         mainPanel.add(versionLabel)
         mainPanel.add(Box.createRigidArea(Dimension(0, 10)))
         mainPanel.add(sourceCodeLabel)
+        mainPanel.add(Box.createRigidArea(Dimension(0, 20)))
+        if (Config.enableApplicationLoggingToFile) {
+            mainPanel.add(applicationLoggingInfoLabel)
+        }
 
         title = "Information"
-        setSize(400, 160)
+        pack()
         setLocationRelativeTo(parentFrame)
         modalityType = ModalityType.APPLICATION_MODAL
-        isResizable = false
-        isVisible = true
     }
 }

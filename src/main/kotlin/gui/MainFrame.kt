@@ -8,6 +8,7 @@ import gui.utils.loadIcon
 import objects.ApplicationInfo
 import objects.notifications.Notifications
 import objects.que.Que
+import java.awt.EventQueue
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.util.logging.Logger
@@ -30,6 +31,9 @@ class MainFrame : JFrame(), Refreshable {
     private val logger = Logger.getLogger(MainFrame::class.java.name)
 
     companion object {
+        private var instance: MainFrame? = null
+        fun getInstance() = instance
+
         fun create(): MainFrame = MainFrame()
 
         fun createAndShow(): MainFrame {
@@ -40,6 +44,8 @@ class MainFrame : JFrame(), Refreshable {
     }
 
     init {
+        instance = this
+
         GUI.register(this)
 
         addWindowListener(MainFrameWindowAdapter(this))
@@ -67,6 +73,20 @@ class MainFrame : JFrame(), Refreshable {
         title = ApplicationInfo.name + " - " + Que.name
         defaultCloseOperation = EXIT_ON_CLOSE
         iconImage = loadIcon("/icon-512.png")
+    }
+
+    fun rebuildGui() {
+        logger.info("Rebuilding main GUI")
+        EventQueue.invokeLater {
+            contentPane.removeAll()
+
+            add(MainFramePanel())
+            jMenuBar = MenuBar()
+
+            revalidate()
+            repaint()
+            logger.info("GUI rebuild done")
+        }
     }
 
     fun saveWindowPosition() {

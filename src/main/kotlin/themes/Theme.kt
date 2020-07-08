@@ -43,7 +43,7 @@ object Theme {
         } catch (e: Exception) {
             logger.severe("Failed to set theme to '$themeInternalName'")
             e.printStackTrace()
-            Notifications.add("Failed to set theme to '$themeInternalName", "Theme")
+            Notifications.add("Failed to set theme to '$themeInternalName': ${e.localizedMessage}", "Theme")
         }
     }
 

@@ -1,7 +1,6 @@
 package gui
 
 import config.Config
-import org.junit.Test
 import java.awt.Dimension
 import java.awt.Point
 import javax.swing.JFrame

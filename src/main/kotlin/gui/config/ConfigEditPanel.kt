@@ -69,6 +69,15 @@ class ConfigEditPanel : JPanel() {
                 "When activating an 'Activate After Previous'-Queue Item,\nalso activate the next 'Activate After Previous'-Queue Items"
             )
         )
+
+        formComponents.add(HeaderFormComponent("Logging"))
+        formComponents.add(
+            BooleanFormInput(
+                "enableApplicationLoggingToFile",
+                "Enable application logging to a file",
+                toolTipText = "Location of this logfile is shown in the Information screen"
+            )
+        )
     }
 
     private fun createGui() {

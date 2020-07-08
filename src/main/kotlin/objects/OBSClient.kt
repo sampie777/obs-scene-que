@@ -19,9 +19,11 @@ import kotlin.collections.HashMap
 object OBSClient {
     private var logger = Logger.getLogger(OBSClient::class.java.name)
 
-    private var reconnecting: Boolean = false
     private var controller: OBSRemoteController? = null
     fun getController() = controller
+    private var reconnecting: Boolean = false
+    private var isRunning: Boolean = false
+    fun isRunning() = isRunning
 
     private val preregisteredCallbacks = HashMap<String, (controller: OBSRemoteController) -> Unit>()
 
@@ -41,6 +43,13 @@ object OBSClient {
         }
 
         registerCallbacks()
+    }
+
+    fun stop() {
+        logger.info("Disconnecting with OBS")
+        controller?.disconnect()
+
+        isRunning = false
     }
 
     private fun processFailedConnection(message: String, reconnect: Boolean = true) {
@@ -89,7 +98,7 @@ object OBSClient {
             logger.severe("Failed to create OBS callback: registerOnError")
             t.printStackTrace()
             Notifications.add(
-                "Failed to register error callback: cannot notify when unexpected errors occur",
+                "Failed to register error callback: cannot notify when unexpected errors occur (${t.localizedMessage})",
                 "OBS"
             )
         }
@@ -108,7 +117,7 @@ object OBSClient {
             logger.severe("Failed to create OBS callback: registerDisconnectCallback")
             t.printStackTrace()
             Notifications.add(
-                "Failed to register disconnect callback: cannot notify when connection is lost",
+                "Failed to register disconnect callback: cannot notify when connection is lost (${t.localizedMessage})",
                 "OBS"
             )
         }
@@ -120,11 +129,11 @@ object OBSClient {
                 GUI.refreshOBSStatus()
 
                 if (reconnecting) {
-                    Notifications.add("Connection re-established", "OBS")
+                    Notifications.add("Connection re-established", "OBS", markAsRead = true)
                 }
                 reconnecting = false
 
-                getScenes()
+                loadScenes()
 
                 getCurrentSceneFromOBS()
             }
@@ -132,7 +141,7 @@ object OBSClient {
             logger.severe("Failed to create OBS callback: registerConnectCallback")
             t.printStackTrace()
             Notifications.add(
-                "Failed to register connect callback: scenes cannot be loaded at startup",
+                "Failed to register connect callback: scenes cannot be loaded at startup (${t.localizedMessage})",
                 "OBS"
             )
         }
@@ -152,7 +161,7 @@ object OBSClient {
             logger.severe("Failed to create OBS callback: registerConnectionFailedCallback")
             t.printStackTrace()
             Notifications.add(
-                "Failed to register connectionFailed callback: connection failures won't be shown",
+                "Failed to register connectionFailed callback: connection failures won't be shown (${t.localizedMessage})",
                 "OBS"
             )
         }
@@ -160,13 +169,13 @@ object OBSClient {
         try {
             controller!!.registerScenesChangedCallback {
                 logger.fine("Processing scenes changed event")
-                getScenes()
+                loadScenes()
             }
         } catch (t: Throwable) {
             logger.severe("Failed to create OBS callback: registerScenesChangedCallback")
             t.printStackTrace()
             Notifications.add(
-                "Failed to register scenesChanged callback: new scenes cannot be loaded",
+                "Failed to register scenesChanged callback: new scenes cannot be loaded (${t.localizedMessage})",
                 "OBS"
             )
         }
@@ -176,13 +185,19 @@ object OBSClient {
                 logger.fine("Processing scene switch event")
                 val response = responseBase as SwitchScenesResponse
 
-                processNewScene(response.sceneName)
+                try {
+                    processNewScene(response.sceneName)
+                } catch (t: Throwable) {
+                    logger.severe("Could not process new scene change")
+                    t.printStackTrace()
+                    Notifications.add("Could not process new scene change: ${t.localizedMessage}", "OBS")
+                }
             }
         } catch (t: Throwable) {
             logger.severe("Failed to create OBS callback: registerSwitchScenesCallback")
             t.printStackTrace()
             Notifications.add(
-                "Failed to register switchScenes callback: cannot detect scene changes",
+                "Failed to register switchScenes callback: cannot detect scene changes (${t.localizedMessage})",
                 "OBS"
             )
         }
@@ -211,9 +226,22 @@ object OBSClient {
     private fun getCurrentSceneFromOBS() {
         logger.fine("Retrieving current scene")
         controller!!.getCurrentScene { res: ResponseBase ->
-            val currentScene = res as GetCurrentSceneResponse
+            val currentScene = try {
+                res as GetCurrentSceneResponse
+            } catch (t: Throwable) {
+                logger.severe("Could not cast response to GetCurrentSceneResponse")
+                t.printStackTrace()
+                Notifications.add("Could not process 'GetCurrentSceneResponse' from OBS: ${t.localizedMessage}", "OBS")
+                return@getCurrentScene
+            }
 
-            processNewScene(currentScene.name)
+            try {
+                processNewScene(currentScene.name)
+            } catch (t: Throwable) {
+                logger.severe("Could not process current scene")
+                t.printStackTrace()
+                Notifications.add("Could not process current scene: ${t.localizedMessage}", "OBS")
+            }
         }
     }
 
@@ -228,16 +256,35 @@ object OBSClient {
         setPreviewScene(getNextQueScene()?.scene ?: return)
     }
 
-    private fun getScenes() {
+    private fun loadScenes() {
         logger.info("Retrieving scenes")
         OBSState.clientActivityStatus = OBSClientStatus.LOADING_SCENES
         GUI.refreshOBSStatus()
 
-        controller!!.getScenes { response: ResponseBase ->
-            val res = response as GetSceneListResponse
-            logger.info(res.scenes.size.toString() + " scenes retrieved")
+        try {
+            controller!!.getScenes { response: ResponseBase ->
+                val res = try {
+                    response as GetSceneListResponse
+                } catch (t: Throwable) {
+                    logger.severe("Could not cast response to GetSceneListResponse")
+                    t.printStackTrace()
+                    Notifications.add("Could not process 'GetSceneListResponse' from OBS: ${t.localizedMessage}", "OBS")
+                    return@getScenes
+                }
+                logger.info("${res.scenes.size} scenes retrieved")
 
-            processOBSScenesToOBSStateScenes(res.scenes)
+                try {
+                    processOBSScenesToOBSStateScenes(res.scenes)
+                } catch (t: Throwable) {
+                    logger.severe("Failed to process scenes")
+                    t.printStackTrace()
+                    Notifications.add("Something went wrong during scenes processing: ${t.localizedMessage}", "OBS")
+                }
+            }
+        } catch (t: Throwable) {
+            logger.severe("Failed to retrieve scenes")
+            t.printStackTrace()
+            Notifications.add("Something went wrong during retrieving scenes: ${t.localizedMessage}", "OBS")
         }
     }
 

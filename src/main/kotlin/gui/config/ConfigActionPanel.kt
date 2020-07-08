@@ -1,6 +1,8 @@
 package gui.config
 
 import config.Config
+import gui.MainFrame
+import themes.Theme
 import java.awt.Dimension
 import java.util.logging.Logger
 import javax.swing.Box
@@ -43,7 +45,8 @@ class ConfigActionPanel(private val frame: ConfigFrame) : JPanel() {
         }
 
         Config.save()
-        frame.parentFrame?.repaint()
         frame.dispose()
+        Theme.init()
+        MainFrame.getInstance()?.rebuildGui()
     }
 }

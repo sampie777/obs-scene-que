@@ -55,7 +55,6 @@ fun getMainFrameComponent(childComponent: Component): JFrame? {
     return SwingUtilities.getAncestorOfClass(MainFrame::class.java, childComponent) as JFrame
 }
 
-
 fun loadIcon(iconPath: String): Image? {
     val resource: URL? = MainFrame::class.java.getResource(iconPath)
     if (resource == null) {

@@ -22,7 +22,7 @@ class ConfigTest {
     fun testConfigGetNonExistingKey() {
         assertNull(Config.get("nonexistingkey"))
         assertEquals(1, Notifications.list.size)
-        assertEquals("Could not get configuration setting: nonexistingkey", Notifications.list[0].message)
+        assertEquals("Could not get configuration setting: nonexistingkey (nonexistingkey)", Notifications.list[0].message)
     }
 
     @Test
@@ -39,7 +39,7 @@ class ConfigTest {
         Config.set("nonexistingkey", "x")
 
         assertEquals(1, Notifications.list.size)
-        assertEquals("Could not set configuration setting: nonexistingkey", Notifications.list[0].message)
+        assertEquals("Could not set configuration setting: nonexistingkey (nonexistingkey)", Notifications.list[0].message)
         assertNull(Config.get("nonexistingkey"))
     }
 
