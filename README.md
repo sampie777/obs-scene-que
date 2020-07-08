@@ -66,6 +66,13 @@ Use `CTRL + MOUSE CLICK` on a Quick Access Button to clear this button's state.
 Display of the plugin icon in the button can be turned on/off in the settings. 
 
 
+#### Hot keys
+
+You can use `ALT + ...` where `...` is a value between 0 and 9, to toggle Quick Access Buttons. `ALT + 1` will activate the first Quick Access Button, `ALT + 2` the next, etc all the way to `ALT + 0` activating the last Quick Access Button. Just like the horizontal layout of these numbers on your keyboard.
+
+You can also use `ALT + P` to go back in the Queue or `ALT + N` for the next queue item.
+
+
 #### Network Scanner
 
 When using OBS Scene Queue on another computer as OBS projector itself, it can be quite a struggle to figure out the correct IP address of the OBS projector computer. Head to Application menu -> Network Scanner to let OBS Scene Queue scan for any possible OBS projector hosts on your local network. This scanning is done by querying the default OBS websocket port 4444 on all possible IP address available on your local network(s). 

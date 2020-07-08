@@ -13,6 +13,7 @@ import objects.que.QueItem
 import themes.Theme
 import java.awt.*
 import java.awt.event.ActionEvent
+import java.awt.event.KeyEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
@@ -51,6 +52,12 @@ class QuickAccessButton(
                 transferHandler.exportAsDrag(e.source as JComponent, e, TransferHandler.COPY)
             }
         })
+
+        if (index < 9) {
+            mnemonic = KeyEvent.VK_1 + index
+        } else if (index == 9) {
+            mnemonic = KeyEvent.VK_0
+        }
 
         refreshLayout()
     }

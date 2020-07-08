@@ -7,6 +7,7 @@ import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Font
 import java.awt.GridLayout
+import java.awt.event.KeyEvent
 import java.util.logging.Logger
 import javax.swing.JButton
 import javax.swing.JLabel
@@ -49,6 +50,9 @@ class ControlFramePanel : JPanel(), Refreshable {
 
         previousQueItemButton.addActionListener { activatePreviousQueItem() }
         nextQueItemButton.addActionListener { activateNextQueItem() }
+
+        previousQueItemButton.mnemonic = KeyEvent.VK_P
+        nextQueItemButton.mnemonic = KeyEvent.VK_N
 
         val buttonPanel = JPanel()
         buttonPanel.layout = GridLayout(0, 1)

@@ -4,6 +4,7 @@ import config.Config
 import gui.MainFrame
 import themes.Theme
 import java.awt.Dimension
+import java.awt.event.KeyEvent
 import java.util.logging.Logger
 import javax.swing.Box
 import javax.swing.BoxLayout
@@ -24,8 +25,11 @@ class ConfigActionPanel(private val frame: ConfigFrame) : JPanel() {
 
         val saveButton = JButton("Save")
         saveButton.addActionListener { saveConfigAndClose() }
+        saveButton.mnemonic = KeyEvent.VK_S
+
         val cancelButton = JButton("Cancel")
         cancelButton.addActionListener { cancelWindow() }
+        cancelButton.mnemonic = KeyEvent.VK_C
 
         add(Box.createHorizontalGlue())
         add(saveButton)

@@ -8,6 +8,7 @@ import gui.notifications.NotificationFrame
 import gui.utils.getMainFrameComponent
 import gui.websocketScanner.WebsocketScannerFrame
 import themes.Theme
+import java.awt.event.KeyEvent
 import java.util.logging.Logger
 import javax.swing.BorderFactory
 import javax.swing.JMenu
@@ -22,6 +23,7 @@ class ApplicationMenu : JMenu("Application") {
 
     private fun initGui() {
         popupMenu.border = BorderFactory.createLineBorder(Theme.get.BORDER_COLOR)
+        mnemonic = KeyEvent.VK_A
 
         val controlFrameItem = JMenuItem("Control window")
         val notificationsItem = JMenuItem("Notifications")
@@ -30,6 +32,15 @@ class ApplicationMenu : JMenu("Application") {
         val fullscreenItem = JMenuItem("Toggle fullscreen")
         val infoItem = JMenuItem("Info")
         val quitItem = JMenuItem("Quit")
+
+        // Set alt keys
+        controlFrameItem.mnemonic = KeyEvent.VK_C
+        notificationsItem.mnemonic = KeyEvent.VK_N
+        scannerItem.mnemonic = KeyEvent.VK_W
+        settingsItem.mnemonic = KeyEvent.VK_S
+        fullscreenItem.mnemonic = KeyEvent.VK_F
+        infoItem.mnemonic = KeyEvent.VK_I
+        quitItem.mnemonic = KeyEvent.VK_Q
 
         controlFrameItem.addActionListener { ControlFrame.createAndShow(getMainFrameComponent(this)) }
         notificationsItem.addActionListener { NotificationFrame(getMainFrameComponent(this)) }
