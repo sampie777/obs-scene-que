@@ -1,6 +1,7 @@
 package gui
 
 import config.Config
+import gui.mainFrame.MainFrame
 import java.awt.Dimension
 import java.awt.Point
 import javax.swing.JFrame

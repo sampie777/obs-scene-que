@@ -1,7 +1,7 @@
 package objects.notifications
 
 import GUI
-import gui.MainFrame
+import gui.mainFrame.MainFrame
 import java.util.logging.Logger
 import javax.swing.JOptionPane
 

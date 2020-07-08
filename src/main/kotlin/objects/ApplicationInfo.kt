@@ -1,6 +1,6 @@
 package objects
 
-import gui.MainFrame
+import gui.mainFrame.MainFrame
 import java.util.*
 
 object ApplicationInfo {

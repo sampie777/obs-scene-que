@@ -72,6 +72,19 @@ You can use `ALT + ...` where `...` is a value between 0 and 9, to toggle Quick 
 
 You can also use `ALT + P` to go back in the Queue or `ALT + N` for the next queue item.
 
+List of hotkeys:
+
+| Key | Action |
+| --- | ----- |
+| `ENTER` | Activate selected queue item |
+| `DELETE` | Deletes selected queue item |
+| `ALT + P` | Activate previous queue item |
+| `ALT + N` | Activate next queue item |
+| `ALT + [0-9]` | Activate the indexed Quick Access Button (with `1` being the first and `0` the last) |
+| `F11` | Toggle fullscreen |
+| `CTRL + Q` | Quit application |
+| `SHIFT + RIGHT ARROW` | Mark selected queue item as Execute After Previous |
+| `SHIFT + LEFT ARROW` | Unmark selected queue item as Execute After Previous |
 
 #### Network Scanner
 

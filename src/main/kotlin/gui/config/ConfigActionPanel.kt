@@ -1,7 +1,7 @@
 package gui.config
 
 import config.Config
-import gui.MainFrame
+import gui.mainFrame.MainFrame
 import themes.Theme
 import java.awt.Dimension
 import java.awt.event.KeyEvent

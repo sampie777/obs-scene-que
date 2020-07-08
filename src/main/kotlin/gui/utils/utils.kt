@@ -1,6 +1,6 @@
 package gui.utils
 
-import gui.MainFrame
+import gui.mainFrame.MainFrame
 import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.image.BufferedImage

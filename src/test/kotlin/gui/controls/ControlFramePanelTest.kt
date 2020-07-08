@@ -1,7 +1,7 @@
 package gui.controls
 
 import GUI
-import gui.MainFrame
+import gui.mainFrame.MainFrame
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
