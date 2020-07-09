@@ -1,6 +1,8 @@
 package gui.plugins.config
 
+import gui.utils.DefaultDialogKeyDispatcher
 import java.awt.BorderLayout
+import java.awt.KeyboardFocusManager
 import java.util.logging.Logger
 import javax.swing.JDialog
 import javax.swing.JFrame
@@ -15,6 +17,10 @@ class ConfigWindow(
     private val logger = Logger.getLogger(ConfigWindow::class.java.name)
 
     init {
+        KeyboardFocusManager
+            .getCurrentKeyboardFocusManager()
+            .addKeyEventDispatcher(DefaultDialogKeyDispatcher(this))
+
         createGui()
     }
 

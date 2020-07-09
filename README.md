@@ -82,6 +82,8 @@ List of hotkeys:
 | `ALT + N` | Activate next queue item |
 | `ALT + [0-9]` | Activate the indexed Quick Access Button (with `1` being the first and `0` the last) |
 | `F11` | Toggle fullscreen |
+| `ESC` | Close popup |
+| `CTRL + W` | Close popup |
 | `CTRL + Q` | Quit application |
 | `SHIFT + RIGHT ARROW` | Mark selected queue item as Execute After Previous |
 | `SHIFT + LEFT ARROW` | Unmark selected queue item as Execute After Previous |

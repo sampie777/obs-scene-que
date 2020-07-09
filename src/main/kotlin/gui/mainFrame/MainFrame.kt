@@ -9,7 +9,6 @@ import objects.ApplicationInfo
 import objects.notifications.Notifications
 import objects.que.Que
 import java.awt.EventQueue
-import java.awt.KeyboardFocusManager
 import java.util.logging.Logger
 import javax.swing.JFrame
 
@@ -36,9 +35,6 @@ class MainFrame : JFrame(), Refreshable {
         GUI.register(this)
 
         addWindowListener(MainFrameWindowAdapter(this))
-        KeyboardFocusManager
-            .getCurrentKeyboardFocusManager()
-            .addKeyEventDispatcher(MainFrameKeyDispatcher(this))
 
         initGUI()
     }

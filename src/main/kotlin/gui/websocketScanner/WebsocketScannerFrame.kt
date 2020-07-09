@@ -1,9 +1,11 @@
 package gui.websocketScanner
 
 import config.Config
+import gui.utils.DefaultDialogKeyDispatcher
 import objects.websocketScanner.ScanResult
 import objects.websocketScanner.WebsocketScannerSwingWorker
 import java.awt.BorderLayout
+import java.awt.KeyboardFocusManager
 import java.util.logging.Logger
 import javax.swing.JDialog
 import javax.swing.JFrame
@@ -20,6 +22,10 @@ open class WebsocketScannerFrame(private val parentFrame: JFrame?, private val v
     private var worker: WebsocketScannerSwingWorker? = null
 
     init {
+        KeyboardFocusManager
+            .getCurrentKeyboardFocusManager()
+            .addKeyEventDispatcher(DefaultDialogKeyDispatcher(this))
+
         createGui()
     }
 

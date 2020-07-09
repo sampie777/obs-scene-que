@@ -1,28 +1,36 @@
-package gui.mainFrame
+package gui.utils
 
 import java.awt.KeyEventDispatcher
+import java.awt.KeyboardFocusManager
+import java.awt.Window
+import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 import java.util.*
 import java.util.logging.Logger
 import javax.swing.KeyStroke
 
-class MainFrameKeyDispatcher(private val frame: MainFrame) : KeyEventDispatcher {
+class DefaultDialogKeyDispatcher(private val frame: Window) : KeyEventDispatcher {
 
-    private val logger = Logger.getLogger(MainFrameKeyDispatcher::class.java.name)
+    private val logger = Logger.getLogger(DefaultDialogKeyDispatcher::class.java.name)
 
     private val keyEvents = HashMap<Int, (e: KeyEvent) -> Unit>()
     private val keyStrokes = HashMap<KeyStroke, (e: KeyEvent) -> Unit>()
 
     init {
-//        keyEvents[KeyEvent.VK_F11] = {
-//            frame.toggleFullscreen()
-//        }
-//
-//        keyStrokes[KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK)] = {
-//            frame.saveWindowPosition()
-//            GUI.windowClosing(frame)
-//            exitApplication()
-//        }
+        keyEvents[KeyEvent.VK_ESCAPE] = {
+            closeWindow()
+        }
+
+        keyStrokes[KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK)] = {
+            closeWindow()
+        }
+    }
+
+    private fun closeWindow() {
+        frame.dispose()
+        KeyboardFocusManager
+            .getCurrentKeyboardFocusManager()
+            .removeKeyEventDispatcher(this)
     }
 
     override fun dispatchKeyEvent(keyEvent: KeyEvent): Boolean {

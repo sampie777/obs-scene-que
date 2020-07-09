@@ -1,12 +1,18 @@
 package gui.notifications
 
+import gui.utils.DefaultDialogKeyDispatcher
 import java.awt.BorderLayout
 import java.awt.Component
+import java.awt.KeyboardFocusManager
 import javax.swing.*
 
 class NotificationFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
 
     init {
+        KeyboardFocusManager
+            .getCurrentKeyboardFocusManager()
+            .addKeyEventDispatcher(DefaultDialogKeyDispatcher(this))
+
         createGui()
     }
 
