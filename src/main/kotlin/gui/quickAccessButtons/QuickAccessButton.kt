@@ -153,16 +153,24 @@ class QuickAccessButton(
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
+        val g2 = g as Graphics2D
+        setDefaultRenderingHints(g2)
+
+        paintButtonIndex(g2)
+
         if (queItem == null || iconBufferedImage == null || !Config.quickAccessButtonDisplayIcon) {
             return
         }
 
-        val g2 = g as Graphics2D
-        setDefaultRenderingHints(g2)
-
         g2.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, iconOpacity)
         g2.drawImage(iconBufferedImage, width - iconSize - iconMargin, iconMargin, iconSize, iconSize, null)
         g2.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F)
+    }
+
+    private fun paintButtonIndex(g2: Graphics2D) {
+        g2.font = Font("Dialog", Font.PLAIN, 10)
+        g2.color = Theme.get.BORDER_COLOR
+        g2.drawString((index + 1).toString(), 6, g2.fontMetrics.height)
     }
 
     private fun iconBufferedImage(): BufferedImage? {
