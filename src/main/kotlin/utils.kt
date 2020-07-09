@@ -1,4 +1,5 @@
 import config.Config
+import gui.mainFrame.MainFrame
 import objects.que.Que
 import plugins.PluginLoader
 import java.awt.Color

@@ -4,6 +4,7 @@ import config.Config
 import themes.Theme
 import java.awt.Dimension
 import java.awt.Font
+import java.awt.event.KeyEvent
 import java.util.logging.Logger
 import javax.swing.*
 import javax.swing.border.EmptyBorder
@@ -34,12 +35,14 @@ class WebsocketScannerActionPanel(private val frame: WebsocketScannerFrame) : JP
         val scanButton = JButton("Scan")
         buttonsToEnable.add(scanButton)
         scanButton.addActionListener { frame.scan(timeoutSpinner.value as Int) }
+        scanButton.mnemonic = KeyEvent.VK_S
 
         val saveButton = JButton("Save")
         saveButton.addActionListener { saveConfigAndClose() }
 
         val cancelButton = JButton("Cancel")
         cancelButton.addActionListener { cancelWindow() }
+        cancelButton.mnemonic = KeyEvent.VK_C
 
         add(Box.createHorizontalGlue())
         add(timeoutLabel)

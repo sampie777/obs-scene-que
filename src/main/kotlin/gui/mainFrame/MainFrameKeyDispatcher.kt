@@ -1,9 +1,6 @@
 package gui.mainFrame
 
-import GUI
-import exitApplication
 import java.awt.KeyEventDispatcher
-import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 import java.util.*
 import java.util.logging.Logger
@@ -17,15 +14,15 @@ class MainFrameKeyDispatcher(private val frame: MainFrame) : KeyEventDispatcher 
     private val keyStrokes = HashMap<KeyStroke, (e: KeyEvent) -> Unit>()
 
     init {
-        keyEvents[KeyEvent.VK_F11] = {
-            frame.toggleFullscreen()
-        }
-
-        keyStrokes[KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK)] = {
-            frame.saveWindowPosition()
-            GUI.windowClosing(frame)
-            exitApplication()
-        }
+//        keyEvents[KeyEvent.VK_F11] = {
+//            frame.toggleFullscreen()
+//        }
+//
+//        keyStrokes[KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK)] = {
+//            frame.saveWindowPosition()
+//            GUI.windowClosing(frame)
+//            exitApplication()
+//        }
     }
 
     override fun dispatchKeyEvent(keyEvent: KeyEvent): Boolean {

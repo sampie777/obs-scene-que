@@ -95,6 +95,11 @@ class QuickAccessButton(
 
         text = "<html><center>${queItem?.name}</center></html>"
         toolTipText = queItem?.plugin?.name
+        if (index < 9) {
+            toolTipText += " (Alt+${index + 1})"
+        } else if (index == 9) {
+            toolTipText += " (Alt+0)"
+        }
         isEnabled = true
         cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         iconBufferedImage = iconBufferedImage()
