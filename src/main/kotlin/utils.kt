@@ -41,6 +41,16 @@ fun isAddressLocalhost(address: String): Boolean {
 fun exitApplication() {
     logger.info("Shutting down application")
 
+    MainFrame.getInstance()?.saveWindowPosition()
+
+    try {
+        logger.info("Closing windows...")
+        GUI.windowClosing(MainFrame.getInstance())
+    } catch (t: Throwable) {
+        logger.warning("Failed to correctly close windows")
+        t.printStackTrace()
+    }
+
     try {
         logger.info("Disabling plugins...")
         PluginLoader.disableAll()
