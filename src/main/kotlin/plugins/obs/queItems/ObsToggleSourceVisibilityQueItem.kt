@@ -6,7 +6,7 @@ import net.twasi.obsremotejava.requests.ResponseBase
 import objects.OBSClient
 import objects.OBSState
 import objects.TScene
-import objects.que.JsonQue
+import objects.que.JsonQueue
 import objects.que.QueItem
 import plugins.obs.ObsPlugin
 import java.awt.Color
@@ -30,10 +30,10 @@ class ObsToggleSourceVisibilityQueItem(
     companion object {
         const val CURRENT_SCENE_NAME = "-- current --"
 
-        fun fromJson(plugin: ObsPlugin, jsonQueItem: JsonQue.QueItem) : QueItem {
-            val sceneName = jsonQueItem.data["sceneName"]!!
-            val sourceName = jsonQueItem.data["sourceName"]!!
-            val targetState = SourceVisibilityState.valueOf(jsonQueItem.data["targetState"]!!)
+        fun fromJson(plugin: ObsPlugin, jsonQueueItem: JsonQueue.QueueItem) : QueItem {
+            val sceneName = jsonQueueItem.data["sceneName"]!!
+            val sourceName = jsonQueueItem.data["sourceName"]!!
+            val targetState = SourceVisibilityState.valueOf(jsonQueueItem.data["targetState"]!!)
             return ObsToggleSourceVisibilityQueItem(plugin, sceneName, sourceName, targetState)
         }
     }
@@ -54,7 +54,7 @@ class ObsToggleSourceVisibilityQueItem(
 
     override fun toString() = renderText()
 
-    override fun toJson(): JsonQue.QueItem {
+    override fun toJson(): JsonQueue.QueueItem {
         val jsonQueItem = super.toJson()
         jsonQueItem.data["sceneName"] = sceneName
         jsonQueItem.data["sourceName"] = sourceName

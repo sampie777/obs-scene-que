@@ -88,6 +88,10 @@ List of hotkeys:
 | `SHIFT + RIGHT ARROW` | Mark selected queue item as Execute After Previous |
 | `SHIFT + LEFT ARROW` | Unmark selected queue item as Execute After Previous |
 
+#### Web Control HTTP API
+
+The OBS Scene Queue application can also be controlled by its HTTP API. For more info about using this API, see the [API documentation](docs/API.md).
+
 #### Network Scanner
 
 When using OBS Scene Queue on another computer as OBS projector itself, it can be quite a struggle to figure out the correct IP address of the OBS projector computer. Head to Application menu -> Network Scanner to let OBS Scene Queue scan for any possible OBS projector hosts on your local network. This scanning is done by querying the default OBS websocket port 4444 on all possible IP address available on your local network(s). 

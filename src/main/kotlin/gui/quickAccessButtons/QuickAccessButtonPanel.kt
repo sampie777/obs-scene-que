@@ -2,6 +2,7 @@ package gui.quickAccessButtons
 
 import com.google.gson.Gson
 import config.Config
+import objects.State
 import objects.que.QueItem
 import objects.que.QueLoader
 import java.awt.Component
@@ -23,9 +24,12 @@ class QuickAccessButtonPanel : JPanel() {
         alignmentX = Component.LEFT_ALIGNMENT
         minimumSize = Dimension(10, 10)
 
+        State.quickAccessButtons.clear()
         for (index in 0 until Config.quickAccessButtonCount) {
             val queItem = getStringQueItemFromQue(Config.quickAccessButtonQueItems, index)
-            add(QuickAccessButton(index, queItem))
+            val quickAccessButton = QuickAccessButton(index, queItem)
+            State.quickAccessButtons.add(index, quickAccessButton)
+            add(quickAccessButton)
         }
     }
 

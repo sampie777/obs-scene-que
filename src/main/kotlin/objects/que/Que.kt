@@ -40,21 +40,21 @@ object Que {
         }
     }
 
-    fun activateCurrentAsPrevious() {
+    private fun activateCurrentAsPrevious() {
         val current = current() ?: return
 
         activateItemAsPrevious(current)
         GUI.refreshQueItems()
     }
 
-    fun deactivateCurrent() {
+    private fun deactivateCurrent() {
         val current = current() ?: return
 
         deactivateItem(current)
         GUI.refreshQueItems()
     }
 
-    fun deactivateCurrentAsPrevious() {
+    private fun deactivateCurrentAsPrevious() {
         val current = current() ?: return
 
         deactivateItemAsPrevious(current)

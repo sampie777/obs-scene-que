@@ -37,7 +37,7 @@ interface QueItem {
         throw NotImplementedError("This method is deprecated. Please use the latest version of the application.")
     }
 
-    fun toJson(): JsonQue.QueItem = JsonQue.QueItem(
+    fun toJson(): JsonQueue.QueueItem = JsonQueue.QueueItem(
         pluginName = plugin.name,
         className = javaClass.simpleName,
         name = name,
@@ -46,9 +46,9 @@ interface QueItem {
         data = HashMap()
     )
 
-    fun dataFromJson(jsonQueItem: JsonQue.QueItem) {
-        executeAfterPrevious = jsonQueItem.executeAfterPrevious
-        quickAccessColor = jsonQueItem.quickAccessColor
+    fun dataFromJson(jsonQueueItem: JsonQueue.QueueItem) {
+        executeAfterPrevious = jsonQueueItem.executeAfterPrevious
+        quickAccessColor = jsonQueueItem.quickAccessColor
     }
 
     fun getListCellRendererComponent(

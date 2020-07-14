@@ -1,7 +1,7 @@
 package plugins.text
 
 import gui.utils.createImageIcon
-import objects.que.JsonQue
+import objects.que.JsonQueue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import plugins.text.queItems.DelayQueItem
@@ -56,12 +56,12 @@ class TextPlugin : QueItemBasePlugin {
         }
     }
 
-    override fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem {
-        return when (jsonQueItem.className) {
-            HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, jsonQueItem.name)
-            PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, jsonQueItem.name)
-            DelayQueItem::class.java.simpleName -> DelayQueItem.fromJson(this, jsonQueItem)
-            else -> throw IllegalArgumentException("Invalid TextPlugin queue item: ${jsonQueItem.className}")
+    override fun jsonToQueItem(jsonQueueItem: JsonQueue.QueueItem): QueItem {
+        return when (jsonQueueItem.className) {
+            HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, jsonQueueItem.name)
+            PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, jsonQueueItem.name)
+            DelayQueItem::class.java.simpleName -> DelayQueItem.fromJson(this, jsonQueueItem)
+            else -> throw IllegalArgumentException("Invalid TextPlugin queue item: ${jsonQueueItem.className}")
         }
     }
 }

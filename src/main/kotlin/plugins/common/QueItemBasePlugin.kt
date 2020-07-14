@@ -1,6 +1,6 @@
 package plugins.common
 
-import objects.que.JsonQue
+import objects.que.JsonQueue
 import objects.que.QueItem
 import plugins.PluginLoader
 import javax.swing.JComponent
@@ -29,8 +29,8 @@ interface QueItemBasePlugin : BasePlugin {
 
     @Deprecated(
         "Use JSON converter instead of this plane text converter",
-        ReplaceWith("jsonToQueItem(jsonQueItem: JsonQue.QueItem)", "objects.que.JsonQue")
+        ReplaceWith("jsonToQueItem(jsonQueueItem: JsonQueue.QueueItem)", "objects.que.JsonQue")
     )
     fun configStringToQueItem(value: String): QueItem
-    fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem
+    fun jsonToQueItem(jsonQueueItem: JsonQueue.QueueItem): QueItem
 }

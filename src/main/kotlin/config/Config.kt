@@ -47,6 +47,9 @@ object Config {
     var activateNextSubQueueItemsOnMouseActivationQueueItem: Boolean = true
     var activateNextSubQueueItemsOnMouseActivationSubQueueItem: Boolean = false
 
+    var httpApiServerEnabled: Boolean = false
+    var httpApiServerPort: Int = 8080
+
     fun load() {
         try {
             PropertyLoader.load()

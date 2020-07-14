@@ -1,6 +1,6 @@
 package mocks
 
-import objects.que.JsonQue
+import objects.que.JsonQueue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import javax.swing.Icon
@@ -23,8 +23,8 @@ class MockPlugin3 : QueItemBasePlugin {
         return QueItemMock(this, value)
     }
 
-    override fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem {
-        return QueItemMock(this, jsonQueItem.name)
+    override fun jsonToQueItem(jsonQueueItem: JsonQueue.QueueItem): QueItem {
+        return QueItemMock(this, jsonQueueItem.name)
     }
 
     override fun createMenu(menu: JMenu): Boolean {

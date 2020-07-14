@@ -1,3 +1,4 @@
+import api.ApiServer
 import config.Config
 import gui.mainFrame.MainFrame
 import objects.ApplicationInfo
@@ -37,6 +38,10 @@ fun main(args: Array<String>) {
 
     EventQueue.invokeLater {
         MainFrame.createAndShow()
+    }
+
+    if (Config.httpApiServerEnabled) {
+        ApiServer.start()
     }
 
     if ("--offline" !in args) {

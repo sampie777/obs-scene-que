@@ -1,6 +1,6 @@
 package mocks
 
-import objects.que.JsonQue
+import objects.que.JsonQueue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import java.awt.Color
@@ -42,11 +42,11 @@ class QueItemMock2(override val plugin: QueItemBasePlugin, override val name: St
 
     override fun toString(): String = "QueItemMock2[name=$name]"
 
-    override fun toJson(): JsonQue.QueItem {
+    override fun toJson(): JsonQueue.QueueItem {
         throw Exception("Oops")
     }
 
-    override fun dataFromJson(jsonQueItem: JsonQue.QueItem) {
+    override fun dataFromJson(jsonQueueItem: JsonQueue.QueueItem) {
         throw Exception("Oops")
     }
 }
