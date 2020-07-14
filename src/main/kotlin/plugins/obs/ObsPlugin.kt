@@ -2,7 +2,7 @@ package plugins.obs
 
 import gui.utils.createImageIcon
 import objects.TScene
-import objects.que.JsonQue
+import objects.que.JsonQueue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import plugins.obs.gui.SourcePanel
@@ -31,15 +31,15 @@ class ObsPlugin : QueItemBasePlugin {
         return ObsSceneQueItem(this, TScene(value))
     }
 
-    override fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem {
-        return when (jsonQueItem.className) {
-            ObsSceneQueItem::class.java.simpleName -> ObsSceneQueItem(this, TScene(jsonQueItem.name))
+    override fun jsonToQueItem(jsonQueueItem: JsonQueue.QueueItem): QueItem {
+        return when (jsonQueueItem.className) {
+            ObsSceneQueItem::class.java.simpleName -> ObsSceneQueItem(this, TScene(jsonQueueItem.name))
             ObsStartStreamingQueItem::class.java.simpleName -> ObsStartStreamingQueItem(this)
             ObsStopStreamingQueItem::class.java.simpleName -> ObsStopStreamingQueItem(this)
             ObsStartRecordingQueItem::class.java.simpleName -> ObsStartRecordingQueItem(this)
             ObsStopRecordingQueItem::class.java.simpleName -> ObsStopRecordingQueItem(this)
-            ObsToggleSourceVisibilityQueItem::class.java.simpleName -> ObsToggleSourceVisibilityQueItem.fromJson(this, jsonQueItem)
-            else -> throw IllegalArgumentException("Invalid OBS Plugin queue item: ${jsonQueItem.className}")
+            ObsToggleSourceVisibilityQueItem::class.java.simpleName -> ObsToggleSourceVisibilityQueItem.fromJson(this, jsonQueueItem)
+            else -> throw IllegalArgumentException("Invalid OBS Plugin queue item: ${jsonQueueItem.className}")
         }
     }
 }

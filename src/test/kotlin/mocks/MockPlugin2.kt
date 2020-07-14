@@ -1,6 +1,6 @@
 package mocks
 
-import objects.que.JsonQue
+import objects.que.JsonQueue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
 import javax.swing.Icon
@@ -23,10 +23,10 @@ class MockPlugin2 : QueItemBasePlugin {
         return QueItemMock(this, value)
     }
 
-    override fun jsonToQueItem(jsonQueItem: JsonQue.QueItem): QueItem {
-        return when(jsonQueItem.className) {
-            QueItemMock::class.java.name -> QueItemMock(this, jsonQueItem.name)
-            QueItemMock2::class.java.name -> QueItemMock2(this, jsonQueItem.name)
+    override fun jsonToQueItem(jsonQueueItem: JsonQueue.QueueItem): QueItem {
+        return when(jsonQueueItem.className) {
+            QueItemMock::class.java.name -> QueItemMock(this, jsonQueueItem.name)
+            QueItemMock2::class.java.name -> QueItemMock2(this, jsonQueueItem.name)
             else -> throw IllegalArgumentException("Unknown class")
         }
     }

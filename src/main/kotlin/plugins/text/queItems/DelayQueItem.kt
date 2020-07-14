@@ -2,7 +2,7 @@ package plugins.text.queItems
 
 import GUI
 import handles.QueItemTransferHandler
-import objects.que.JsonQue
+import objects.que.JsonQueue
 import objects.que.Que
 import objects.que.QueItem
 import plugins.text.TextPlugin
@@ -29,8 +29,8 @@ class DelayQueItem(override val plugin: TextPlugin, private val delay: Long) : Q
     private var timer: Timer? = null
 
     companion object {
-        fun fromJson(plugin: TextPlugin, jsonQueItem: JsonQue.QueItem): DelayQueItem {
-            return DelayQueItem(plugin, jsonQueItem.data["delay"]!!.toLong())
+        fun fromJson(plugin: TextPlugin, jsonQueueItem: JsonQueue.QueueItem): DelayQueItem {
+            return DelayQueItem(plugin, jsonQueueItem.data["delay"]!!.toLong())
         }
 
         fun createPanelForQueItem(plugin: TextPlugin): JComponent {
@@ -104,7 +104,7 @@ class DelayQueItem(override val plugin: TextPlugin, private val delay: Long) : Q
         }
     }
 
-    override fun toJson(): JsonQue.QueItem {
+    override fun toJson(): JsonQueue.QueueItem {
         val jsonQueItem = super.toJson()
         jsonQueItem.data["delay"] = delay.toString()
         return jsonQueItem

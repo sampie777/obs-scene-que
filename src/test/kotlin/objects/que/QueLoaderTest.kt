@@ -115,30 +115,31 @@ class QueLoaderTest {
 
         assertEquals(
             """
-            {
-              "name": "testQueue",
-              "applicationVersion": "0.1.0",
-              "queItems": [
-                {
-                  "pluginName": "MockPlugin",
-                  "className": "QueItemMock",
-                  "name": "1",
-                  "executeAfterPrevious": false,
-                  "quickAccessColor": {
-                    "value": -16751416,
-                    "falpha": 0.0
-                  },
-                  "data": {}
-                },
-                {
-                  "pluginName": "MockPlugin",
-                  "className": "QueItemMock",
-                  "name": "2",
-                  "executeAfterPrevious": false,
-                  "data": {}
-                }
-              ]
-            }
+{
+  "name": "testQueue",
+  "applicationVersion": "0.1.0",
+  "queueItems": [
+    {
+      "pluginName": "MockPlugin",
+      "className": "QueItemMock",
+      "name": "1",
+      "executeAfterPrevious": false,
+      "quickAccessColor": {
+        "value": -16751416,
+        "falpha": 0.0
+      },
+      "data": {}
+    },
+    {
+      "pluginName": "MockPlugin",
+      "className": "QueItemMock",
+      "name": "2",
+      "executeAfterPrevious": false,
+      "data": {}
+    }
+  ],
+  "apiVersion": 1
+}
         """.trimIndent(), json
         )
     }
@@ -158,7 +159,7 @@ class QueLoaderTest {
             {
               "name": "testQueue",
               "applicationVersion": "0.1.0",
-              "queItems": [
+              "queueItems": [
                 {
                   "pluginName": "MockPlugin",
                   "className": "QueItemMock",
@@ -166,14 +167,15 @@ class QueLoaderTest {
                   "executeAfterPrevious": false,
                   "data": {}
                 }
-              ]
+              ],
+              "apiVersion": 1
             }
         """.trimIndent(), json
         )
 
         assertEquals(2, Notifications.unreadNotifications)
-        assertEquals("Failed to save queue item 1", Notifications.list[0].message)
-        assertEquals("Failed to save queue item 3", Notifications.list[1].message)
+        assertEquals("Failed to save queue item 1: Oops", Notifications.list[0].message)
+        assertEquals("Failed to save queue item 3: Oops", Notifications.list[1].message)
     }
 
     @Test
@@ -271,13 +273,17 @@ class QueLoaderTest {
 
         assertNull(item)
         assertEquals(1, Notifications.unreadNotifications)
-        assertEquals("Failed to load Queue Item from json", Notifications.list[0].message)
+        assertEquals(
+            "Failed to load Queue Item from json: com.google.gson.stream.MalformedJsonException: Expected ':' at line 3 column 21 path \$.pluginNa\n" +
+                    "                  ",
+            Notifications.list[0].message
+        )
     }
 
     @Test
     fun testLoadQueItemFromJsonQueItem() {
         PluginLoader.queItemPlugins.add(mockPlugin)
-        val jsonQueItem = JsonQue.QueItem(
+        val jsonQueItem = JsonQueue.QueueItem(
             mockPlugin.name, "QueItemMock",
             "name", false,
             null, hashMapOf()
@@ -294,7 +300,7 @@ class QueLoaderTest {
 
     @Test
     fun testLoadQueItemFromJsonQueItemWithoutPlugins() {
-        val jsonQueItem = JsonQue.QueItem(
+        val jsonQueItem = JsonQueue.QueueItem(
             mockPlugin.name, "QueItemMock",
             "", false,
             null, hashMapOf()
@@ -311,7 +317,7 @@ class QueLoaderTest {
     fun testLoadQueItemFromJsonQueItemWithInvalidQueItemMethod() {
         val plugin = MockPlugin2()
         PluginLoader.queItemPlugins.add(plugin)
-        val jsonQueItem = JsonQue.QueItem(
+        val jsonQueItem = JsonQueue.QueueItem(
             plugin.name, "QueItemMock2",
             "name", false,
             null, hashMapOf()

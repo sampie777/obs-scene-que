@@ -64,23 +64,23 @@ internal object QueLoader {
         }
     }
 
-    fun loadQueItemFromJson(jsonQueItem: JsonQue.QueItem): QueItem? {
-        val plugin = PluginLoader.queItemPlugins.find { plugin -> plugin.name == jsonQueItem.pluginName }
+    fun loadQueItemFromJson(jsonQueueItem: JsonQueue.QueueItem): QueItem? {
+        val plugin = PluginLoader.queItemPlugins.find { plugin -> plugin.name == jsonQueueItem.pluginName }
 
         if (plugin == null) {
-            Notifications.add("Plugin '${jsonQueItem.pluginName}' not found", "Queue")
+            Notifications.add("Plugin '${jsonQueueItem.pluginName}' not found", "Queue")
             return null
         }
 
         val item: QueItem
         try {
-            item = plugin.jsonToQueItem(jsonQueItem)
-            item.dataFromJson(jsonQueItem)
+            item = plugin.jsonToQueItem(jsonQueueItem)
+            item.dataFromJson(jsonQueueItem)
         } catch (e: Exception) {
-            logger.warning("Failed to load queue item $jsonQueItem")
+            logger.warning("Failed to load queue item $jsonQueueItem")
             e.printStackTrace()
             Notifications.add(
-                "Failed to load queue item '${jsonQueItem}' for plugin '${jsonQueItem.pluginName}': $e",
+                "Failed to load queue item '${jsonQueueItem}' for plugin '${jsonQueueItem.pluginName}': $e",
                 "Queue"
             )
             return null
@@ -127,60 +127,80 @@ internal object QueLoader {
             try {
                 it.toJson()
             } catch (e: Exception) {
-                logger.warning("Failed to convert QueItem '${it.name}' to JsonQue.QueItem")
+                logger.warning("Failed to convert QueItem '${it.name}' to JsonQueue.QueItem")
                 e.printStackTrace()
-                Notifications.add("Failed to save queue item ${it.name}", "Queue")
+                Notifications.add("Failed to save queue item ${it.name}: ${e.localizedMessage}", "Queue")
                 null
             }
         }
 
-        val jsonQue = JsonQue.Que(
+        val jsonQueue = JsonQueue.Queue(
             name = Que.name,
             applicationVersion = Que.applicationVersion,
-            queItems = jsonQueItems
+            queueItems = jsonQueItems
         )
 
         try {
             val prettyGson = GsonBuilder().setPrettyPrinting().create()
-            return prettyGson.toJson(jsonQue)
+            return prettyGson.toJson(jsonQueue)
         } catch (e: Exception) {
-            logger.warning("Failed to convert JsonQue.Que to string: $jsonQue")
+            logger.warning("Failed to convert JsonQueue.Queue to string: $jsonQueue")
             e.printStackTrace()
             throw e
         }
     }
 
     fun fromJson(json: String): Boolean {
-        val jsonQue = jsonQueFromJson(json) ?: return false
+        try {
+            val jsonQue = jsonQueFromJson(json) ?: return false
 
-        Que.name = jsonQue.name
-        Que.applicationVersion = jsonQue.applicationVersion
-        Que.clear()
+            Que.name = jsonQue.name
+            Que.applicationVersion = jsonQue.applicationVersion
+            Que.clear()
 
-        jsonQue.queItems.forEach {
-            loadQueItemFromJson(it)?.let { it1 -> Que.add(it1) }
+            jsonQue.queueItems.forEach {
+                loadQueItemFromJson(it)?.let { it1 -> Que.add(it1) }
+            }
+            return true
+        } catch (e: Exception) {
+            logger.warning("Failed to load Queue from JSON: $json")
+            e.printStackTrace()
+            Notifications.add("Failed to load Queue from file: ${e.localizedMessage}", "Queue")
         }
-        return true
+        return false
     }
 
-    private fun jsonQueFromJson(json: String): JsonQue.Que? {
+    private fun jsonQueFromJson(json: String): JsonQueue.Queue? {
         return try {
-            Gson().fromJson(json, JsonQue.Que::class.java)
+            val compatibleJson = json.let {
+                val apiVersionPredicate = """"apiVersion":[\s\n\r]*(\d+),""".toRegex()
+                val result = apiVersionPredicate.find(it)
+
+                // Make JSON text compatible with new JsonQueue.Queue API
+                if (result == null) {
+                    val queItemsPredicate = """"queItems":[\s\n\r]*\[""".toRegex()
+                    return@let queItemsPredicate.replace(json, "\"queueItems\": [")
+                }
+
+                json
+            }
+
+            Gson().fromJson(compatibleJson, JsonQueue.Queue::class.java)
         } catch (e: Exception) {
             logger.warning("Failed to load Queue from json: $json")
             e.printStackTrace()
-            Notifications.add("Failed to load Queue from json", "Queue")
+            Notifications.add("Failed to load Queue from json: ${e.localizedMessage}", "Queue")
             null
         }
     }
 
-    fun jsonQueItemFromJson(json: String): JsonQue.QueItem? {
+    fun jsonQueItemFromJson(json: String): JsonQueue.QueueItem? {
         return try {
-            Gson().fromJson(json, JsonQue.QueItem::class.java)
+            Gson().fromJson(json, JsonQueue.QueueItem::class.java)
         } catch (e: Exception) {
             logger.warning("Failed to load Queue Item from json: $json")
             e.printStackTrace()
-            Notifications.add("Failed to load Queue Item from json", "Queue")
+            Notifications.add("Failed to load Queue Item from json: ${e.localizedMessage}", "Queue")
             null
         }
     }
@@ -188,7 +208,7 @@ internal object QueLoader {
     @Deprecated(
         "Use JSON converter instead of this plane text converter",
         ReplaceWith(
-            "QueLoader.loadQueItemFromJson(jsonQueItem: JsonQue.QueItem)",
+            "QueLoader.loadQueItemFromJson(jsonQueItem: JsonQueue.QueItem)",
             "objects.que.QueLoader\nobjects.que.JsonQue"
         )
     )
@@ -223,7 +243,7 @@ internal object QueLoader {
         } catch (e: Exception) {
             logger.warning("Failed to load queue item $line")
             e.printStackTrace()
-            Notifications.add("Failed to load queue item '$data' for '$pluginName': $e", "Queue")
+            Notifications.add("Failed to load queue item '$data' for '$pluginName': ${e.localizedMessage}", "Queue")
             return null
         }
     }

@@ -70,6 +70,23 @@ class ConfigEditPanel : JPanel() {
             )
         )
 
+        formComponents.add(HeaderFormComponent("Web control"))
+        formComponents.add(
+            BooleanFormInput(
+                "httpApiServerEnabled",
+                "Enable Queue web control server",
+                toolTipText = "This will run an HTTP server which can be used to interact with the Queue"
+            )
+        )
+        formComponents.add(
+            NumberFormInput<Int>(
+                "httpApiServerPort",
+                "Web control server port",
+                min = 0,
+                max = null
+            )
+        )
+
         formComponents.add(HeaderFormComponent("Logging"))
         formComponents.add(
             BooleanFormInput(
