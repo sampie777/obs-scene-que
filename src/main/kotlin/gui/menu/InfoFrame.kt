@@ -2,7 +2,6 @@ package gui.menu
 
 import LogService
 import config.Config
-import gui.mainFrame.MainFrameKeyDispatcher
 import gui.utils.ClickableLinkComponent
 import gui.utils.DefaultDialogKeyDispatcher
 import objects.ApplicationInfo
