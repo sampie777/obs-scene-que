@@ -15,6 +15,8 @@ import javax.swing.border.EmptyBorder
 class ConfigActionPanel(private val frame: ConfigFrame) : JPanel() {
     private val logger = Logger.getLogger(ConfigActionPanel::class.java.name)
 
+    val saveButton = JButton("Save")
+
     init {
         createGui()
     }
@@ -23,9 +25,9 @@ class ConfigActionPanel(private val frame: ConfigFrame) : JPanel() {
         layout = BoxLayout(this, BoxLayout.LINE_AXIS)
         border = EmptyBorder(0, 10, 10, 10)
 
-        val saveButton = JButton("Save")
         saveButton.addActionListener { saveConfigAndClose() }
         saveButton.mnemonic = KeyEvent.VK_S
+        frame.rootPane.defaultButton = saveButton
 
         val cancelButton = JButton("Cancel")
         cancelButton.addActionListener { cancelWindow() }

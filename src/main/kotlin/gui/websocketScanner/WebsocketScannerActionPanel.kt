@@ -39,6 +39,7 @@ class WebsocketScannerActionPanel(private val frame: WebsocketScannerFrame) : JP
 
         val saveButton = JButton("Save")
         saveButton.addActionListener { saveConfigAndClose() }
+        frame.rootPane.defaultButton = saveButton
 
         val cancelButton = JButton("Cancel")
         cancelButton.addActionListener { cancelWindow() }

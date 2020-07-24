@@ -46,7 +46,11 @@ class ControlFrame(private val parentFrame: Component?) : JFrame() {
         val mainPanel = JPanel(BorderLayout(10, 10))
         add(mainPanel)
 
-        mainPanel.add(ControlFramePanel(), BorderLayout.CENTER)
+        val controlFramePanel = ControlFramePanel()
+        mainPanel.add(controlFramePanel, BorderLayout.CENTER)
+
+        pack()  // Realize components so the focus request will work
+        controlFramePanel.nextQueItemButton.requestFocusInWindow()
 
         if (Config.windowRestoreLastPosition) {
             if (isLocationRelaviteToParent()) {

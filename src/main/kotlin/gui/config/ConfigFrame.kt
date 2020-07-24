@@ -25,8 +25,13 @@ class ConfigFrame(internal val parentFrame: JFrame?) : JDialog(parentFrame) {
         val mainPanel = JPanel(BorderLayout(10, 10))
         add(mainPanel)
 
+        val configActionPanel = ConfigActionPanel(this)
+
         mainPanel.add(configEditPanel, BorderLayout.CENTER)
-        mainPanel.add(ConfigActionPanel(this), BorderLayout.PAGE_END)
+        mainPanel.add(configActionPanel, BorderLayout.PAGE_END)
+
+        pack()  // Realize components so the focus request will work
+        configActionPanel.saveButton.requestFocusInWindow()
 
         title = "Settings"
         setSize(560, 520)

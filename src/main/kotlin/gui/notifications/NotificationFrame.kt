@@ -24,6 +24,7 @@ class NotificationFrame(private val parentFrame: JFrame?) : JDialog(parentFrame)
         closeButton.horizontalAlignment = SwingConstants.CENTER
         closeButton.alignmentX = Component.CENTER_ALIGNMENT
         closeButton.addActionListener { dispose() }
+        parentFrame?.rootPane?.defaultButton = closeButton
 
         val actionPanel = JPanel()
         actionPanel.add(closeButton)

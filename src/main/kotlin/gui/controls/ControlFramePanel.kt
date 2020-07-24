@@ -21,7 +21,7 @@ class ControlFramePanel : JPanel(), Refreshable {
 
     private val previousQueItemButton = JButton("Previous")
     private val currentQueItemLabel = JLabel()
-    private val nextQueItemButton = JButton("Next")
+    val nextQueItemButton = JButton("Next")
 
     init {
         GUI.register(this)
