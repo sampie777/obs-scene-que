@@ -91,7 +91,11 @@ object PropertyLoader {
                     }
 
                     field.isAccessible = true
-                    field.set(null, propertyValueToTypedValue(userProperties, field.name, field.type))
+
+                    val propertyValue = userProperties.getProperty(field.name)
+                        ?: throw IllegalArgumentException("Missing configuration value: ${field.name}")
+
+                    field.set(null, stringToTypedValue(propertyValue, field.name, field.type))
 
                 } catch (e: IllegalArgumentException) {
                     logger.warning(e.toString())
@@ -143,9 +147,7 @@ object PropertyLoader {
         return true
     }
 
-    private fun propertyValueToTypedValue(props: Properties, name: String, type: Class<*>): Any? {
-        val value = props.getProperty(name) ?: throw IllegalArgumentException("Missing configuration value: $name")
-
+    fun stringToTypedValue(value: String, name: String, type: Class<*>): Any? {
         if (type == String::class.java) return value
         if (type == Boolean::class.javaPrimitiveType) return java.lang.Boolean.parseBoolean(value)
         if (type == Int::class.javaPrimitiveType) return value.toInt()

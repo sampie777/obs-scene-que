@@ -6,6 +6,8 @@ import objects.que.Que
 import java.awt.Dimension
 import java.awt.Point
 import java.io.File
+import java.lang.reflect.Field
+import java.lang.reflect.Modifier
 import java.util.logging.Logger
 
 object Config {
@@ -96,5 +98,14 @@ object Config {
 
     fun enableWriteToFile(value: Boolean) {
         PropertyLoader.writeToFile = value
+    }
+
+    fun fields(): List<Field> {
+        val fields = javaClass.declaredFields.filter {
+            it.name != "INSTANCE" && it.name != "logger"
+                    && Modifier.isStatic(it.modifiers)
+        }
+        fields.forEach { it.isAccessible = true }
+        return fields
     }
 }

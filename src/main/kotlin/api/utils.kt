@@ -1,5 +1,7 @@
 package api
 
+import java.io.InputStream
+import java.net.HttpURLConnection
 import java.util.logging.Logger
 import javax.servlet.http.HttpServletResponse
 
@@ -22,3 +24,6 @@ fun respondWithNotFound(response: HttpServletResponse) {
 }
 
 fun String.getParams(regex: Regex): List<String> = regex.find(this)?.destructured?.toList() ?: emptyList()
+
+fun HttpURLConnection.body() = (this.content as InputStream).bufferedReader().readText()
+fun HttpURLConnection.errorBody() = this.errorStream.bufferedReader().readText()

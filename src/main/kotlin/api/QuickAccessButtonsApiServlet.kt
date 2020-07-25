@@ -2,7 +2,6 @@ package api
 
 
 import com.google.gson.GsonBuilder
-import config.Config
 import objects.State
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
@@ -44,7 +43,14 @@ class QuickAccessButtonsApiServlet : HttpServlet() {
         val index = params[0].toInt()
         logger.info("Getting Quick Access Button index: $index")
 
-        val json = Config.quickAccessButtonQueItems[index].ifBlank { "null" }
+        val button = State.quickAccessButtons.getOrNull(index)
+        if (button?.getQueItem() == null) {
+            respondWithJson(response, "null")
+            return
+        }
+
+        val queueItem = button.getQueItem()!!.toJson()
+        val json = GsonBuilder().setPrettyPrinting().create().toJson(queueItem)
 
         respondWithJson(response, json)
     }

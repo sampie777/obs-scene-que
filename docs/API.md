@@ -51,6 +51,21 @@ JSON:
 }
 ```
 
+### ConfigPair
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `key` | string | Name of the config property |
+| `value` | string | Value of the config property |
+
+JSON: 
+```json
+{
+  "key": "string",
+  "value": object
+}
+```
+
 ## Endpoints
 
 ### Queue
@@ -75,11 +90,52 @@ Retrieve the Queue list:
 ```bash
 curl -X GET http://localhost:8080/api/v1/queue/list
 ```
+> Response:
+> ```json
+> {
+>   "name": "default-que",
+>   "applicationVersion": "2.6.0",
+>   "queueItems": [
+>     {
+>       "pluginName": "MockPlugin",
+>       "className": "QueItemMock",
+>       "name": "1",
+>       "executeAfterPrevious": false,
+>       "data": {}
+>     },
+>     {
+>       "pluginName": "MockPlugin",
+>       "className": "QueItemMock",
+>       "name": "2",
+>       "executeAfterPrevious": false,
+>       "data": {}
+>     },
+>     {
+>       "pluginName": "MockPlugin",
+>       "className": "QueItemMock",
+>       "name": "3",
+>       "executeAfterPrevious": false,
+>       "data": {}
+>     }
+>   ],
+>   "apiVersion": 1
+> }
+> ```
 
 Activate the next Queue item:
 ```bash
 curl -X POST http://localhost:8080/api/v1/queue/next
 ```
+> Response:
+> ```json
+> {
+>   "pluginName": "MockPlugin",
+>   "className": "QueItemMock",
+>   "name": "3",
+>   "executeAfterPrevious": false,
+>   "data": {}
+> }
+> ```
 
 Activate the first Queue item:
 ```bash
@@ -107,8 +163,61 @@ Retrieve a list of all Quick Access Buttons:
 ```bash
 curl -X GET http://localhost:8080/api/v1/quickAccessButtons/list
 ```
+> Response:
+> ```json
+> [
+>   {
+>     "pluginName": "MockPlugin",
+>     "className": "QueItemMock",
+>     "name": "1",
+>     "executeAfterPrevious": false,
+>     "data": {}
+>   },
+>   null,
+>   {
+>     "pluginName": "MockPlugin",
+>     "className": "QueItemMock",
+>     "name": "2",
+>     "executeAfterPrevious": false,
+>     "data": {}
+>   }
+> ]
+> ```
 
 Execute the first Quick Access Button:
 ```bash
 curl -X POST http://localhost:8080/api/v1/quickAccessButtons/0
 ```
+> Response:
+> ```json
+> {
+>   "pluginName": "MockPlugin",
+>   "className": "QueItemMock",
+>   "name": "2",
+>   "executeAfterPrevious": false,
+>   "data": {}
+> }
+> ```
+
+### Config
+
+Relative API endpoint: `/config`
+
+| Method | Relative endpoint | Response | Description |
+| --- | --- | --- | --- |
+| GET | `/list` | `array<ConfigPair>` | Returns a list of ConfigPairs with the current configuration key/value pairs. |
+| GET | `/<key:string>` | `ConfigPair` | Returns the configuration value of the given property key. Returns no value property or `"value": null` if the key doesn't exists. |
+
+#### Examples
+
+Returns the `obsReconnectionTimeout` property value:
+```bash
+curl -X GET http://localhost:8080/api/v1/config/obsReconnectionTimeout
+```
+> Response:
+> ```json
+> {
+>   "key": "obsReconnectionTimeout",
+>   "value": 3000
+> }
+> ```

@@ -84,7 +84,6 @@ class ControlFrameTest {
         val frame = ControlFrame.create(null)
 
         assertEquals(Point(0, 0), frame.location)
-        assertEquals(Dimension(0, 0), frame.size)
         assertEquals(JFrame.MAXIMIZED_BOTH, frame.extendedState)
     }
 
