@@ -51,6 +51,23 @@ JSON:
 }
 ```
 
+### Notification
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `subject` | string | Notification subject |
+| `message` | string | Notification content |
+| `timestamp` | string | Timestamp when the Notification was created |
+
+JSON: 
+```json
+{
+  "timestamp": "2020-07-26T13:38:27.046+0200",
+  "message": "string",
+  "subject": "string"
+}
+```
+
 ### ConfigPair
 
 | Property | Type | Description |
@@ -82,7 +99,7 @@ Relative API endpoint: `/queue`
 | GET | `/next` | `QueueItem?` | Returns the next Queue item. Returns `null` if no next item is found. |
 | POST | `/next` | `QueueItem?` | Activates and the next Queue item. Returns the (new) active Queue item. Returns `null` if no item is active. |
 | GET | `/<index:number>` | `QueueItem?` | Returns the Queue item at the given queue index. Returns `null` if no item is found. |
-| POST | `/<index:number>` | `QueueItem?` | Activates and returns the Queue item at the given queue index. Returns `null` if no item is found. <p>Query parameters: <br/>- `activateNextSubQueueItems=(true/false)`</p> |
+| POST | `/<index:number>` | `QueueItem?` | Activates and returns the Queue item at the given queue index. Returns `null` if no item is found. <p>Query parameters: <br/>- `activateNextSubQueueItems=<true/false>`</p> |
 
 #### Examples
 
@@ -196,6 +213,45 @@ curl -X POST http://localhost:8080/api/v1/quickAccessButtons/0
 >   "name": "2",
 >   "executeAfterPrevious": false,
 >   "data": {}
+> }
+> ```
+
+### Notifications
+
+Relative API endpoint: `/notifications`
+
+| Method | Relative endpoint | Response | Description |
+| --- | --- | --- | --- |
+| GET | `/list` | `array<Notification>` | Returns a list of all Notifications. <p>Query parameters: <br/>- `unread=<true/false>`</p> |
+| GET | `/last` | `Notification?` | Returns the most recently added Notification. Returns `null` if there are no Notifications. |
+| POST | `/markAllAsRead` |  | Marks all Notifications as read. |
+| POST | `/add` | `Notification` | Adds a new Notification. <p>Query parameters: <br/>- `markAsRead=<true/false>`<br/>- `popup=<true/false>`</p> |
+
+#### Examples
+
+Returns the last Notification:
+```bash
+curl -X GET http://localhost:8080/api/v1/notifications/last
+```
+> Response:
+> ```json
+> {
+>   "timestamp": "2020-07-26T13:38:27.046+0200",
+>   "message": "Some thing went wrong during the test",
+>   "subject": "Test Error"
+> }
+> ```
+
+Add a new Notification and display it in a popup window in the GUI:
+```bash
+curl -X POST http://localhost:8080/api/v1/notifications/add?popup=true -d "{\"timestamp\": \"2020-07-26T13:38:27.046+0200\",\"message\": \"Some thing went wrong during the test\",\"subject\": \"Test Error\"}"
+```
+> Response:
+> ```json
+> {
+>   "timestamp": "2020-07-26T13:38:27.046+0200",
+>   "message": "Some thing went wrong during the test",
+>   "subject": "Test Error"
 > }
 > ```
 

@@ -4,9 +4,7 @@ import config.Config
 import org.eclipse.jetty.http.HttpStatus
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import java.net.HttpURLConnection
 import java.net.ServerSocket
-import java.net.URL
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -42,8 +40,7 @@ class ConfigApiServletTest {
 
     @Test
     fun testGetConfigKeyValue() {
-        val connection = URL("${apiUrl}/obsReconnectionTimeout").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/obsReconnectionTimeout")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""
@@ -56,8 +53,7 @@ class ConfigApiServletTest {
 
     @Test
     fun testGetInvalidConfigKeyValue() {
-        val connection = URL("${apiUrl}/xx").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/xx")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""
@@ -69,8 +65,7 @@ class ConfigApiServletTest {
 
     @Test
     fun testGetList() {
-        val connection = URL("${apiUrl}/list").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/list")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         val body = connection.body().trim()
@@ -84,9 +79,7 @@ class ConfigApiServletTest {
 
     @Test
     fun testGetInvalidPostEndpoint() {
-        val connection = URL("${apiUrl}/x").openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.connect()
+        val connection = post("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
         assertEquals("Not Found", connection.errorBody().trim())

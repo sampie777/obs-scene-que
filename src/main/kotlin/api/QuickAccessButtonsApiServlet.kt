@@ -1,7 +1,7 @@
 package api
 
 
-import com.google.gson.GsonBuilder
+import jsonBuilder
 import objects.State
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
@@ -19,7 +19,7 @@ class QuickAccessButtonsApiServlet : HttpServlet() {
 
         when (request.pathInfo) {
             "/list" -> getList(response)
-            in Regex(indexMatcher.pattern) -> getIndex(response, request.pathInfo.getParams(indexMatcher))
+            in Regex(indexMatcher.pattern) -> getIndex(response, request.pathInfo.getPathVariables(indexMatcher))
             else -> respondWithNotFound(response)
         }
     }
@@ -27,14 +27,15 @@ class QuickAccessButtonsApiServlet : HttpServlet() {
         logger.info("Processing ${request.method} request from : ${request.requestURI}")
 
         when (request.pathInfo) {
-            in Regex(indexMatcher.pattern) -> postIndex(response, request.pathInfo.getParams(indexMatcher))
+            in Regex(indexMatcher.pattern) -> postIndex(response, request.pathInfo.getPathVariables(indexMatcher))
             else -> respondWithNotFound(response)
         }
     }
 
     private fun getList(response: HttpServletResponse) {
+        logger.info("Getting QuickAccessButtons list")
         val queueItems = State.quickAccessButtons.map { it.getQueItem()?.toJson() }
-        val json = GsonBuilder().setPrettyPrinting().create().toJson(queueItems)
+        val json = jsonBuilder().toJson(queueItems)
 
         respondWithJson(response, json)
     }
@@ -50,7 +51,7 @@ class QuickAccessButtonsApiServlet : HttpServlet() {
         }
 
         val queueItem = button.getQueItem()!!.toJson()
-        val json = GsonBuilder().setPrettyPrinting().create().toJson(queueItem)
+        val json = jsonBuilder().toJson(queueItem)
 
         respondWithJson(response, json)
     }

@@ -110,16 +110,14 @@ class QuickAccessButtonsApiServletTest {
 
     @Test
     fun testGetIndex2() {
-        val connection = URL("${apiUrl}/1").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/1")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""null""".trimIndent(), connection.body().trim())
     }
 
     @Test
     fun testGetIndexNotFound() {
-        val connection = URL("${apiUrl}/10").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/10")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("null", connection.body().trim())
@@ -127,8 +125,7 @@ class QuickAccessButtonsApiServletTest {
 
     @Test
     fun testGetInvalidGetEndpoint() {
-        val connection = URL("${apiUrl}/x").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
         assertEquals("Not Found", connection.errorBody().trim())
@@ -136,9 +133,7 @@ class QuickAccessButtonsApiServletTest {
 
     @Test
     fun testGetInvalidPostEndpoint() {
-        val connection = URL("${apiUrl}/x").openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.connect()
+        val connection = post("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
         assertEquals("Not Found", connection.errorBody().trim())
@@ -149,9 +144,7 @@ class QuickAccessButtonsApiServletTest {
         val queueItem = State.quickAccessButtons[2].getQueItem() as QueItemMock
         assertFalse(queueItem.isActivated)
 
-        val connection = URL("${apiUrl}/2").openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.connect()
+        val connection = post("${apiUrl}/2")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{

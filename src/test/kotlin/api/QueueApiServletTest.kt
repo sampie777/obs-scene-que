@@ -7,9 +7,7 @@ import objects.que.Que
 import org.eclipse.jetty.http.HttpStatus
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import java.net.HttpURLConnection
 import java.net.ServerSocket
-import java.net.URL
 import kotlin.test.*
 
 
@@ -53,8 +51,7 @@ class QueueApiServletTest {
 
     @Test
     fun testGetList() {
-        val connection = URL("${apiUrl}/list").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/list")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
   "name": "default-que",
@@ -88,8 +85,7 @@ class QueueApiServletTest {
 
     @Test
     fun testGetCurrent() {
-        val connection = URL("${apiUrl}/current").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/current")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
   "pluginName": "MockPlugin",
@@ -102,8 +98,7 @@ class QueueApiServletTest {
 
     @Test
     fun testGetPrevious() {
-        val connection = URL("${apiUrl}/previous").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/previous")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
   "pluginName": "MockPlugin",
@@ -116,8 +111,7 @@ class QueueApiServletTest {
 
     @Test
     fun testGetNext() {
-        val connection = URL("${apiUrl}/next").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/next")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
   "pluginName": "MockPlugin",
@@ -130,8 +124,7 @@ class QueueApiServletTest {
 
     @Test
     fun testGetIndex() {
-        val connection = URL("${apiUrl}/1").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/1")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
   "pluginName": "MockPlugin",
@@ -144,16 +137,14 @@ class QueueApiServletTest {
 
     @Test
     fun testGetIndexNotFound() {
-        val connection = URL("${apiUrl}/10").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/10")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("null", connection.body().trim())
     }
 
     @Test
     fun testGetInvalidGetEndpoint() {
-        val connection = URL("${apiUrl}/x").openConnection() as HttpURLConnection
-        connection.connect()
+        val connection = get("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
         assertEquals("Not Found", connection.errorBody().trim())
@@ -161,9 +152,7 @@ class QueueApiServletTest {
 
     @Test
     fun testGetInvalidPostEndpoint() {
-        val connection = URL("${apiUrl}/x").openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.connect()
+        val connection = post("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
         assertEquals("Not Found", connection.errorBody().trim())
@@ -174,9 +163,7 @@ class QueueApiServletTest {
         val queueItem = Que.current() as QueItemMock
         assertFalse(queueItem.isActivated)
 
-        val connection = URL("${apiUrl}/current").openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.connect()
+        val connection = post("${apiUrl}/current")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
@@ -197,9 +184,7 @@ class QueueApiServletTest {
         assertFalse(queueItemCurrent.isDeactivated)
         assertFalse(queueItemNext.isActivated)
 
-        val connection = URL("${apiUrl}/next").openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.connect()
+        val connection = post("${apiUrl}/next")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
@@ -218,9 +203,7 @@ class QueueApiServletTest {
     @Test
     fun testPostIndex() {
         assertNotEquals(2, Que.currentIndex())
-        val connection = URL("${apiUrl}/2").openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.connect()
+        val connection = post("${apiUrl}/2")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{

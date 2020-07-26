@@ -1,8 +1,8 @@
 package objects.que
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import config.Config
+import jsonBuilder
 import objects.notifications.Notifications
 import plugins.PluginLoader
 import java.io.File
@@ -141,8 +141,7 @@ internal object QueLoader {
         )
 
         try {
-            val prettyGson = GsonBuilder().setPrettyPrinting().create()
-            return prettyGson.toJson(jsonQueue)
+            return jsonBuilder().toJson(jsonQueue)
         } catch (e: Exception) {
             logger.warning("Failed to convert JsonQueue.Queue to string: $jsonQueue")
             e.printStackTrace()

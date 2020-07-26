@@ -1,8 +1,8 @@
 package api
 
 
-import com.google.gson.GsonBuilder
 import config.Config
+import jsonBuilder
 import objects.que.Que
 import objects.que.QueLoader
 import java.util.logging.Logger
@@ -24,7 +24,7 @@ class QueueApiServlet : HttpServlet() {
             "/current" -> getCurrent(response)
             "/previous" -> getPrevious(response)
             "/next" -> getNext(response)
-            in Regex(indexMatcher.pattern) -> getIndex(response, request.pathInfo.getParams(indexMatcher))
+            in Regex(indexMatcher.pattern) -> getIndex(response, request.pathInfo.getPathVariables(indexMatcher))
             else -> respondWithNotFound(response)
         }
     }
@@ -36,34 +36,38 @@ class QueueApiServlet : HttpServlet() {
             "/current" -> postCurrent(response)
             "/previous" -> postPrevious(response)
             "/next" -> postNext(response)
-            in Regex(indexMatcher.pattern) -> postIndex(request, response, request.pathInfo.getParams(indexMatcher))
+            in Regex(indexMatcher.pattern) -> postIndex(request, response, request.pathInfo.getPathVariables(indexMatcher))
             else -> respondWithNotFound(response)
         }
     }
 
     private fun getList(response: HttpServletResponse) {
+        logger.info("Getting Queue list")
         val json = QueLoader.queToJson()
 
         respondWithJson(response, json)
     }
 
     private fun getCurrent(response: HttpServletResponse) {
+        logger.info("Getting current Queue item")
         val currentQueueItemJson = Que.current()?.toJson()
-        val json = GsonBuilder().setPrettyPrinting().create().toJson(currentQueueItemJson)
+        val json = jsonBuilder().toJson(currentQueueItemJson)
 
         respondWithJson(response, json)
     }
 
     private fun getPrevious(response: HttpServletResponse) {
+        logger.info("Getting previous Queue item")
         val currentQueueItemJson = Que.previewPrevious()?.toJson()
-        val json = GsonBuilder().setPrettyPrinting().create().toJson(currentQueueItemJson)
+        val json = jsonBuilder().toJson(currentQueueItemJson)
 
         respondWithJson(response, json)
     }
 
     private fun getNext(response: HttpServletResponse) {
+        logger.info("Getting next Queue item")
         val currentQueueItemJson = Que.previewNext()?.toJson()
-        val json = GsonBuilder().setPrettyPrinting().create().toJson(currentQueueItemJson)
+        val json = jsonBuilder().toJson(currentQueueItemJson)
 
         respondWithJson(response, json)
     }
@@ -73,22 +77,25 @@ class QueueApiServlet : HttpServlet() {
         logger.info("Getting Queue index: $index")
 
         val currentQueueItemJson = Que.getAt(index)?.toJson()
-        val json = GsonBuilder().setPrettyPrinting().create().toJson(currentQueueItemJson)
+        val json = jsonBuilder().toJson(currentQueueItemJson)
 
         respondWithJson(response, json)
     }
 
     private fun postCurrent(response: HttpServletResponse) {
+        logger.info("Activating current Queue item")
         Que.activateCurrent(executeExecuteAfterPrevious = false)
         getCurrent(response)
     }
 
     private fun postPrevious(response: HttpServletResponse) {
+        logger.info("Activating previous Queue item")
         Que.previous()
         getCurrent(response)
     }
 
     private fun postNext(response: HttpServletResponse) {
+        logger.info("Activating next Queue item")
         Que.next()
         getCurrent(response)
     }

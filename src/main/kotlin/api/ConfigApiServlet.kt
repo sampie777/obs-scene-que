@@ -1,8 +1,8 @@
 package api
 
 
-import com.google.gson.GsonBuilder
 import config.Config
+import jsonBuilder
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
@@ -21,7 +21,7 @@ class ConfigApiServlet : HttpServlet() {
 
         when (request.pathInfo) {
             "/list" -> getList(response)
-            in Regex(configKeyMatcher.pattern) -> getKeyValue(response, request.pathInfo.getParams(configKeyMatcher))
+            in Regex(configKeyMatcher.pattern) -> getKeyValue(response, request.pathInfo.getPathVariables(configKeyMatcher))
             else -> respondWithNotFound(response)
         }
     }
@@ -35,13 +35,15 @@ class ConfigApiServlet : HttpServlet() {
     }
 
     private fun getList(response: HttpServletResponse) {
+        logger.info("Getting Config values list")
+
         val pairs = Config.fields().map {
             JsonConfigPair(
                 key = it.name,
                 value = it.get(Config)
             )
         }
-        val json = GsonBuilder().setPrettyPrinting().create().toJson(pairs)
+        val json = jsonBuilder().toJson(pairs)
 
         respondWithJson(response, json)
     }
@@ -53,7 +55,7 @@ class ConfigApiServlet : HttpServlet() {
         val value = Config.get(key)
 
         val jsonObject = JsonConfigPair(key, value)
-        val json = GsonBuilder().setPrettyPrinting().create().toJson(jsonObject)
+        val json = jsonBuilder().toJson(jsonObject)
 
         respondWithJson(response, json)
     }

@@ -3,6 +3,7 @@ package api
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.util.logging.Logger
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 private val logger: Logger = Logger.getLogger("utils")
@@ -23,7 +24,12 @@ fun respondWithNotFound(response: HttpServletResponse) {
     response.writer.println("Not Found")
 }
 
-fun String.getParams(regex: Regex): List<String> = regex.find(this)?.destructured?.toList() ?: emptyList()
+fun String.getPathVariables(regex: Regex): List<String> = regex.find(this)?.destructured?.toList() ?: emptyList()
+
+fun HttpServletRequest.getQueryParameter(key: String, default: Any?): Any? {
+    val param = this.parameterMap[key] ?: return default
+    return param[0] ?: default
+}
 
 fun HttpURLConnection.body() = (this.content as InputStream).bufferedReader().readText()
 fun HttpURLConnection.errorBody() = this.errorStream.bufferedReader().readText()

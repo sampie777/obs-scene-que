@@ -15,9 +15,12 @@ object ApiServer {
     init {
         val apiServletContextHandler = ServletContextHandler()
         apiServletContextHandler.contextPath = "/api/v1"
+
+        logger.fine("Registering API endpoints")
         apiServletContextHandler.addServlet(QueueApiServlet::class.java, "/queue/*")
         apiServletContextHandler.addServlet(QuickAccessButtonsApiServlet::class.java, "/quickAccessButtons/*")
         apiServletContextHandler.addServlet(ConfigApiServlet::class.java, "/config/*")
+        apiServletContextHandler.addServlet(NotificationApiServlet::class.java, "/notifications/*")
         server.handler = apiServletContextHandler
     }
 
