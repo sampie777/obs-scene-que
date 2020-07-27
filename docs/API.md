@@ -100,6 +100,9 @@ Relative API endpoint: `/queue`
 | POST | `/next` | `QueueItem?` | Activates and the next Queue item. Returns the (new) active Queue item. Returns `null` if no item is active. |
 | GET | `/<index:number>` | `QueueItem?` | Returns the Queue item at the given queue index. Returns `null` if no item is found. |
 | POST | `/<index:number>` | `QueueItem?` | Activates and returns the Queue item at the given queue index. Returns `null` if no item is found. <p>Query parameters: <br/>- `activateNextSubQueueItems=<true/false>`</p> |
+| DELETE | `/<index:number>` | `QueueItem?` | Removes and returns the removed Queue item at the given queue index. Returns `null` if no item is found. |
+| POST | `/add` | `QueueItem?` | Adds the given Queue item at the end of the Queue. Returns `null` if this failed. |
+| POST | `/add/<index:number>` | `QueueItem?` | Adds the given Queue item at the given index in the Queue. Returns `null` if this failed. |
 
 #### Examples
 
@@ -163,6 +166,21 @@ Activate the first Queue item without activating any sub items:
 ```bash
 curl -X POST http://localhost:8080/api/v1/queue/0?activateNextSubQueueItems=false
 ```
+
+Adds a new Queue item:
+```bash
+curl -X POST http://localhost:8080/api/v1/queue/add -d "{\"pluginName\": \"MockPlugin\",\"className\": \"QueItemMock\",\"name\": \"I'm new :)\",\"executeAfterPrevious\": false,\"data\": {}}"
+```
+> Response:
+> ```json
+> {
+>   "pluginName": "MockPlugin",
+>   "className": "QueItemMock",
+>   "name": "I'm new :)",
+>   "executeAfterPrevious": false,
+>   "data": {}
+> }
+> ```
 
 ### Quick Access Buttons
 

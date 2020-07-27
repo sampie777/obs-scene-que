@@ -33,3 +33,4 @@ fun HttpServletRequest.getQueryParameter(key: String, default: Any?): Any? {
 
 fun HttpURLConnection.body() = (this.content as InputStream).bufferedReader().readText()
 fun HttpURLConnection.errorBody() = this.errorStream.bufferedReader().readText()
+fun HttpServletRequest.body() = this.inputStream.bufferedReader().readText()

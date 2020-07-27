@@ -75,7 +75,7 @@ class NotificationApiServlet : HttpServlet() {
     private fun postAdd(request: HttpServletRequest, response: HttpServletResponse) {
         logger.info("Adding new notification")
 
-        val json = request.inputStream.bufferedReader().readText()
+        val json = request.body()
         val notification = Gson().fromJson(json, Notification::class.java)
         logger.info(notification.toString())
 

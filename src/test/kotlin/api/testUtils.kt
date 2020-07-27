@@ -6,6 +6,7 @@ import java.net.URL
 
 fun get(url: String): HttpURLConnection {
     val connection = URL(url).openConnection() as HttpURLConnection
+    connection.requestMethod = "GET"
     connection.connect()
     return connection
 }
@@ -25,6 +26,13 @@ fun post(url: String, body: String? = null): HttpURLConnection {
         }
     }
 
+    connection.connect()
+    return connection
+}
+
+fun delete(url: String): HttpURLConnection {
+    val connection = URL(url).openConnection() as HttpURLConnection
+    connection.requestMethod = "DELETE"
     connection.connect()
     return connection
 }

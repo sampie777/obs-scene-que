@@ -15,6 +15,7 @@ class QueueApiServlet : HttpServlet() {
 
     operator fun Regex.contains(text: CharSequence?): Boolean = this.matches(text ?: "")
     private val indexMatcher = """^/(\d+)$""".toRegex()
+    private val addQueueItemMatcher = """^/add(/(\d+))?$""".toRegex()
 
     override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
         logger.info("Processing ${request.method} request from : ${request.requestURI}")
@@ -36,7 +37,17 @@ class QueueApiServlet : HttpServlet() {
             "/current" -> postCurrent(response)
             "/previous" -> postPrevious(response)
             "/next" -> postNext(response)
+            in Regex(addQueueItemMatcher.pattern) -> postAdd(request, response, request.pathInfo.getPathVariables(addQueueItemMatcher))
             in Regex(indexMatcher.pattern) -> postIndex(request, response, request.pathInfo.getPathVariables(indexMatcher))
+            else -> respondWithNotFound(response)
+        }
+    }
+
+    override fun doDelete(request: HttpServletRequest, response: HttpServletResponse) {
+        logger.info("Processing ${request.method} request from : ${request.requestURI}")
+
+        when (request.pathInfo) {
+            in Regex(indexMatcher.pattern) -> deleteIndex(request, response, request.pathInfo.getPathVariables(indexMatcher))
             else -> respondWithNotFound(response)
         }
     }
@@ -122,5 +133,55 @@ class QueueApiServlet : HttpServlet() {
         Que.activateCurrent(activateNextSubQueueItems)
 
         getCurrent(response)
+    }
+
+    private fun postAdd(request: HttpServletRequest, response: HttpServletResponse, params: List<String>) {
+        val index: Int? = if (params.size == 2 && params[1].isNotBlank()) {
+            logger.info("Adding new Queue item at index: ${params[1]}")
+            params[1].toInt()
+        } else {
+            logger.info("Adding new Queue item")
+            null
+        }
+
+        val json = request.body()
+        val jsonQueueItem = QueLoader.jsonQueItemFromJson(json)
+
+        if (jsonQueueItem == null) {
+            logger.warning("Failed to convert json to jsonQueueItem. Json: $json")
+            respondWithJson(response, "null")
+            return
+        }
+
+        val queueItem = QueLoader.loadQueItemFromJson(jsonQueueItem)
+
+        if (queueItem == null) {
+            logger.warning("Failed to create Queue Item")
+            respondWithJson(response, "null")
+            return
+        }
+
+        logger.info(queueItem.toString())
+
+        if (index == null) {
+            Que.add(queueItem)
+        } else {
+            Que.add(index, queueItem)
+        }
+
+        respondWithJson(response, jsonBuilder().toJson(queueItem.toJson()))
+    }
+
+    private fun deleteIndex(request: HttpServletRequest, response: HttpServletResponse, params: List<String>) {
+        val index = params[0].toInt()
+        logger.info("Removing Queue index: $index")
+
+        val queueItem = Que.remove(index)
+        if (queueItem == null) {
+            respondWithNotFound(response)
+            return
+        }
+
+        respondWithJson(response, jsonBuilder().toJson(queueItem.toJson()))
     }
 }
