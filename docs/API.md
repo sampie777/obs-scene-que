@@ -83,6 +83,29 @@ JSON:
 }
 ```
 
+### Plugin
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `name` | string | Internal plugin name |
+| `description` | string | Description of the plugin |
+| `version` | string | Version of the plugin |
+| `icon` | object? | Information about the plugins icon. May be `null`. |
+
+JSON: 
+```json
+{
+  "name": "string",
+  "description": "string",
+  "version": "string",
+  "icon": {
+    "description": "string",
+    "width": number,
+    "height": number
+  }
+}
+```
+
 ## Endpoints
 
 ### Queue
@@ -294,4 +317,55 @@ curl -X GET http://localhost:8080/api/v1/config/obsReconnectionTimeout
 >   "key": "obsReconnectionTimeout",
 >   "value": 3000
 > }
+> ```
+
+### Plugins
+
+Relative API endpoint: `/plugins`
+
+| Method | Relative endpoint | Response | Description |
+| --- | --- | --- | --- |
+| GET | `/list` | `array<Plugin>` | Returns a list of enabled plugins. |
+
+#### Examples
+
+Returns a list of the enabled plugins:
+```bash
+curl -X GET http://localhost:8080/api/v1/plugins/list
+```
+> Response:
+> ```json
+> [
+>   {
+>     "name": "ObsPlugin",
+>     "description": "Queue items for integration with OBS",
+>     "version": "0.0.0",
+>     "icon": {
+>       "description": "file:/path/obs/icon-14.png",
+>       "width": 14,
+>       "height": 14
+>     },
+>     "tabName": "OBS",
+>     "quickAccessColor": {
+>       "value": -1708289,
+>       "falpha": 0.0
+>     }
+>   },
+>   {
+>     "name": "TextPlugin",
+>     "description": "Queue items for just displaying text or adding delay",
+>     "version": "0.0.0",
+>     "icon": {
+>       "description": "file:/path/text/icon-14.png",
+>       "width": 14,
+>       "height": 14
+>     },
+>     "tabName": "Text \u0026 Delay",
+>     "configStringSeparator": "|",
+>     "quickAccessColor": {
+>       "value": -1579033,
+>       "falpha": 0.0
+>     }
+>   }
+> ]
 > ```

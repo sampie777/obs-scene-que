@@ -21,6 +21,7 @@ object ApiServer {
         apiServletContextHandler.addServlet(QuickAccessButtonsApiServlet::class.java, "/quickAccessButtons/*")
         apiServletContextHandler.addServlet(ConfigApiServlet::class.java, "/config/*")
         apiServletContextHandler.addServlet(NotificationApiServlet::class.java, "/notifications/*")
+        apiServletContextHandler.addServlet(PluginApiServlet::class.java, "/plugins/*")
         server.handler = apiServletContextHandler
     }
 
