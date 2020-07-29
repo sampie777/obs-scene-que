@@ -43,12 +43,12 @@ class ConfigApiServletTest {
         val connection = get("${apiUrl}/obsReconnectionTimeout")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""
-            {
-              "key": "obsReconnectionTimeout",
-              "value": 3001
-            }
-        """.trimIndent(), connection.body().trim())
+        assertEquals("""{
+  "data": {
+    "key": "obsReconnectionTimeout",
+    "value": 3001
+  }
+}""".trimIndent(), connection.body().trim())
     }
 
     @Test
@@ -56,11 +56,12 @@ class ConfigApiServletTest {
         val connection = get("${apiUrl}/xx")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""
-            {
-              "key": "xx"
-            }
-        """.trimIndent(), connection.body().trim())
+        assertEquals("""{
+  "data": {
+    "key": "xx",
+    "value": null
+  }
+}""".trimIndent(), connection.body().trim())
     }
 
     @Test
@@ -69,12 +70,14 @@ class ConfigApiServletTest {
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         val body = connection.body().trim()
-        assertTrue(body.startsWith("["))
-        assertTrue(body.endsWith("]"))
+        assertTrue(body.startsWith("""{
+  "data": ["""))
+        assertTrue(body.endsWith("""]
+}"""))
         assertTrue(body.contains("""{
-    "key": "obsReconnectionTimeout",
-    "value": 3001
-  },""".trimIndent()))
+      "key": "obsReconnectionTimeout",
+      "value": 3001
+    }""".trimIndent()))
     }
 
     @Test
@@ -84,33 +87,4 @@ class ConfigApiServletTest {
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
         assertEquals("Not Found", connection.errorBody().trim())
     }
-
-//    @Test
-//    fun testPostConfigKeyValue() {
-//        val connection = URL("${apiUrl}/obsReconnectionTimeout").openConnection() as HttpURLConnection
-//        connection.requestMethod = "POST"
-//        connection.setRequestProperty("Content-Type", "application/json; utf-8")
-//        connection.setRequestProperty("Accept", "application/json")
-//        connection.doOutput = true
-//
-//        OutputStreamWriter(connection.outputStream).run {
-//            write("""
-//            {
-//              "key": "obsReconnectionTimeout",
-//              "value": 4001
-//            }
-//        """.trimIndent())
-//            flush()
-//        }
-//        connection.connect()
-//
-//        assertEquals(HttpStatus.OK_200, connection.responseCode)
-//        assertEquals("""
-//            {
-//              "key": "obsReconnectionTimeout",
-//              "value": 4001
-//            }
-//        """.trimIndent(), connection.body().trim())
-//        assertEquals(4001, Config.obsReconnectionTimeout)
-//    }
 }

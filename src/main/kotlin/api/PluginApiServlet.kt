@@ -1,12 +1,17 @@
 package api
 
 
-import jsonBuilder
 import plugins.PluginLoader
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+
+data class JsonPlugin(
+    val name: String,
+    val description: String,
+    val version: String
+)
 
 class PluginApiServlet : HttpServlet() {
     private val logger = Logger.getLogger(ConfigApiServlet::class.java.name)
@@ -25,8 +30,8 @@ class PluginApiServlet : HttpServlet() {
     private fun getList(request: HttpServletRequest, response: HttpServletResponse) {
         logger.info("Getting Plugins list")
 
-        val json = jsonBuilder().toJson(PluginLoader.allPlugins)
+        val jsonObjects = PluginLoader.allPlugins.map { JsonPlugin(it.name, it.description, it.version) }
 
-        respondWithJson(response, json)
+        respondWithJson(response, jsonObjects)
     }
 }

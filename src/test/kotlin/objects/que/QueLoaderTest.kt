@@ -111,7 +111,7 @@ class QueLoaderTest {
         Que.add(item1)
         Que.add(mockPlugin.configStringToQueItem("2"))
 
-        val json = QueLoader.queToJson()
+        val json = QueLoader.queToJsonString()
 
         assertEquals(
             """
@@ -126,7 +126,10 @@ class QueLoaderTest {
       "executeAfterPrevious": false,
       "quickAccessColor": {
         "value": -16751416,
-        "falpha": 0.0
+        "frgbvalue": null,
+        "fvalue": null,
+        "falpha": 0.0,
+        "cs": null
       },
       "data": {}
     },
@@ -135,6 +138,7 @@ class QueLoaderTest {
       "className": "QueItemMock",
       "name": "2",
       "executeAfterPrevious": false,
+      "quickAccessColor": null,
       "data": {}
     }
   ],
@@ -152,7 +156,7 @@ class QueLoaderTest {
         Que.add(QueItemMock(mockPlugin, "2"))
         Que.add(QueItemMock2(mockPlugin, "3"))
 
-        val json = QueLoader.queToJson()
+        val json = QueLoader.queToJsonString()
 
         assertEquals(
             """
@@ -165,6 +169,7 @@ class QueLoaderTest {
                   "className": "QueItemMock",
                   "name": "2",
                   "executeAfterPrevious": false,
+                  "quickAccessColor": null,
                   "data": {}
                 }
               ],

@@ -54,7 +54,9 @@ class QuickAccessButtonsApiServletTest {
         val connection = URL("${apiUrl}/list").openConnection() as HttpURLConnection
         connection.connect()
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""[]""".trimIndent(), connection.body().trim())
+        assertEquals("""{
+  "data": []
+}""".trimIndent(), connection.body().trim())
     }
 
     @Test
@@ -65,9 +67,11 @@ class QuickAccessButtonsApiServletTest {
         val connection = URL("${apiUrl}/list").openConnection() as HttpURLConnection
         connection.connect()
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""[
-  null
-]""".trimIndent(), connection.body().trim())
+        assertEquals("""{
+  "data": [
+    null
+  ]
+}""".trimIndent(), connection.body().trim())
     }
 
     @Test
@@ -75,23 +79,27 @@ class QuickAccessButtonsApiServletTest {
         val connection = URL("${apiUrl}/list").openConnection() as HttpURLConnection
         connection.connect()
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""[
-  {
-    "pluginName": "MockPlugin",
-    "className": "QueItemMock",
-    "name": "1",
-    "executeAfterPrevious": false,
-    "data": {}
-  },
-  null,
-  {
-    "pluginName": "MockPlugin",
-    "className": "QueItemMock",
-    "name": "2",
-    "executeAfterPrevious": false,
-    "data": {}
-  }
-]""".trimIndent(), connection.body().trim())
+        assertEquals("""{
+  "data": [
+    {
+      "pluginName": "MockPlugin",
+      "className": "QueItemMock",
+      "name": "1",
+      "executeAfterPrevious": false,
+      "quickAccessColor": null,
+      "data": {}
+    },
+    null,
+    {
+      "pluginName": "MockPlugin",
+      "className": "QueItemMock",
+      "name": "2",
+      "executeAfterPrevious": false,
+      "quickAccessColor": null,
+      "data": {}
+    }
+  ]
+}""".trimIndent(), connection.body().trim())
     }
 
     @Test
@@ -100,11 +108,14 @@ class QuickAccessButtonsApiServletTest {
         connection.connect()
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
-  "pluginName": "MockPlugin",
-  "className": "QueItemMock",
-  "name": "1",
-  "executeAfterPrevious": false,
-  "data": {}
+  "data": {
+    "pluginName": "MockPlugin",
+    "className": "QueItemMock",
+    "name": "1",
+    "executeAfterPrevious": false,
+    "quickAccessColor": null,
+    "data": {}
+  }
 }""".trimIndent(), connection.body().trim())
     }
 
@@ -112,7 +123,9 @@ class QuickAccessButtonsApiServletTest {
     fun testGetIndex2() {
         val connection = get("${apiUrl}/1")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""null""".trimIndent(), connection.body().trim())
+        assertEquals("""{
+  "data": null
+}""".trimMargin(), connection.body().trim())
     }
 
     @Test
@@ -120,7 +133,9 @@ class QuickAccessButtonsApiServletTest {
         val connection = get("${apiUrl}/10")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("null", connection.body().trim())
+        assertEquals("""{
+  "data": null
+}""".trimMargin(), connection.body().trim())
     }
 
     @Test
@@ -148,11 +163,14 @@ class QuickAccessButtonsApiServletTest {
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals("""{
-  "pluginName": "MockPlugin",
-  "className": "QueItemMock",
-  "name": "2",
-  "executeAfterPrevious": false,
-  "data": {}
+  "data": {
+    "pluginName": "MockPlugin",
+    "className": "QueItemMock",
+    "name": "2",
+    "executeAfterPrevious": false,
+    "quickAccessColor": null,
+    "data": {}
+  }
 }""".trimIndent(), connection.body().trim())
         assertTrue(queueItem.isActivated)
     }

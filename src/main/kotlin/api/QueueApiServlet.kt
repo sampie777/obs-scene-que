@@ -1,8 +1,8 @@
 package api
 
 
+import GUI
 import config.Config
-import jsonBuilder
 import objects.que.Que
 import objects.que.QueLoader
 import java.util.logging.Logger
@@ -54,43 +54,39 @@ class QueueApiServlet : HttpServlet() {
 
     private fun getList(response: HttpServletResponse) {
         logger.info("Getting Queue list")
-        val json = QueLoader.queToJson()
+        val json = QueLoader.queueToJsonObject()
 
         respondWithJson(response, json)
     }
 
     private fun getCurrent(response: HttpServletResponse) {
         logger.info("Getting current Queue item")
-        val currentQueueItemJson = Que.current()?.toJson()
-        val json = jsonBuilder().toJson(currentQueueItemJson)
+        val queueItemJson = Que.current()?.toJson()
 
-        respondWithJson(response, json)
+        respondWithJson(response, queueItemJson)
     }
 
     private fun getPrevious(response: HttpServletResponse) {
         logger.info("Getting previous Queue item")
-        val currentQueueItemJson = Que.previewPrevious()?.toJson()
-        val json = jsonBuilder().toJson(currentQueueItemJson)
+        val queueItemJson = Que.previewPrevious()?.toJson()
 
-        respondWithJson(response, json)
+        respondWithJson(response, queueItemJson)
     }
 
     private fun getNext(response: HttpServletResponse) {
         logger.info("Getting next Queue item")
-        val currentQueueItemJson = Que.previewNext()?.toJson()
-        val json = jsonBuilder().toJson(currentQueueItemJson)
+        val queueItemJson = Que.previewNext()?.toJson()
 
-        respondWithJson(response, json)
+        respondWithJson(response, queueItemJson)
     }
 
     private fun getIndex(response: HttpServletResponse, params: List<String>) {
         val index = params[0].toInt()
         logger.info("Getting Queue index: $index")
 
-        val currentQueueItemJson = Que.getAt(index)?.toJson()
-        val json = jsonBuilder().toJson(currentQueueItemJson)
+        val queueItemJson = Que.getAt(index)?.toJson()
 
-        respondWithJson(response, json)
+        respondWithJson(response, queueItemJson)
     }
 
     private fun postCurrent(response: HttpServletResponse) {
@@ -149,7 +145,7 @@ class QueueApiServlet : HttpServlet() {
 
         if (jsonQueueItem == null) {
             logger.warning("Failed to convert json to jsonQueueItem. Json: $json")
-            respondWithJson(response, "null")
+            respondWithJson(response, null)
             return
         }
 
@@ -157,7 +153,7 @@ class QueueApiServlet : HttpServlet() {
 
         if (queueItem == null) {
             logger.warning("Failed to create Queue Item")
-            respondWithJson(response, "null")
+            respondWithJson(response, null)
             return
         }
 
@@ -169,7 +165,9 @@ class QueueApiServlet : HttpServlet() {
             Que.add(index, queueItem)
         }
 
-        respondWithJson(response, jsonBuilder().toJson(queueItem.toJson()))
+        GUI.refreshQueItems()
+
+        respondWithJson(response, queueItem.toJson())
     }
 
     private fun deleteIndex(request: HttpServletRequest, response: HttpServletResponse, params: List<String>) {
@@ -182,6 +180,8 @@ class QueueApiServlet : HttpServlet() {
             return
         }
 
-        respondWithJson(response, jsonBuilder().toJson(queueItem.toJson()))
+        GUI.refreshQueItems()
+
+        respondWithJson(response, queueItem.toJson())
     }
 }

@@ -4,6 +4,8 @@ When OBS Scene Queue runs and the configuration property `httpApiServerEnabled` 
 
 The root endpoint for the API is: `/api/v1`. The endpoints below are relative to this endpoint. These endpoints may return any of the described objects below.
 
+Responses are following the [JSON API](https://jsonapi.org/) guidelines, but due to limited implementation, errors will not be shown. Instead, a `"data": null` response will be given. The error messages can be retrieved from the *Notifications* endpoint. 
+
 ## Objects
 
 ### Queue
@@ -90,19 +92,13 @@ JSON:
 | `name` | string | Internal plugin name |
 | `description` | string | Description of the plugin |
 | `version` | string | Version of the plugin |
-| `icon` | object? | Information about the plugins icon. May be `null`. |
 
 JSON: 
 ```json
 {
   "name": "string",
   "description": "string",
-  "version": "string",
-  "icon": {
-    "description": "string",
-    "width": number,
-    "height": number
-  }
+  "version": "string"
 }
 ```
 
@@ -136,32 +132,37 @@ curl -X GET http://localhost:8080/api/v1/queue/list
 > Response:
 > ```json
 > {
->   "name": "default-que",
->   "applicationVersion": "2.6.0",
->   "queueItems": [
->     {
->       "pluginName": "MockPlugin",
->       "className": "QueItemMock",
->       "name": "1",
->       "executeAfterPrevious": false,
->       "data": {}
->     },
->     {
->       "pluginName": "MockPlugin",
->       "className": "QueItemMock",
->       "name": "2",
->       "executeAfterPrevious": false,
->       "data": {}
->     },
->     {
->       "pluginName": "MockPlugin",
->       "className": "QueItemMock",
->       "name": "3",
->       "executeAfterPrevious": false,
->       "data": {}
->     }
->   ],
->   "apiVersion": 1
+>   "data": {
+>     "name": "default-que",
+>     "applicationVersion": "2.6.0",
+>     "queueItems": [
+>       {
+>         "pluginName": "MockPlugin",
+>         "className": "QueItemMock",
+>         "name": "1",
+>         "executeAfterPrevious": false,
+>         "quickAccessColor": null,
+>         "data": {}
+>       },
+>       {
+>         "pluginName": "MockPlugin",
+>         "className": "QueItemMock",
+>         "name": "2",
+>         "executeAfterPrevious": false,
+>         "quickAccessColor": null,
+>         "data": {}
+>       },
+>       {
+>         "pluginName": "MockPlugin",
+>         "className": "QueItemMock",
+>         "name": "3",
+>         "executeAfterPrevious": false,
+>         "quickAccessColor": null,
+>         "data": {}
+>       }
+>     ],
+>     "apiVersion": 1
+>   }
 > }
 > ```
 
@@ -172,11 +173,14 @@ curl -X POST http://localhost:8080/api/v1/queue/next
 > Response:
 > ```json
 > {
->   "pluginName": "MockPlugin",
->   "className": "QueItemMock",
->   "name": "3",
->   "executeAfterPrevious": false,
->   "data": {}
+>   "data": {
+>     "pluginName": "MockPlugin",
+>     "className": "QueItemMock",
+>     "name": "3",
+>     "executeAfterPrevious": false,
+>     "quickAccessColor": null,
+>     "data": {}
+>   }
 > }
 > ```
 
@@ -197,11 +201,14 @@ curl -X POST http://localhost:8080/api/v1/queue/add -d "{\"pluginName\": \"MockP
 > Response:
 > ```json
 > {
->   "pluginName": "MockPlugin",
->   "className": "QueItemMock",
->   "name": "I'm new :)",
->   "executeAfterPrevious": false,
->   "data": {}
+>   "data": {
+>     "pluginName": "MockPlugin",
+>     "className": "QueItemMock",
+>     "name": "I'm new :)",
+>     "executeAfterPrevious": false,
+>     "quickAccessColor": null,
+>     "data": {}
+>   }
 > }
 > ```
 
@@ -223,23 +230,27 @@ curl -X GET http://localhost:8080/api/v1/quickAccessButtons/list
 ```
 > Response:
 > ```json
-> [
->   {
->     "pluginName": "MockPlugin",
->     "className": "QueItemMock",
->     "name": "1",
->     "executeAfterPrevious": false,
->     "data": {}
->   },
->   null,
->   {
->     "pluginName": "MockPlugin",
->     "className": "QueItemMock",
->     "name": "2",
->     "executeAfterPrevious": false,
->     "data": {}
->   }
-> ]
+> {
+>   "data": [
+>     {
+>       "pluginName": "MockPlugin",
+>       "className": "QueItemMock",
+>       "name": "1",
+>       "executeAfterPrevious": false,
+>       "quickAccessColor": null,
+>       "data": {}
+>     },
+>     null,
+>     {
+>       "pluginName": "MockPlugin",
+>       "className": "QueItemMock",
+>       "name": "2",
+>       "executeAfterPrevious": false,
+>       "quickAccessColor": null,
+>       "data": {}
+>     }
+>   ]
+> }
 > ```
 
 Execute the first Quick Access Button:
@@ -249,11 +260,14 @@ curl -X POST http://localhost:8080/api/v1/quickAccessButtons/0
 > Response:
 > ```json
 > {
->   "pluginName": "MockPlugin",
->   "className": "QueItemMock",
->   "name": "2",
->   "executeAfterPrevious": false,
->   "data": {}
+>   "data": {
+>     "pluginName": "MockPlugin",
+>     "className": "QueItemMock",
+>     "name": "2",
+>     "executeAfterPrevious": false,
+>     "quickAccessColor": null,
+>     "data": {}
+>   }
 > }
 > ```
 
@@ -277,9 +291,11 @@ curl -X GET http://localhost:8080/api/v1/notifications/last
 > Response:
 > ```json
 > {
->   "timestamp": "2020-07-26T13:38:27.046+0200",
->   "message": "Some thing went wrong during the test",
->   "subject": "Test Error"
+>   "data": {
+>     "timestamp": "2020-07-26T13:38:27.046+0200",
+>     "message": "Some thing went wrong during the test",
+>     "subject": "Test Error"
+>   }
 > }
 > ```
 
@@ -290,9 +306,11 @@ curl -X POST http://localhost:8080/api/v1/notifications/add?popup=true -d "{\"ti
 > Response:
 > ```json
 > {
->   "timestamp": "2020-07-26T13:38:27.046+0200",
->   "message": "Some thing went wrong during the test",
->   "subject": "Test Error"
+>   "data": {
+>     "timestamp": "2020-07-26T13:38:27.046+0200",
+>     "message": "Some thing went wrong during the test",
+>     "subject": "Test Error"
+>   }
 > }
 > ```
 
@@ -314,8 +332,10 @@ curl -X GET http://localhost:8080/api/v1/config/obsReconnectionTimeout
 > Response:
 > ```json
 > {
->   "key": "obsReconnectionTimeout",
->   "value": 3000
+>   "data": {
+>     "key": "obsReconnectionTimeout",
+>     "value": 3000
+>   }
 > }
 > ```
 
@@ -335,37 +355,18 @@ curl -X GET http://localhost:8080/api/v1/plugins/list
 ```
 > Response:
 > ```json
-> [
->   {
->     "name": "ObsPlugin",
->     "description": "Queue items for integration with OBS",
->     "version": "0.0.0",
->     "icon": {
->       "description": "file:/path/obs/icon-14.png",
->       "width": 14,
->       "height": 14
+> {
+>   "data": [
+>     {
+>       "name": "ObsPlugin",
+>       "description": "Queue items for integration with OBS",
+>       "version": "0.0.0"
 >     },
->     "tabName": "OBS",
->     "quickAccessColor": {
->       "value": -1708289,
->       "falpha": 0.0
+>     {
+>       "name": "TextPlugin",
+>       "description": "Queue items for just displaying text or adding delay",
+>       "version": "0.0.0"
 >     }
->   },
->   {
->     "name": "TextPlugin",
->     "description": "Queue items for just displaying text or adding delay",
->     "version": "0.0.0",
->     "icon": {
->       "description": "file:/path/text/icon-14.png",
->       "width": 14,
->       "height": 14
->     },
->     "tabName": "Text \u0026 Delay",
->     "configStringSeparator": "|",
->     "quickAccessColor": {
->       "value": -1579033,
->       "falpha": 0.0
->     }
->   }
-> ]
+>   ]
+> }
 > ```

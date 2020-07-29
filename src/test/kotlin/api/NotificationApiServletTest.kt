@@ -50,23 +50,25 @@ class NotificationApiServletTest {
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals(
-            """[
-  {
-    "timestamp": "${Notifications.list[0].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
-    "message": "message 1",
-    "subject": "title 1"
-  },
-  {
-    "timestamp": "${Notifications.list[1].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
-    "message": "message 2",
-    "subject": "title 2"
-  },
-  {
-    "timestamp": "${Notifications.list[2].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
-    "message": "message 3",
-    "subject": "title 3"
-  }
-]""".trimIndent(), connection.body().trim()
+            """{
+  "data": [
+    {
+      "timestamp": "${Notifications.list[0].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
+      "message": "message 1",
+      "subject": "title 1"
+    },
+    {
+      "timestamp": "${Notifications.list[1].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
+      "message": "message 2",
+      "subject": "title 2"
+    },
+    {
+      "timestamp": "${Notifications.list[2].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
+      "message": "message 3",
+      "subject": "title 3"
+    }
+  ]
+}""".trimIndent(), connection.body().trim()
         )
     }
 
@@ -76,7 +78,9 @@ class NotificationApiServletTest {
         val connection = get("${apiUrl}/list")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("[]", connection.body().trim())
+        assertEquals("""{
+  "data": []
+}""", connection.body().trim())
     }
 
     @Test
@@ -85,18 +89,20 @@ class NotificationApiServletTest {
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals(
-            """[
-  {
-    "timestamp": "${Notifications.list[1].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
-    "message": "message 2",
-    "subject": "title 2"
-  },
-  {
-    "timestamp": "${Notifications.list[2].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
-    "message": "message 3",
-    "subject": "title 3"
-  }
-]""".trimIndent(), connection.body().trim()
+            """{
+  "data": [
+    {
+      "timestamp": "${Notifications.list[1].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
+      "message": "message 2",
+      "subject": "title 2"
+    },
+    {
+      "timestamp": "${Notifications.list[2].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
+      "message": "message 3",
+      "subject": "title 3"
+    }
+  ]
+}""".trimIndent(), connection.body().trim()
         )
     }
 
@@ -107,9 +113,11 @@ class NotificationApiServletTest {
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals(
             """{
-  "timestamp": "${Notifications.list[2].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
-  "message": "message 3",
-  "subject": "title 3"
+  "data": {
+    "timestamp": "${Notifications.list[2].timestamp.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}",
+    "message": "message 3",
+    "subject": "title 3"
+  }
 }""".trimIndent(), connection.body().trim()
         )
     }
@@ -121,7 +129,9 @@ class NotificationApiServletTest {
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals(
-            """null""".trimIndent(), connection.body().trim()
+            """{
+  "data": null
+}""".trimIndent(), connection.body().trim()
         )
     }
 
@@ -168,13 +178,13 @@ class NotificationApiServletTest {
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals(
-            """
-            {
-              "timestamp": "2020-07-26T13:38:27.046+0200",
-              "message": "message new",
-              "subject": "title new"
-            }
-        """.trimIndent(), connection.body().trim()
+            """{
+  "data": {
+    "timestamp": "2020-07-26T13:38:27.046+0200",
+    "message": "message new",
+    "subject": "title new"
+  }
+}""".trimIndent(), connection.body().trim()
         )
         assertEquals(1, Notifications.list.size)
         assertEquals(1, Notifications.unreadNotifications)
@@ -200,13 +210,13 @@ class NotificationApiServletTest {
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
         assertEquals(
-            """
-            {
-              "timestamp": "2020-07-26T13:38:27.046+0200",
-              "message": "message new",
-              "subject": "title new"
-            }
-        """.trimIndent(), connection.body().trim()
+            """{
+  "data": {
+    "timestamp": "2020-07-26T13:38:27.046+0200",
+    "message": "message new",
+    "subject": "title new"
+  }
+}""".trimIndent(), connection.body().trim()
         )
         assertEquals(1, Notifications.list.size)
         assertEquals(0, Notifications.unreadNotifications)

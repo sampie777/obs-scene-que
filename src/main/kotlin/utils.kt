@@ -112,5 +112,6 @@ fun Date.format(format: String): String? = SimpleDateFormat(format).format(this)
 internal fun jsonBuilder() =
     GsonBuilder()
         .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+        .serializeNulls()
         .setPrettyPrinting()
         .create()

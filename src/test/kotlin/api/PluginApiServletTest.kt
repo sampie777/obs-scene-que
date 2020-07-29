@@ -1,8 +1,9 @@
 package api
 
 import com.google.gson.Gson
-import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import config.Config
+import mocks.MockPlugin
 import org.eclipse.jetty.http.HttpStatus
 import org.junit.AfterClass
 import org.junit.BeforeClass
@@ -54,9 +55,34 @@ class PluginApiServletTest {
         assertEquals(HttpStatus.OK_200, connection.responseCode)
 
         val body = connection.body()
-        val obj = Gson().fromJson(body, JsonArray::class.java)
-        assertEquals(2, obj.size())
-        assertTrue(obj[0].asJsonObject.get("name").asString in listOf("ObsPlugin", "TextPlugin"))
-        assertTrue(obj[1].asJsonObject.get("name").asString in listOf("ObsPlugin", "TextPlugin"))
+        val obj = Gson().fromJson(body, JsonObject::class.java)
+        val array = obj.get("data").asJsonArray
+        assertEquals(2, array.size())
+        assertTrue(array[0].asJsonObject.get("name").asString in listOf("ObsPlugin", "TextPlugin"))
+        assertTrue(array[1].asJsonObject.get("name").asString in listOf("ObsPlugin", "TextPlugin"))
+    }
+
+    @Test
+    fun testGetListWithOnePlugin() {
+        PluginLoader.allPlugins.clear()
+        val mockPlugin = MockPlugin()
+        PluginLoader.allPlugins.add(mockPlugin)
+
+        val connection = get("${apiUrl}/list")
+
+        assertEquals(HttpStatus.OK_200, connection.responseCode)
+
+        val body = connection.body().trim()
+        val obj = Gson().fromJson(body, JsonObject::class.java)
+        val array = obj.get("data").asJsonArray
+        assertEquals("""{
+  "data": [
+    {
+      "name": "MockPlugin",
+      "description": "description",
+      "version": "0.0.0"
+    }
+  ]
+}""", body)
     }
 }

@@ -2,7 +2,6 @@ package api
 
 
 import com.google.gson.Gson
-import jsonBuilder
 import objects.notifications.Notification
 import objects.notifications.Notifications
 import java.util.logging.Logger
@@ -47,23 +46,21 @@ class NotificationApiServlet : HttpServlet() {
         } else {
             Notifications.list
         }
-        val json = jsonBuilder().toJson(notifications)
 
-        respondWithJson(response, json)
+        respondWithJson(response, notifications)
     }
 
     private fun getLast(response: HttpServletResponse) {
         logger.info("Getting last Notification")
 
         if (Notifications.list.isEmpty()) {
-            respondWithJson(response, "null")
+            respondWithJson(response, null)
             return
         }
 
         val notification = Notifications.list.last()
-        val json = jsonBuilder().toJson(notification)
 
-        respondWithJson(response, json)
+        respondWithJson(response, notification)
     }
 
     private fun postMarkAllAsRead(request: HttpServletRequest, response: HttpServletResponse) {
@@ -86,6 +83,6 @@ class NotificationApiServlet : HttpServlet() {
             Notifications.add(notification, markAsRead = markAsRead)
         }
 
-        respondWithJson(response, jsonBuilder().toJson(notification))
+        respondWithJson(response, notification)
     }
 }

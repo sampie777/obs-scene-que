@@ -1,7 +1,6 @@
 package api
 
 
-import jsonBuilder
 import objects.State
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
@@ -35,9 +34,8 @@ class QuickAccessButtonsApiServlet : HttpServlet() {
     private fun getList(response: HttpServletResponse) {
         logger.info("Getting QuickAccessButtons list")
         val queueItems = State.quickAccessButtons.map { it.getQueItem()?.toJson() }
-        val json = jsonBuilder().toJson(queueItems)
 
-        respondWithJson(response, json)
+        respondWithJson(response, queueItems)
     }
 
     private fun getIndex(response: HttpServletResponse, params: List<String>) {
@@ -46,14 +44,13 @@ class QuickAccessButtonsApiServlet : HttpServlet() {
 
         val button = State.quickAccessButtons.getOrNull(index)
         if (button?.getQueItem() == null) {
-            respondWithJson(response, "null")
+            respondWithJson(response, null)
             return
         }
 
         val queueItem = button.getQueItem()!!.toJson()
-        val json = jsonBuilder().toJson(queueItem)
 
-        respondWithJson(response, json)
+        respondWithJson(response, queueItem)
     }
 
     private fun postIndex(response: HttpServletResponse, params: List<String>) {
@@ -62,7 +59,7 @@ class QuickAccessButtonsApiServlet : HttpServlet() {
 
         if (index >= State.quickAccessButtons.size) {
             logger.info("Quick Access Button list out of bounds")
-            respondWithJson(response, "null")
+            respondWithJson(response, null)
             return
         }
 

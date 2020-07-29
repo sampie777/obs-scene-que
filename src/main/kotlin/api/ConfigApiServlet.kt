@@ -2,7 +2,6 @@ package api
 
 
 import config.Config
-import jsonBuilder
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
@@ -43,9 +42,8 @@ class ConfigApiServlet : HttpServlet() {
                 value = it.get(Config)
             )
         }
-        val json = jsonBuilder().toJson(pairs)
 
-        respondWithJson(response, json)
+        respondWithJson(response, pairs)
     }
 
     private fun getKeyValue(response: HttpServletResponse, params: List<String>) {
@@ -55,9 +53,8 @@ class ConfigApiServlet : HttpServlet() {
         val value = Config.get(key)
 
         val jsonObject = JsonConfigPair(key, value)
-        val json = jsonBuilder().toJson(jsonObject)
 
-        respondWithJson(response, json)
+        respondWithJson(response, jsonObject)
     }
 
 //    private fun postKeyValue(request: HttpServletRequest, response: HttpServletResponse, params: List<String>) {
@@ -70,7 +67,7 @@ class ConfigApiServlet : HttpServlet() {
 //
 //        if (key != pair.key) {
 //            logger.info("Request parameter key doesn't match request body key")
-//            respondWithJson(response, "null")
+//            respondWithJson(response, null)
 //            return
 //        }
 //

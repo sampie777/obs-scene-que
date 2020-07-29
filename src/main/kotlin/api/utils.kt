@@ -1,5 +1,6 @@
 package api
 
+import jsonBuilder
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.util.logging.Logger
@@ -8,11 +9,18 @@ import javax.servlet.http.HttpServletResponse
 
 private val logger: Logger = Logger.getLogger("utils")
 
+data class JsonErrorObject(val title: String, val detail: String, val status: Int)
+
+data class JsonSuccessResponse(val data: Any?)
+data class JsonErrorResponse(val errors: List<JsonErrorObject>)
+
 fun respondWithJson(
     response: HttpServletResponse,
-    json: String,
+    data: Any?,
     status: Int = HttpServletResponse.SC_OK
 ) {
+    val json = jsonBuilder().toJson(JsonSuccessResponse(data = data))
+
     response.status = status
     response.contentType = "application/json"
     response.writer.println(json)

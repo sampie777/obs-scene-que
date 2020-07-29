@@ -93,7 +93,7 @@ internal object QueLoader {
         Que.name = File(Config.queFile).nameWithoutExtension
 
         val json = try {
-            queToJson()
+            queToJsonString()
         } catch (e: Exception) {
             logger.warning("Failed to convert Queue to json")
             e.printStackTrace()
@@ -122,7 +122,19 @@ internal object QueLoader {
         lastSavedData = json
     }
 
-    fun queToJson(): String {
+    fun queToJsonString(): String {
+        val jsonQueue = queueToJsonObject()
+
+        try {
+            return jsonBuilder().toJson(jsonQueue)
+        } catch (e: Exception) {
+            logger.warning("Failed to convert JsonQueue.Queue to string: $jsonQueue")
+            e.printStackTrace()
+            throw e
+        }
+    }
+
+    fun queueToJsonObject(): JsonQueue.Queue {
         val jsonQueItems = Que.getList().mapNotNull {
             try {
                 it.toJson()
@@ -139,14 +151,7 @@ internal object QueLoader {
             applicationVersion = Que.applicationVersion,
             queueItems = jsonQueItems
         )
-
-        try {
-            return jsonBuilder().toJson(jsonQueue)
-        } catch (e: Exception) {
-            logger.warning("Failed to convert JsonQueue.Queue to string: $jsonQueue")
-            e.printStackTrace()
-            throw e
-        }
+        return jsonQueue
     }
 
     fun fromJson(json: String): Boolean {
