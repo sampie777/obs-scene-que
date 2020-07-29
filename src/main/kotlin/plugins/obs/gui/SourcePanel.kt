@@ -24,6 +24,8 @@ class SourcePanel(private val plugin: ObsPlugin) : JPanel(), Refreshable {
     init {
         initGui()
         GUI.register(this)
+
+        refreshScenes()
     }
 
     private fun initGui() {
