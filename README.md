@@ -90,7 +90,9 @@ List of hotkeys:
 
 #### Web Control HTTP API
 
-The OBS Scene Queue application can also be controlled by its HTTP API. For more info about using this API, see the [API documentation](docs/API.md).
+The OBS Scene Queue application can also be controlled by its build in webserver. This server can be enabled in the settings. Application restart is required after enabling/disabling the server. 
+
+For more info about using this server, see the [API documentation](docs/API.md).
 
 #### Network Scanner
 
