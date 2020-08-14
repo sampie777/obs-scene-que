@@ -116,7 +116,8 @@
         post(apiBaseUrl + "/queue/next").then(updateState);
     });
     currentButton.addEventListener("click", () => {
-        post(apiBaseUrl + "/queue/current").then(updateState);
+        console.log("Action for 'Current' is disabled.");
+        // post(apiBaseUrl + "/queue/current").then(updateState);
     });
     previousButton.addEventListener("click", () => {
         post(apiBaseUrl + "/queue/previous").then(updateState);

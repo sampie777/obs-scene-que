@@ -201,7 +201,7 @@ object Que {
         } catch (e: Exception) {
             logger.warning("Exception occurred when activating current queue item: ${item?.name}")
             e.printStackTrace()
-            Notifications.add("Failed to activate current queue item '${item?.name}'", "Queue")
+            Notifications.add("Failed to activate current queue item '${item?.name}': ${e.localizedMessage}", "Queue")
         }
     }
 
@@ -212,7 +212,7 @@ object Que {
         } catch (e: Exception) {
             logger.warning("Exception occurred when activating current queue item as previous: ${item?.name}")
             e.printStackTrace()
-            Notifications.add("Failed to activate current queue item '${item?.name}'", "Queue")
+            Notifications.add("Failed to activate current queue item '${item?.name}': ${e.localizedMessage}", "Queue")
         }
     }
 
@@ -223,7 +223,7 @@ object Que {
         } catch (e: Exception) {
             logger.warning("Failed to deactivate current queue item: ${item?.name}")
             e.printStackTrace()
-            Notifications.add("Failed to deactivate current queue item '${item?.name}'", "Queue")
+            Notifications.add("Failed to deactivate current queue item '${item?.name}': ${e.localizedMessage}", "Queue")
         }
     }
 
@@ -234,7 +234,7 @@ object Que {
         } catch (e: Exception) {
             logger.warning("Failed to deactivate current queue item as previous: ${item?.name}")
             e.printStackTrace()
-            Notifications.add("Failed to deactivate current queue item '${item?.name}'", "Queue")
+            Notifications.add("Failed to deactivate current queue item '${item?.name}': ${e.localizedMessage}", "Queue")
         }
     }
 
