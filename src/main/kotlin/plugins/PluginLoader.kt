@@ -20,7 +20,7 @@ object PluginLoader {
     private val logger = Logger.getLogger(PluginLoader.toString())
 
     private val pluginDirectory = Config.pluginDirectory
-    private val internalPluginClasses = listOf(
+    val internalPluginClasses = listOf(
         "/plugins/obs/ObsPlugin",
         "/plugins/text/TextPlugin",
         "/plugins/http/HttpPlugin"
@@ -84,8 +84,15 @@ object PluginLoader {
     }
 
     private fun getExternalPluginFiles(): Array<URL?> {
-        val pluginFiles = File(pluginDirectory).listFiles { file -> file.name.endsWith(".jar") }
-            ?: return emptyArray()
+        var pluginFiles = File(pluginDirectory).listFiles { file -> file.name.endsWith(".jar") }
+            ?: emptyArray()
+
+        pluginFiles += externalPluginJars
+
+        if (pluginFiles.isEmpty()) {
+            logger.info("No external plugin jars found")
+            return emptyArray()
+        }
 
         logger.info("External jar files found in plugin dir: " + pluginFiles.joinToString { it.name })
 
