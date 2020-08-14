@@ -13,6 +13,7 @@ data class JsonPlugin(
     val version: String
 )
 
+@Suppress("UNUSED_PARAMETER")
 class PluginApiServlet : HttpServlet() {
     private val logger = Logger.getLogger(ConfigApiServlet::class.java.name)
 

@@ -73,8 +73,6 @@ class PluginApiServletTest {
         assertEquals(HttpStatus.OK_200, connection.responseCode)
 
         val body = connection.body().trim()
-        val obj = Gson().fromJson(body, JsonObject::class.java)
-        val array = obj.get("data").asJsonArray
         assertEquals("""{
   "data": [
     {

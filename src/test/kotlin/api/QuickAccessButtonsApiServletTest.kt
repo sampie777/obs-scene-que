@@ -14,6 +14,7 @@ import java.net.URL
 import kotlin.test.*
 
 
+@Suppress("DEPRECATION")
 class QuickAccessButtonsApiServletTest {
     companion object {
         private var apiRootEndpoint: String = "/quickAccessButtons"

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+@Suppress("UNUSED_PARAMETER")
 class QueueApiServlet : HttpServlet() {
     private val logger = Logger.getLogger(QueueApiServlet::class.java.name)
 

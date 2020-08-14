@@ -14,6 +14,7 @@ import java.net.ServerSocket
 import kotlin.test.*
 
 
+@Suppress("DEPRECATION")
 class QueueApiServletTest {
     companion object {
         private var apiRootEndpoint: String = "/queue"
@@ -87,7 +88,8 @@ class QueueApiServletTest {
     fun testGetList() {
         val connection = get("${apiUrl}/list")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "name": "default-que",
     "applicationVersion": "${ApplicationInfo.version}",
@@ -119,14 +121,16 @@ class QueueApiServletTest {
     ],
     "apiVersion": 1
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
     }
 
     @Test
     fun testGetCurrent() {
         val connection = get("${apiUrl}/current")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -135,14 +139,16 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
     }
 
     @Test
     fun testGetPrevious() {
         val connection = get("${apiUrl}/previous")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -151,14 +157,16 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
     }
 
     @Test
     fun testGetNext() {
         val connection = get("${apiUrl}/next")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -167,14 +175,16 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
     }
 
     @Test
     fun testGetIndex() {
         val connection = get("${apiUrl}/1")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -183,16 +193,19 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
     }
 
     @Test
     fun testGetIndexNotFound() {
         val connection = get("${apiUrl}/10")
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": null
-}""".trimMargin(), connection.body().trim())
+}""".trimMargin(), connection.body().trim()
+        )
     }
 
     @Test
@@ -203,7 +216,8 @@ class QueueApiServletTest {
         val connection = post("${apiUrl}/current")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -212,7 +226,8 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
         assertTrue(queueItem.isActivated)
     }
 
@@ -227,7 +242,8 @@ class QueueApiServletTest {
         val connection = post("${apiUrl}/next")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -236,7 +252,8 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
         assertFalse(queueItemCurrent.isActivated)
         assertTrue(queueItemCurrent.isDeactivated)
         assertTrue(queueItemNext.isActivated)
@@ -255,7 +272,8 @@ class QueueApiServletTest {
         val connection = post("${apiUrl}/2")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -264,7 +282,8 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
         assertEquals(2, Que.currentIndex())
 
         assertFalse(queueItemCurrent.isActivated)
@@ -292,7 +311,8 @@ class QueueApiServletTest {
         )
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -301,7 +321,8 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
         assertEquals(4, Que.size())
         assertEquals(1, Que.currentIndex())
         val queItem = Que.getAt(3)!!
@@ -327,7 +348,8 @@ class QueueApiServletTest {
         )
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -336,7 +358,8 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
         assertEquals(4, Que.size())
         assertEquals(2, Que.currentIndex())
         val queItem = Que.getAt(1)!!
@@ -362,9 +385,11 @@ class QueueApiServletTest {
         )
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": null
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
         assertEquals(3, Que.size())
         assertEquals(1, Que.currentIndex())
         assertEquals(1, Notifications.unreadNotifications)
@@ -380,9 +405,11 @@ class QueueApiServletTest {
         )
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": null
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
         assertEquals(3, Que.size())
         assertEquals(1, Que.currentIndex())
         assertEquals(1, Notifications.unreadNotifications)
@@ -394,7 +421,8 @@ class QueueApiServletTest {
         val connection = delete("${apiUrl}/1")
 
         assertEquals(HttpStatus.OK_200, connection.responseCode)
-        assertEquals("""{
+        assertEquals(
+            """{
   "data": {
     "pluginName": "MockPlugin",
     "className": "QueItemMock",
@@ -403,7 +431,8 @@ class QueueApiServletTest {
     "quickAccessColor": null,
     "data": {}
   }
-}""".trimIndent(), connection.body().trim())
+}""".trimIndent(), connection.body().trim()
+        )
         assertEquals(2, Que.size())
     }
 
