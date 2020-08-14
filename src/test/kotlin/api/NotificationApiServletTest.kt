@@ -140,7 +140,7 @@ class NotificationApiServletTest {
         val connection = get("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
-        assertEquals("Not Found", connection.errorBody().trim())
+        assertEquals("Not Found", connection.errorBody()?.trim())
     }
 
     @Test
@@ -148,7 +148,7 @@ class NotificationApiServletTest {
         val connection = post("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
-        assertEquals("Not Found", connection.errorBody().trim())
+        assertEquals("Not Found", connection.errorBody()?.trim())
     }
 
     @Test

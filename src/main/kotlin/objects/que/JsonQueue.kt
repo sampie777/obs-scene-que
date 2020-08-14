@@ -16,7 +16,7 @@ class JsonQueue {
         val name: String,
         val executeAfterPrevious: Boolean,
         val quickAccessColor: Color?,
-        val data: HashMap<String, String>
+        val data: HashMap<String, String?>
     ) {
         override fun toString(): String = "JsonQueue.QueueItem[pluginName=$pluginName; className=$className; name=$name]"
     }

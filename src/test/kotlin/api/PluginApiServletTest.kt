@@ -44,8 +44,8 @@ class PluginApiServletTest {
         PluginLoader.loadInternalPlugins()
 
         PluginLoader.enableAll()
-        assertEquals(2, PluginLoader.allPlugins.size)
-        assertEquals(2, PluginLoader.queItemPlugins.size)
+        assertEquals(PluginLoader.internalPluginClasses.size, PluginLoader.allPlugins.size)
+        assertEquals(PluginLoader.internalPluginClasses.size, PluginLoader.queItemPlugins.size)
     }
 
     @Test
@@ -57,7 +57,7 @@ class PluginApiServletTest {
         val body = connection.body()
         val obj = Gson().fromJson(body, JsonObject::class.java)
         val array = obj.get("data").asJsonArray
-        assertEquals(2, array.size())
+        assertEquals(PluginLoader.allPlugins.size, array.size())
         assertTrue(array[0].asJsonObject.get("name").asString in listOf("ObsPlugin", "TextPlugin"))
         assertTrue(array[1].asJsonObject.get("name").asString in listOf("ObsPlugin", "TextPlugin"))
     }

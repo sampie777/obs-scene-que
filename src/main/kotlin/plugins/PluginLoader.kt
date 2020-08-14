@@ -22,8 +22,11 @@ object PluginLoader {
     private val pluginDirectory = Config.pluginDirectory
     private val internalPluginClasses = listOf(
         "/plugins/obs/ObsPlugin",
-        "/plugins/text/TextPlugin"
+        "/plugins/text/TextPlugin",
+        "/plugins/http/HttpPlugin"
     )
+    private val externalPluginJars: Array<File> =
+        arrayOf()
     private const val pluginEntryFileExtensionName = "Plugin.class"
 
     // Available plugins

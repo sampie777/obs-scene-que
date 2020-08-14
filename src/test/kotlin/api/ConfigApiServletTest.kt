@@ -85,6 +85,6 @@ class ConfigApiServletTest {
         val connection = post("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
-        assertEquals("Not Found", connection.errorBody().trim())
+        assertEquals("Not Found", connection.errorBody()?.trim())
     }
 }

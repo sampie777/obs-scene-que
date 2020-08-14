@@ -12,7 +12,7 @@ class PluginLoaderTest {
 
         PluginLoader.loadInternalPlugins()
 
-        assertEquals(2, PluginLoader.allPlugins.size)
+        assertEquals(PluginLoader.internalPluginClasses.size, PluginLoader.allPlugins.size)
         assertEquals(0, PluginLoader.queItemPlugins.size)
     }
 
@@ -24,7 +24,7 @@ class PluginLoaderTest {
 
         PluginLoader.enableAll()
 
-        assertEquals(2, PluginLoader.allPlugins.size)
-        assertEquals(2, PluginLoader.queItemPlugins.size)
+        assertEquals(PluginLoader.internalPluginClasses.size, PluginLoader.allPlugins.size)
+        assertEquals(PluginLoader.internalPluginClasses.size, PluginLoader.queItemPlugins.size)
     }
 }

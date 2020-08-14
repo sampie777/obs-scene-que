@@ -65,7 +65,7 @@ class QueueApiServletTest {
         val connection = get("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
-        assertEquals("Not Found", connection.errorBody().trim())
+        assertEquals("Not Found", connection.errorBody()?.trim())
     }
 
     @Test
@@ -73,7 +73,7 @@ class QueueApiServletTest {
         val connection = post("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
-        assertEquals("Not Found", connection.errorBody().trim())
+        assertEquals("Not Found", connection.errorBody()?.trim())
     }
 
     @Test
@@ -81,7 +81,7 @@ class QueueApiServletTest {
         val connection = delete("${apiUrl}/x")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
-        assertEquals("Not Found", connection.errorBody().trim())
+        assertEquals("Not Found", connection.errorBody()?.trim())
     }
 
     @Test
@@ -442,7 +442,7 @@ class QueueApiServletTest {
         val connection = delete("${apiUrl}/10")
 
         assertEquals(HttpStatus.NOT_FOUND_404, connection.responseCode)
-        assertEquals("Not Found", connection.errorBody().trim())
+        assertEquals("Not Found", connection.errorBody()?.trim())
         assertEquals(3, Que.size())
     }
 }
