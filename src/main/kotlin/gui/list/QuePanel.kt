@@ -67,29 +67,23 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
         list.cellRenderer = QueListCellRenderer()
         list.background = Theme.get.QUE_LIST_BACKGROUND_COLOR
 
-        list.addKeyListener(QueListKeyListener(list))
+        list.addKeyListener(QueListKeyListener(this, list))
         list.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
                 if (isCtrlClick(e.modifiers)) {
-                    val selectedIndex = (e.source as JList<*>).selectedIndex
-                    Que.setCurrentQueItemByIndex(selectedIndex)
-                    GUI.refreshQueItems()
+                    logger.info("[MouseEvent] Mouse Ctrl click on Queue Panel list")
+                    silentlyActivateSelectedIndex((e.source as JList<*>).selectedIndex)
                     return
                 }
 
                 // On double click
                 if (e.clickCount == 2) {
-                    val selectedIndex = (e.source as JList<*>).selectedIndex
-                    Que.setCurrentQueItemByIndex(selectedIndex)
-
-                    val activateNextSubQueueItems =
-                        if (Que.current() != null && Que.current()!!.executeAfterPrevious)
-                            Config.activateNextSubQueueItemsOnMouseActivationSubQueueItem
-                        else
-                            Config.activateNextSubQueueItemsOnMouseActivationQueueItem
-
-                    Que.activateCurrent(activateNextSubQueueItems)
+                    logger.info("[MouseEvent] Mouse double click on Queue Panel list")
+                    activateSelectedIndex((e.source as JList<*>).selectedIndex)
+                    return
                 }
+
+                logger.info("[MouseEvent] Unhandled mouse click on Queue Panel list")
             }
         })
 
@@ -97,6 +91,26 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
         scrollPanel.preferredSize = Dimension(350, 500)
         scrollPanel.border = null
         return scrollPanel
+    }
+
+    fun activateSelectedIndex(selectedIndex: Int) {
+        Que.deactivateCurrent()
+        Que.setCurrentQueItemByIndex(selectedIndex)
+
+        val activateNextSubQueueItems =
+            if (Que.current() != null && Que.current()!!.executeAfterPrevious)
+                Config.activateNextSubQueueItemsOnMouseActivationSubQueueItem
+            else
+                Config.activateNextSubQueueItemsOnMouseActivationQueueItem
+
+        Que.activateCurrent(activateNextSubQueueItems)
+    }
+
+    private fun silentlyActivateSelectedIndex(selectedIndex: Int) {
+        Que.deactivateCurrent()
+        Que.setCurrentQueItemByIndex(selectedIndex)
+
+        GUI.refreshQueItems()
     }
 
     private fun createButtonPanel(): JPanel {

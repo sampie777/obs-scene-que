@@ -47,7 +47,7 @@ object Que {
         GUI.refreshQueItems()
     }
 
-    private fun deactivateCurrent() {
+    fun deactivateCurrent() {
         val current = current() ?: return
 
         deactivateItem(current)

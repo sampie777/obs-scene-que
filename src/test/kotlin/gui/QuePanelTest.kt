@@ -2,13 +2,15 @@ package gui
 
 import gui.list.QuePanel
 import mocks.MockPlugin
+import mocks.QueItemMock
 import objects.OBSState
 import objects.TScene
 import objects.que.Que
 import plugins.obs.ObsPlugin
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import java.awt.event.ActionEvent
+import java.awt.event.KeyEvent
+import java.awt.event.MouseEvent
+import kotlin.test.*
 
 @Suppress("DEPRECATION")
 class QuePanelTest {
@@ -124,5 +126,65 @@ class QuePanelTest {
         panel.refreshQueItems()
 
         assertEquals(0, panel.list.model.size)
+    }
+
+    @Test
+    fun testDoubleClickItemActivatesItem() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(0)
+        assertFalse(item1.isDeactivated)
+        assertFalse(item2.isActivated)
+        val panel = QuePanel()
+
+        panel.list.selectedIndex = 1
+        val e = MouseEvent(panel.list, 0, 0, MouseEvent.BUTTON1, 0, 0, 2, false)
+        panel.list.mouseListeners.forEach { it.mouseClicked(e) }
+
+        assertTrue(item1.isDeactivated)
+        assertTrue(item2.isActivated)
+        assertEquals(item2, Que.current())
+    }
+
+    @Test
+    fun testCtrlClickItemSetsCurrentItemWithoutActivatingIt() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(0)
+        assertFalse(item1.isDeactivated)
+        assertFalse(item2.isActivated)
+        val panel = QuePanel()
+
+        panel.list.selectedIndex = 1
+        val e = MouseEvent(panel.list, 0, 0, MouseEvent.BUTTON1.or(ActionEvent.CTRL_MASK), 0, 0, 1, false)
+        panel.list.mouseListeners.forEach { it.mouseClicked(e) }
+
+        assertTrue(item1.isDeactivated)
+        assertFalse(item2.isActivated)
+        assertEquals(item2, Que.current())
+    }
+
+    @Test
+    fun testEnterKeyPressActivatesItem() {
+        val item1 = mockPlugin.configStringToQueItem("1") as QueItemMock
+        val item2 = mockPlugin.configStringToQueItem("2") as QueItemMock
+        Que.add(item1)
+        Que.add(item2)
+        Que.setCurrentQueItemByIndex(0)
+        assertFalse(item1.isDeactivated)
+        assertFalse(item2.isActivated)
+        val panel = QuePanel()
+
+        panel.list.selectedIndex = 1
+        val e = KeyEvent(panel.list, 0, 0, 0, KeyEvent.VK_ENTER)
+        panel.list.keyListeners.forEach { it.keyReleased(e) }
+
+        assertTrue(item1.isDeactivated)
+        assertTrue(item2.isActivated)
+        assertEquals(item2, Que.current())
     }
 }

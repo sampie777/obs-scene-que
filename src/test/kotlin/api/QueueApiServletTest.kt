@@ -245,6 +245,12 @@ class QueueApiServletTest {
 
     @Test
     fun testPostIndex() {
+        val queueItemCurrent = Que.current() as QueItemMock
+        val queueItemNext = Que.previewNext() as QueItemMock
+        assertFalse(queueItemCurrent.isActivated)
+        assertFalse(queueItemCurrent.isDeactivated)
+        assertFalse(queueItemNext.isActivated)
+
         assertNotEquals(2, Que.currentIndex())
         val connection = post("${apiUrl}/2")
 
@@ -260,6 +266,11 @@ class QueueApiServletTest {
   }
 }""".trimIndent(), connection.body().trim())
         assertEquals(2, Que.currentIndex())
+
+        assertFalse(queueItemCurrent.isActivated)
+        assertTrue(queueItemCurrent.isDeactivated)
+        assertTrue(queueItemNext.isActivated)
+        assertEquals(queueItemNext, Que.current())
     }
 
     @Test

@@ -1,7 +1,6 @@
 package gui.list
 
 import GUI
-import config.Config
 import objects.que.Que
 import objects.que.QueItem
 import java.awt.event.ActionEvent
@@ -14,7 +13,9 @@ import javax.swing.AbstractAction
 import javax.swing.JList
 import javax.swing.KeyStroke
 
-class QueListKeyListener(private val list: JList<QueItem>) : KeyListener {
+class QueListKeyListener(private val panel: QuePanel, private val list: JList<QueItem>) : KeyListener {
+
+    private val logger = Logger.getLogger(QueListKeyListener::class.java.name)
 
     private val keyEvents = HashMap<Int, (e: KeyEvent) -> Unit>()
 
@@ -25,6 +26,7 @@ class QueListKeyListener(private val list: JList<QueItem>) : KeyListener {
             item.executeAfterPrevious = false
             GUI.refreshQueItems()
         }
+
         addKeyStrokeEvent(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.SHIFT_DOWN_MASK)) {
             logger.info("[KeyEvent] Shift + Right pressed")
             val item: QueItem = list.selectedValue ?: return@addKeyStrokeEvent
@@ -34,16 +36,9 @@ class QueListKeyListener(private val list: JList<QueItem>) : KeyListener {
 
         keyEvents[KeyEvent.VK_ENTER] = {
             logger.info("[KeyEvent] Enter key pressed")
-            Que.setCurrentQueItemByIndex(list.selectedIndex)
-
-            val activateNextSubQueueItems =
-                if (Que.current() != null && Que.current()!!.executeAfterPrevious)
-                    Config.activateNextSubQueueItemsOnMouseActivationSubQueueItem
-                else
-                    Config.activateNextSubQueueItemsOnMouseActivationQueueItem
-
-            Que.activateCurrent(activateNextSubQueueItems)
+            panel.activateSelectedIndex(list.selectedIndex)
         }
+
         keyEvents[KeyEvent.VK_DELETE] = {
             logger.info("[KeyEvent] Delete key pressed")
             Que.remove(list.selectedIndex)
@@ -66,12 +61,9 @@ class QueListKeyListener(private val list: JList<QueItem>) : KeyListener {
         })
     }
 
-    private val logger = Logger.getLogger(QueListKeyListener::class.java.name)
+    override fun keyTyped(keyEvent: KeyEvent) {}
 
-    override fun keyTyped(keyEvent: KeyEvent?) {
-    }
-
-    override fun keyPressed(keyEvent: KeyEvent?) {}
+    override fun keyPressed(keyEvent: KeyEvent) {}
 
     override fun keyReleased(keyEvent: KeyEvent) {
         if (list.selectedIndex < 0 || list.selectedIndex >= Que.size()) {

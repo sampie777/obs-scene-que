@@ -117,6 +117,7 @@ class QueueApiServlet : HttpServlet() {
             return
         }
 
+        Que.deactivateCurrent()
         Que.setCurrentQueItemByIndex(index)
 
         val activateNextSubQueueItems =

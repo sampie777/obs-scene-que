@@ -35,6 +35,8 @@ class DefaultSourcesList<T> : JList<T> {
 
                 // On double click
                 if (e.clickCount == 2) {
+                    logger.info("[MouseEvent] Mouse Double click on list")
+
                     val queItem = (e.source as JList<*>).selectedValue as QueItem
                     Que.add(queItem)
                     GUI.refreshQueItems()
