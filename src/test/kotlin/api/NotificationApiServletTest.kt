@@ -15,7 +15,7 @@ import kotlin.test.assertNotEquals
 
 class NotificationApiServletTest {
     companion object {
-        private var apiRootEndpoint: String = "/notifications"
+        private var apiRootEndpoint: String = "/api/v1/notifications"
         private var apiUrl: String = "" + apiRootEndpoint
 
         @BeforeClass
@@ -25,7 +25,7 @@ class NotificationApiServletTest {
             Config.httpApiServerPort = ServerSocket(0).use { it.localPort }
 
             ApiServer.start()
-            apiUrl = ApiServer.uri().toString() + apiRootEndpoint
+            apiUrl = ApiServer.url() + apiRootEndpoint
         }
 
         @AfterClass

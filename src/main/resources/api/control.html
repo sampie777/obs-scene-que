@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-size: 20pt;
+            color: #333;
+        }
+
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #wrapper {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            white-space: normal;
+            word-wrap: break-word;
+            border: 1px solid black;
+            border-width: 2px 0;
+            min-height: 50px;
+        }
+
+        button[disabled] {
+            color: #333;
+            opacity: 0.4;
+        }
+
+        #previous {
+            background-color: #f38686;
+            flex-grow: 3;
+            font-size: 14pt;
+        }
+
+        #current {
+            flex-grow: 4;
+        }
+
+        #next {
+            background-color: #00ff00;
+            flex-grow: 18;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <button id="previous">Previous</button>
+    <button id="current">Current</button>
+    <button id="next">Next</button>
+</div>
+
+<script>
+    const apiBaseUrl = window.location.origin + "/api/v1";
+    const previousButton = document.getElementById("previous");
+    const currentButton = document.getElementById("current");
+    const nextButton = document.getElementById("next");
+
+    const get = (url) => fetch(url, {
+        method: "GET"
+    });
+
+    const post = (url, data = "") => fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data)
+    });
+
+    function setButtonText(button, prependText, item) {
+        if (item == null) {
+            button.disabled = true;
+            button.innerText = prependText + "no item";
+        } else {
+            button.disabled = false;
+            button.innerText = prependText + item.name;
+        }
+    }
+
+    function updateState() {
+        get(apiBaseUrl + "/queue/next")
+            .then(response => response.json())
+            .then(data => {
+                const item = data.data;
+                setButtonText(nextButton, "Next: ", item);
+            })
+            .catch(error => console.error('Error updating Next state', error));
+        get(apiBaseUrl + "/queue/current")
+            .then(response => response.json())
+            .then(data => {
+                const item = data.data;
+                setButtonText(currentButton, "Current: ", item);
+            })
+            .catch(error => console.error('Error updating Current state', error));
+        get(apiBaseUrl + "/queue/previous")
+            .then(response => response.json())
+            .then(data => {
+                const item = data.data;
+                setButtonText(previousButton, "Previous: ", item);
+            })
+            .catch(error => console.error('Error updating Previous state', error));
+    }
+
+    nextButton.addEventListener("click", () => {
+        post(apiBaseUrl + "/queue/next").then(updateState);
+    });
+    currentButton.addEventListener("click", () => {
+        post(apiBaseUrl + "/queue/current").then(updateState);
+    });
+    previousButton.addEventListener("click", () => {
+        post(apiBaseUrl + "/queue/previous").then(updateState);
+    });
+
+    updateState();
+    window.setInterval(updateState, 2000);
+</script>
+</body>
+</html>

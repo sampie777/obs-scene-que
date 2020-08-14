@@ -17,7 +17,7 @@ import kotlin.test.*
 @Suppress("DEPRECATION")
 class QueueApiServletTest {
     companion object {
-        private var apiRootEndpoint: String = "/queue"
+        private var apiRootEndpoint: String = "/api/v1/queue"
         private var apiUrl: String = "" + apiRootEndpoint
 
         @BeforeClass
@@ -27,7 +27,7 @@ class QueueApiServletTest {
             Config.httpApiServerPort = ServerSocket(0).use { it.localPort }
 
             ApiServer.start()
-            apiUrl = ApiServer.uri().toString() + apiRootEndpoint
+            apiUrl = ApiServer.url() + apiRootEndpoint
         }
 
         @AfterClass

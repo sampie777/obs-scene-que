@@ -94,6 +94,8 @@ The OBS Scene Queue application can also be controlled by its build in webserver
 
 For more info about using this server, see the [API documentation](docs/API.md).
 
+A very basic control webpage is implemented. Navigate to the [/control](http://localhost:8080/control) endpoint for this very basic Queue controller. Note: use the IP address of the computer on which OBS Scene Queue is running, like so: [http://192.168.178.100:8080/control](http://192.168.178.100:8080/control).
+
 #### Network Scanner
 
 When using OBS Scene Queue on another computer as OBS projector itself, it can be quite a struggle to figure out the correct IP address of the OBS projector computer. Head to Application menu -> Network Scanner to let OBS Scene Queue scan for any possible OBS projector hosts on your local network. This scanning is done by querying the default OBS websocket port 4444 on all possible IP address available on your local network(s). 

@@ -27,6 +27,17 @@ fun respondWithJson(
     logger.info("Response: $json")
 }
 
+fun respondWithHtml(
+    response: HttpServletResponse,
+    data: Any?,
+    status: Int = HttpServletResponse.SC_OK
+) {
+    response.status = status
+    response.contentType = "text/html"
+    response.writer.println(data)
+    logger.info("Response: $data")
+}
+
 fun respondWithNotFound(response: HttpServletResponse) {
     response.status = HttpServletResponse.SC_NOT_FOUND
     response.writer.println("Not Found")

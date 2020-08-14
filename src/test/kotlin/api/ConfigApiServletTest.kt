@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
 
 class ConfigApiServletTest {
     companion object {
-        private var apiRootEndpoint: String = "/config"
+        private var apiRootEndpoint: String = "/api/v1/config"
         private var apiUrl: String = "" + apiRootEndpoint
 
         @BeforeClass
@@ -23,7 +23,7 @@ class ConfigApiServletTest {
             Config.httpApiServerPort = ServerSocket(0).use { it.localPort }
 
             ApiServer.start()
-            apiUrl = ApiServer.uri().toString() + apiRootEndpoint
+            apiUrl = ApiServer.url() + apiRootEndpoint
         }
 
         @AfterClass

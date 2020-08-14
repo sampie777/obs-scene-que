@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 
 class PluginApiServletTest {
     companion object {
-        private var apiRootEndpoint: String = "/plugins"
+        private var apiRootEndpoint: String = "/api/v1/plugins"
         private var apiUrl: String = "" + apiRootEndpoint
 
         @BeforeClass
@@ -27,7 +27,7 @@ class PluginApiServletTest {
             Config.httpApiServerPort = ServerSocket(0).use { it.localPort }
 
             ApiServer.start()
-            apiUrl = ApiServer.uri().toString() + apiRootEndpoint
+            apiUrl = ApiServer.url() + apiRootEndpoint
         }
 
         @AfterClass

@@ -3,8 +3,8 @@ package api
 
 import config.Config
 import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.handler.HandlerList
 import org.eclipse.jetty.servlet.ServletContextHandler
-import java.net.URI
 import java.util.logging.Logger
 
 object ApiServer {
@@ -13,6 +13,9 @@ object ApiServer {
     private val server: Server = Server(Config.httpApiServerPort)
 
     init {
+        val handlers = HandlerList()
+        server.handler = handlers
+
         val apiServletContextHandler = ServletContextHandler()
         apiServletContextHandler.contextPath = "/api/v1"
 
@@ -22,13 +25,18 @@ object ApiServer {
         apiServletContextHandler.addServlet(ConfigApiServlet::class.java, "/config/*")
         apiServletContextHandler.addServlet(NotificationApiServlet::class.java, "/notifications/*")
         apiServletContextHandler.addServlet(PluginApiServlet::class.java, "/plugins/*")
-        server.handler = apiServletContextHandler
+        handlers.addHandler(apiServletContextHandler)
+
+        val webPageServletContextHandler = ServletContextHandler()
+        webPageServletContextHandler.contextPath = ""
+        webPageServletContextHandler.addServlet(WebPageServlet::class.java, "/*")
+        handlers.addHandler(webPageServletContextHandler)
     }
 
     fun start() {
         logger.info("Starting API server...")
         server.start()
-        logger.info("API server started on: ${uri()}")
+        logger.info("API server started on: ${url()}")
     }
 
     fun stop() {
@@ -37,5 +45,5 @@ object ApiServer {
         logger.info("API server stopped")
     }
 
-    fun uri(): URI = server.uri
+    fun url(): String = server.uri.scheme + "://" + server.uri.authority
 }
