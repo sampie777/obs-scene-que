@@ -4,6 +4,7 @@ import plugins.common.QueItemBasePlugin
 import themes.Theme
 import java.awt.Color
 import javax.swing.BorderFactory
+import javax.swing.Icon
 import javax.swing.JLabel
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
@@ -14,6 +15,8 @@ interface QueItem {
 
     var executeAfterPrevious: Boolean
     var quickAccessColor: Color?
+    val icon: Icon?
+        get() = null
 
     fun renderText(): String = name
 
@@ -58,7 +61,7 @@ interface QueItem {
         cellHasFocus: Boolean
     ) {
         cell.text = renderText()
-        cell.icon = plugin.icon
+        cell.icon = icon ?: plugin.icon
 
         if (!executeAfterPrevious) {
             cell.border = EmptyBorder(1, 10, 1, 10)

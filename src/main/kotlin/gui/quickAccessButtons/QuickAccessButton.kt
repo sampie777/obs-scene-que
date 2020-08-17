@@ -178,7 +178,7 @@ class QuickAccessButton(
             return null
         }
 
-        val icon = queItem?.plugin?.icon ?: return null
+        val icon = queItem?.icon ?: queItem?.plugin?.icon ?: return null
 
         val (bufferedImage, g2) = createGraphics(icon.iconWidth, icon.iconHeight)
         icon.paintIcon(null, g2, 0, 0)
