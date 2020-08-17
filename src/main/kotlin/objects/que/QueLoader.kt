@@ -65,7 +65,13 @@ internal object QueLoader {
     }
 
     fun loadQueItemFromJson(jsonQueueItem: JsonQueue.QueueItem): QueItem? {
-        val plugin = PluginLoader.queItemPlugins.find { plugin -> plugin.name == jsonQueueItem.pluginName }
+        val plugin =
+            if (jsonQueueItem.pluginName == "TextPlugin") {     // Backwards compatible from version 2.6.0
+                logger.info("Loading UtilityPlugin for TextPlugin as backwards compatibility for Queue Item: $jsonQueueItem")
+                PluginLoader.queItemPlugins.find { plugin -> plugin.name == "UtilityPlugin" }
+            } else {
+                PluginLoader.queItemPlugins.find { plugin -> plugin.name == jsonQueueItem.pluginName }
+            }
 
         if (plugin == null) {
             Notifications.add("Plugin '${jsonQueueItem.pluginName}' not found", "Queue")

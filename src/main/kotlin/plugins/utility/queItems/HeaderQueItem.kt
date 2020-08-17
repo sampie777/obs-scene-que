@@ -1,23 +1,25 @@
-package plugins.text.queItems
+package plugins.utility.queItems
 
 import objects.que.Que
 import objects.que.QueItem
-import plugins.text.TextPlugin
-import plugins.text.TextPluginQueItemCompanion
+import plugins.utility.TextQueItemsCompanion
+import plugins.utility.UtilityPlugin
 import themes.Theme
 import java.awt.Color
 import java.awt.Font
 import javax.swing.BorderFactory
+import javax.swing.Icon
 import javax.swing.JLabel
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
-class HeaderQueItem(override val plugin: TextPlugin, override val name: String) : QueItem {
+class HeaderQueItem(override val plugin: UtilityPlugin, override val name: String) : QueItem {
 
     override var executeAfterPrevious = false
     override var quickAccessColor: Color? = plugin.quickAccessColor
+    override val icon: Icon? = HeaderQueItem.icon
 
-    companion object QueItemCompanion : TextPluginQueItemCompanion(HeaderQueItem::class.java, "Header");
+    companion object QueItemCompanion : TextQueItemsCompanion(HeaderQueItem::class.java, "Header")
 
     override fun activateAsPrevious() {
         // Skip this queue item by going to the previous one

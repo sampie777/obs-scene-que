@@ -58,8 +58,8 @@ class PluginApiServletTest {
         val obj = Gson().fromJson(body, JsonObject::class.java)
         val array = obj.get("data").asJsonArray
         assertEquals(PluginLoader.allPlugins.size, array.size())
-        assertTrue(array[0].asJsonObject.get("name").asString in listOf("ObsPlugin", "TextPlugin", "HttpPlugin"))
-        assertTrue(array[1].asJsonObject.get("name").asString in listOf("ObsPlugin", "TextPlugin", "HttpPlugin"))
+        assertTrue(array[0].asJsonObject.get("name").asString in listOf("ObsPlugin", "UtilityPlugin", "HttpPlugin"))
+        assertTrue(array[1].asJsonObject.get("name").asString in listOf("ObsPlugin", "UtilityPlugin", "HttpPlugin"))
     }
 
     @Test

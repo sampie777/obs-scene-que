@@ -363,7 +363,7 @@ curl -X GET http://localhost:8080/api/v1/plugins/list
 >       "version": "0.0.0"
 >     },
 >     {
->       "name": "TextPlugin",
+>       "name": "Utility",
 >       "description": "Queue items for just displaying text or adding delay",
 >       "version": "0.0.0"
 >     }

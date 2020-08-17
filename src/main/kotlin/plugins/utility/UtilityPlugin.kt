@@ -1,12 +1,12 @@
-package plugins.text
+package plugins.utility
 
 import gui.utils.createImageIcon
 import objects.que.JsonQueue
 import objects.que.QueItem
 import plugins.common.QueItemBasePlugin
-import plugins.text.queItems.DelayQueItem
-import plugins.text.queItems.HeaderQueItem
-import plugins.text.queItems.PlainTextQueItem
+import plugins.utility.queItems.DelayQueItem
+import plugins.utility.queItems.HeaderQueItem
+import plugins.utility.queItems.PlainTextQueItem
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.GridLayout
@@ -14,14 +14,14 @@ import javax.swing.*
 import javax.swing.border.EmptyBorder
 
 @Suppress("unused")
-class TextPlugin : QueItemBasePlugin {
-    override val name = "TextPlugin"
-    override val description = "Queue items for just displaying text or adding delay"
+class UtilityPlugin : QueItemBasePlugin {
+    override val name = "UtilityPlugin"
+    override val description = "Utility Queue items for Queue control"
     override val version: String = "0.0.0"
 
-    override val icon: Icon? = createImageIcon("/plugins/text/icon-14.png")
+    override val icon: Icon? = createImageIcon("/plugins/utility/icon-14.png")
 
-    override val tabName = "Text & Delay"
+    override val tabName = "Utility"
 
     internal val configStringSeparator = "|"
     internal val quickAccessColor = Color(231, 231, 231)
@@ -52,7 +52,7 @@ class TextPlugin : QueItemBasePlugin {
         return when (className) {
             HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, text)
             PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, text)
-            else -> throw IllegalArgumentException("Invalid TextPlugin queue item: $value")
+            else -> throw IllegalArgumentException("Invalid $name queue item: $value")
         }
     }
 
@@ -61,7 +61,7 @@ class TextPlugin : QueItemBasePlugin {
             HeaderQueItem::class.java.simpleName -> HeaderQueItem(this, jsonQueueItem.name)
             PlainTextQueItem::class.java.simpleName -> PlainTextQueItem(this, jsonQueueItem.name)
             DelayQueItem::class.java.simpleName -> DelayQueItem.fromJson(this, jsonQueueItem)
-            else -> throw IllegalArgumentException("Invalid TextPlugin queue item: ${jsonQueueItem.className}")
+            else -> throw IllegalArgumentException("Invalid $name queue item: ${jsonQueueItem.className}")
         }
     }
 }

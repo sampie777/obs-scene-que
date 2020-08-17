@@ -1,11 +1,13 @@
-package plugins.text.queItems
+package plugins.utility.queItems
 
 import GUI
+import gui.utils.IconLabel
+import gui.utils.createImageIcon
 import handles.QueItemTransferHandler
 import objects.que.JsonQueue
 import objects.que.Que
 import objects.que.QueItem
-import plugins.text.TextPlugin
+import plugins.utility.UtilityPlugin
 import themes.Theme
 import java.awt.BorderLayout
 import java.awt.Color
@@ -19,21 +21,25 @@ import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
-class DelayQueItem(override val plugin: TextPlugin, private val delay: Long) : QueItem {
+
+class DelayQueItem(override val plugin: UtilityPlugin, private val delay: Long) : QueItem {
     private val logger = Logger.getLogger(DelayQueItem::class.java.name)
 
     override val name: String = "Delay ($delay ms)"
     override var executeAfterPrevious = false
     override var quickAccessColor: Color? = plugin.quickAccessColor
+    override val icon: Icon? = DelayQueItem.icon
 
     private var timer: Timer? = null
 
     companion object {
-        fun fromJson(plugin: TextPlugin, jsonQueueItem: JsonQueue.QueueItem): DelayQueItem {
+        val icon: Icon? = createImageIcon("/plugins/utility/icon-delay-14.png")
+
+        fun fromJson(plugin: UtilityPlugin, jsonQueueItem: JsonQueue.QueueItem): DelayQueItem {
             return DelayQueItem(plugin, jsonQueueItem.data["delay"]!!.toLong())
         }
 
-        fun createPanelForQueItem(plugin: TextPlugin): JComponent {
+        fun createPanelForQueItem(plugin: UtilityPlugin): JComponent {
             val panel = JPanel(BorderLayout(5, 5))
             panel.border = CompoundBorder(
                 CompoundBorder(
@@ -66,13 +72,13 @@ class DelayQueItem(override val plugin: TextPlugin, private val delay: Long) : Q
                 }
             })
 
-            panel.add(JLabel("Delay (ms)"), BorderLayout.PAGE_START)
+            panel.add(IconLabel(icon, "Delay (ms)"), BorderLayout.PAGE_START)
             panel.add(inputSpinner, BorderLayout.CENTER)
             panel.add(addButton, BorderLayout.LINE_END)
             return panel
         }
 
-        private fun createQueItem(plugin: TextPlugin, value: Long): QueItem {
+        private fun createQueItem(plugin: UtilityPlugin, value: Long): QueItem {
             return DelayQueItem(plugin, value)
         }
     }

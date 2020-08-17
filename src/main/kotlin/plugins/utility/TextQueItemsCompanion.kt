@@ -1,6 +1,8 @@
-package plugins.text
+package plugins.utility
 
 import GUI
+import gui.utils.IconLabel
+import gui.utils.createImageIcon
 import handles.QueItemTransferHandler
 import objects.que.Que
 import objects.que.QueItem
@@ -12,9 +14,11 @@ import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 
-abstract class TextPluginQueItemCompanion(private val queItemClass: Class<*>, private val itemTitle: String) {
+abstract class TextQueItemsCompanion(private val queItemClass: Class<*>, private val itemTitle: String) {
 
-    open fun createPanelForQueItem(plugin: TextPlugin): JComponent {
+    val icon: Icon? = createImageIcon("/plugins/utility/icon-text-14.png")
+
+    open fun createPanelForQueItem(plugin: UtilityPlugin): JComponent {
         val panel = JPanel(BorderLayout(5, 5))
         panel.border = CompoundBorder(
             CompoundBorder(
@@ -55,13 +59,13 @@ abstract class TextPluginQueItemCompanion(private val queItemClass: Class<*>, pr
             }
         })
 
-        panel.add(JLabel(itemTitle), BorderLayout.PAGE_START)
+        panel.add(IconLabel(icon, itemTitle), BorderLayout.PAGE_START)
         panel.add(textField, BorderLayout.CENTER)
         panel.add(addButton, BorderLayout.LINE_END)
         return panel
     }
 
-    private fun createQueItem(plugin: TextPlugin, value: String): QueItem {
+    private fun createQueItem(plugin: UtilityPlugin, value: String): QueItem {
         val classDefinition = Class.forName(queItemClass.name)
         val cons = classDefinition.constructors[0]
         return cons.newInstance(plugin, value) as QueItem

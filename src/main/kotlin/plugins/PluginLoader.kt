@@ -22,7 +22,7 @@ object PluginLoader {
     private val pluginDirectory = Config.pluginDirectory
     val internalPluginClasses = listOf(
         "/plugins/obs/ObsPlugin",
-        "/plugins/text/TextPlugin",
+        "/plugins/utility/UtilityPlugin",
         "/plugins/http/HttpPlugin"
     )
     private val externalPluginJars: Array<File> =

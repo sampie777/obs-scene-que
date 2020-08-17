@@ -51,7 +51,7 @@ Note that settings can be changed in order to adjust the behaviour of activating
 #### Execute After Previous
 Mark a queue item to be executed after the previous queue item is executed. In this way, when a queue item becomes active, all the directly following queue items which are marked as Execute After Previous, will also be activated and executed in order. 
 
-When using the `ENTER` key on a selected queue item, the Execute After Previous items will be activated in order, as normal behaviour. When activating an queue item by `DOUBLE CLICK`, it will only activate that item and NOT it's Execute After Previous items. 
+When using the `ENTER` key on a selected queue item, the Execute After Previous items will be activated in order, as normal behaviour. When activating a queue item by `DOUBLE CLICK`, it will only activate that item and NOT its Execute After Previous items. This behaviour can be changed in the Settings.
  
 Marking a queue item as Execute After Previous: 
 - `SHIFT + RIGHT ARROW` will mark a queue item to be executed after the execution of the previous queue item.
@@ -121,8 +121,9 @@ When an error or something else interesting occurs, a notification of this event
 
 Plugins can be added to enable the use of different queue item types which can perform different actions on execution/activation. The following plugins are internally installed:
 
-- `OBSPlugin`: lets you activate OBS scenes and do other OBS stuff
-- `TextPlugin`: doesn't really do anything. It's just there to create some clarity and order in your queue
+- `OBSPlugin`: lets you activate OBS scenes and do other OBS stuff.
+- `UtilityPlugin`: gives you the tools to clearify your Queue list with Text items or let you sit back and relax by using Delay items to automatically activate the next Queue item after a certain delay.
+- `HttpPlugin`: perform HTTP requests to activate another device, for example.
 
 To install new plugins, just place their .jar file in the plugin directory (see settings for where this directory is). If this directory doesn't exist, you can create it: create a directory in the same directory as OBS Scene Queue and name it "plugins".
  

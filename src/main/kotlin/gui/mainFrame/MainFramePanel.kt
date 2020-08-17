@@ -43,7 +43,7 @@ class MainFramePanel : JSplitPane(), Refreshable {
         border = null
         val divider = divider()
         divider.border = BorderFactory.createMatteBorder(0, 0, 0, 1, Theme.get.BORDER_COLOR)
-        divider.dividerSize = 6
+        divider.dividerSize = 7
 
         notificationsButton.isBorderPainted = false
         notificationsButton.isContentAreaFilled = false

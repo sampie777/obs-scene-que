@@ -1,14 +1,14 @@
-package plugins.text.queItems
+package plugins.utility.queItems
 
 import objects.que.Que
-import plugins.text.TextPlugin
+import plugins.utility.UtilityPlugin
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class HeaderQueItemTest {
 
-    private val plugin = TextPlugin()
+    private val plugin = UtilityPlugin()
 
     @BeforeTest
     fun before() {
