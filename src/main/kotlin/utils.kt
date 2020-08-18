@@ -15,11 +15,11 @@ import kotlin.system.exitProcess
 
 private val logger: Logger = Logger.getLogger("utils")
 
-fun getTimeAsClock(value: Long): String {
-    var positiveValue = value
+fun getTimeAsClock(seconds: Long): String {
+    var positiveValue = seconds
 
     var signString = ""
-    if (value < 0) {
+    if (seconds < 0) {
         positiveValue *= -1
         signString = "-"
     }

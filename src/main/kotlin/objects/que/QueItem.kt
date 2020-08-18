@@ -1,8 +1,10 @@
 package objects.que
 
+import gui.list.QueListCellRenderer
 import plugins.common.QueItemBasePlugin
 import themes.Theme
 import java.awt.Color
+import java.awt.Graphics2D
 import javax.swing.BorderFactory
 import javax.swing.Icon
 import javax.swing.JLabel
@@ -81,4 +83,6 @@ interface QueItem {
             cell.border
         )
     }
+
+    fun listCellRendererPaintAction(g: Graphics2D, queListCellRenderer: QueListCellRenderer) {}
 }

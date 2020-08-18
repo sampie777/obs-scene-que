@@ -1,6 +1,8 @@
 package plugins.utility.queItems
 
 import GUI
+import gui.list.QueListCellRenderer
+import gui.mainFrame.MainFrame
 import gui.utils.IconLabel
 import gui.utils.createImageIcon
 import handles.QueItemTransferHandler
@@ -12,6 +14,8 @@ import themes.Theme
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
+import java.awt.Graphics2D
+import java.awt.event.ActionListener
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.util.*
@@ -30,7 +34,12 @@ class DelayQueItem(override val plugin: UtilityPlugin, private val delay: Long) 
     override var quickAccessColor: Color? = plugin.quickAccessColor
     override val icon: Icon? = DelayQueItem.icon
 
-    private var timer: Timer? = null
+    private var delayTimer: Timer? = null
+    private var timeStarted: Long = 0
+    private var progressTimer: javax.swing.Timer = javax.swing.Timer(
+        33, // 30 fps
+        ActionListener { progressTimerUpdate() }
+    )
 
     companion object {
         val icon: Icon? = createImageIcon("/plugins/utility/icon-delay-14.png")
@@ -85,25 +94,37 @@ class DelayQueItem(override val plugin: UtilityPlugin, private val delay: Long) 
 
     override fun activate() {
         logger.info("Starting Queue delay for $delay milli seconds")
-        timer = Timer()
-        timer!!.schedule(object : TimerTask() {
+        delayTimer = Timer()
+        delayTimer!!.schedule(object : TimerTask() {
             override fun run() {
-                logger.info("Delay $name is over. Activating next Queue item")
-                timer = null
-                Que.next()
+                delayTimerDoneTask()
             }
         }, delay)
+
+        timeStarted = System.currentTimeMillis()
+        progressTimer.restart()
+    }
+
+    private fun delayTimerDoneTask() {
+        logger.info("Delay $name is over. Activating next Queue item")
+        delayTimer = null
+
+        progressTimer.stop()
+        MainFrame.getInstance()?.repaint()
+
+        Que.next()
     }
 
     override fun deactivate() {
-        if (timer == null) {
+        if (delayTimer == null) {
             logger.info("No delay timer to cancel")
             return
         }
 
         try {
             logger.info("Canceling delay timer")
-            timer!!.cancel()
+            delayTimer!!.cancel()
+            delayTimer = null
         } catch (e: Exception) {
             logger.info("Exception caught during canceling delay timer")
             e.printStackTrace()
@@ -114,5 +135,28 @@ class DelayQueItem(override val plugin: UtilityPlugin, private val delay: Long) 
         val jsonQueItem = super.toJson()
         jsonQueItem.data["delay"] = delay.toString()
         return jsonQueItem
+    }
+
+    private fun progressTimerUpdate() {
+        if (delayTimer == null) {
+            progressTimer.stop()
+        }
+
+        MainFrame.getInstance()?.repaint()
+    }
+
+    override fun listCellRendererPaintAction(g: Graphics2D, queListCellRenderer: QueListCellRenderer) {
+        super.listCellRendererPaintAction(g, queListCellRenderer)
+
+        if (delayTimer == null) {
+            return
+        }
+
+        val elapsed = System.currentTimeMillis() - timeStarted
+        val progressBarPosition = queListCellRenderer.width * elapsed / delay
+
+        val color = queListCellRenderer.background.darker().darker()
+        g.color = Color(color.red, color.green, color.blue, 80)
+        g.fillRect(0, 0, progressBarPosition.toInt(), 30)
     }
 }

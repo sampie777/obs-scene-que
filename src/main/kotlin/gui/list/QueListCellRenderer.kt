@@ -1,13 +1,16 @@
 package gui.list
 
 import brightness
+import objects.notifications.Notifications
 import objects.que.QueItem
 import themes.Theme
 import java.awt.*
+import java.util.logging.Logger
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JList
 
 class QueListCellRenderer : DefaultListCellRenderer() {
+    private val logger = Logger.getLogger(QueListCellRenderer::class.java.name)
 
     var item: QueItem? = null
 
@@ -18,13 +21,21 @@ class QueListCellRenderer : DefaultListCellRenderer() {
         isSelected: Boolean,
         cellHasFocus: Boolean
     ): Component {
-        val cell = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus) as QueListCellRenderer
+
+        val cell = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus)
+                as QueListCellRenderer
         if (value == null) {
             return cell
         }
 
         cell.item = value as QueItem
-        cell.item!!.getListCellRendererComponent(cell, index, isSelected, cellHasFocus)
+        try {
+            cell.item!!.getListCellRendererComponent(cell, index, isSelected, cellHasFocus)
+        } catch (e: Error) {
+            logger.severe("Failed to render QueueItem: $value")
+            e.printStackTrace()
+            Notifications.add("Failed to display QueueItem '${value.name}' in Queue list: ${e.localizedMessage}", "GUI")
+        }
 
         if (brightness(cell.background) > 110) {
             cell.foreground = Theme.get.LIST_SELECTION_FONT_COLOR_DARK
@@ -40,6 +51,13 @@ class QueListCellRenderer : DefaultListCellRenderer() {
 
         if (item != null && item!!.executeAfterPrevious) {
             paintExecuteAfterPrevious(g as Graphics2D)
+        }
+
+        try {
+            item?.listCellRendererPaintAction(g as Graphics2D, this)
+        } catch (e: Error) {
+            logger.severe("Failed to paint QueueItem: $item")
+            e.printStackTrace()
         }
     }
 
