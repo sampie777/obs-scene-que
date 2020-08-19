@@ -122,7 +122,7 @@ When an error or something else interesting occurs, a notification of this event
 Plugins can be added to enable the use of different queue item types which can perform different actions on execution/activation. The following plugins are internally installed:
 
 - `OBSPlugin`: lets you activate OBS scenes and do other OBS stuff.
-- `UtilityPlugin`: gives you the tools to clearify your Queue list with Text items or let you sit back and relax by using Delay items to automatically activate the next Queue item after a certain delay.
+- `UtilityPlugin`: gives you the tools to clarify your Queue list with Text items or let you sit back and relax by using Delay items to automatically activate the next Queue item after a certain delay. Once activated, the Delay item will wait for the specified amount of time before automatically activating the next Queue item.
 - `HttpPlugin`: perform HTTP requests to activate another device, for example.
 
 To install new plugins, just place their .jar file in the plugin directory (see settings for where this directory is). If this directory doesn't exist, you can create it: create a directory in the same directory as OBS Scene Queue and name it "plugins".
