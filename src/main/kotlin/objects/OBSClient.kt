@@ -306,7 +306,11 @@ object OBSClient {
         val tScene = TScene(name)
 
         if (sources != null) {
-            val tSources = sources.map { source: Source -> TSource(source.name, source.type) }
+            val tSources = sources.map { source: Source ->
+                TSource(source.name, source.type).also {
+                    it.isVisible = source.isRender
+                }
+            }
             tScene.sources = tSources
         }
         return tScene

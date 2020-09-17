@@ -9,6 +9,7 @@ class TSource {
     var settings: Map<String, Any> = HashMap()
     var fileName = ""
     var videoLength = 0
+    var isVisible = true
 
     constructor()
 

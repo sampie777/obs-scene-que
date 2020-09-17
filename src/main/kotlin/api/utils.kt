@@ -22,6 +22,7 @@ fun respondWithJson(
     val json = jsonBuilder().toJson(JsonSuccessResponse(data = data))
 
     response.status = status
+    response.addHeader("Access-Control-Allow-Origin", "*")
     response.contentType = "application/json"
     response.writer.println(json)
     logger.info("Response: $json")
@@ -30,16 +31,22 @@ fun respondWithJson(
 fun respondWithHtml(
     response: HttpServletResponse,
     data: Any?,
-    status: Int = HttpServletResponse.SC_OK
+    status: Int = HttpServletResponse.SC_OK,
+    log: Boolean = true
 ) {
     response.status = status
+    response.addHeader("Access-Control-Allow-Origin", "*")
     response.contentType = "text/html"
     response.writer.println(data)
-    logger.info("Response: $data")
+
+    if (log) {
+        logger.info("Response: $data")
+    }
 }
 
 fun respondWithNotFound(response: HttpServletResponse) {
     response.status = HttpServletResponse.SC_NOT_FOUND
+    response.addHeader("Access-Control-Allow-Origin", "*")
     response.writer.println("Not Found")
 }
 

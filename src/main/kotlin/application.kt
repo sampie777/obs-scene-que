@@ -6,6 +6,7 @@ import objects.OBSClient
 import objects.notifications.Notifications
 import objects.que.Que
 import plugins.PluginLoader
+import plugins.tallyLight.TallyLightPlugin
 import themes.Theme
 import java.awt.EventQueue
 import java.util.logging.Level
@@ -32,6 +33,7 @@ fun main(args: Array<String>) {
 
     PluginLoader.loadAll()
     PluginLoader.enableAll()
+    TallyLightPlugin().enable()
 
     Que.enableWriteToFile(true)
     Que.load()

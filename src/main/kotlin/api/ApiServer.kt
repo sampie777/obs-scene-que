@@ -20,6 +20,7 @@ object ApiServer {
         apiServletContextHandler.contextPath = "/api/v1"
 
         logger.fine("Registering API endpoints")
+        apiServletContextHandler.addServlet(TallyLightApiServlet::class.java, "/tallylight/*")
         apiServletContextHandler.addServlet(QueueApiServlet::class.java, "/queue/*")
         apiServletContextHandler.addServlet(QuickAccessButtonsApiServlet::class.java, "/quickAccessButtons/*")
         apiServletContextHandler.addServlet(ConfigApiServlet::class.java, "/config/*")
