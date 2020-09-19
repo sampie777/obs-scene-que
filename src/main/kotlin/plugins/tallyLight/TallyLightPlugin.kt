@@ -12,40 +12,49 @@ import plugins.tallyLight.websocketEvents.SourceDestroyed
 import plugins.tallyLight.websocketEvents.SourceRenamed
 import java.util.logging.Logger
 
-class TallyLightPlugin : Refreshable {
+object TallyLightPlugin : Refreshable {
     private val logger = Logger.getLogger(TallyLightPlugin::class.java.name)
 
-    companion object {
-        val tallies: ArrayList<TallyLight> = arrayListOf(
-            TallyLight("Camera 1", "192.168.178.143"),
-            TallyLight("Camera 2", ""),
-            TallyLight("Camera 3", ""),
-            TallyLight("Camera 4", ""),
-            TallyLight("Camera 5", "")
-        )
-    }
+    val tallies: ArrayList<TallyLight> = arrayListOf(
+        TallyLight("Camera 1", "192.168.178.68"),
+        TallyLight("Camera 2", "192.168.178.90"),
+        TallyLight("Camera 3", "192.168.178.143"),
+        TallyLight("Camera 4", ""),
+        TallyLight("Camera 5", "")
+    )
+
+    private var isEnabled: Boolean = false
 
     fun enable() {
+        isEnabled = true
+
+        TallyLightProperties.load()
+
         sendUpdates()
 
         GUI.register(this)
 
         OBSClient.preregisterCallback("TallyLightCallbacks") { controller ->
             controller.registerEventCallback("SceneItemVisibilityChanged") { payload ->
+                if (!isEnabled) return@registerEventCallback
                 val event = Gson().fromJson(payload, SceneItemVisibilityChanged::class.java)
                 sceneItemVisibilityChanged(event)
             }
+
             controller.registerEventCallback("SourceDestroyed") { payload ->
+                if (!isEnabled) return@registerEventCallback
                 val event = Gson().fromJson(payload, SourceDestroyed::class.java)
                 sourceDestroyedEvent(event)
             }
+
             controller.registerEventCallback("SourceCreated") { payload ->
-                println(payload)
+                if (!isEnabled) return@registerEventCallback
                 val event = Gson().fromJson(payload, SourceCreated::class.java)
                 sourceCreatedEvent(event)
             }
+
             controller.registerEventCallback("SourceRenamed") { payload ->
-                println(payload)
+                if (!isEnabled) return@registerEventCallback
                 val event = Gson().fromJson(payload, SourceRenamed::class.java)
                 sourceRenamedEvent(event)
             }
@@ -53,43 +62,29 @@ class TallyLightPlugin : Refreshable {
     }
 
     fun disable() {
+        isEnabled = false
+
         GUI.unregister(this)
 
+        TallyLightProperties.save()
+
         tallies.forEach { it.isLive = false }
-        sendUpdates()
+        sendUpdates(async = false)
     }
 
     private fun sceneItemVisibilityChanged(event: SceneItemVisibilityChanged) {
         logger.info("Received SceneItemVisibilityChanged for scene: ${event.sceneName}")
-
-        val tallyLight = tallies.find { it.cameraSourceName == event.itemName }
-        if (tallyLight == null) {
-            logger.info("No tally light found for: ${event.itemName}")
-            return
-        }
-
-        tallyLight.isLive = event.itemVisible ?: false
-        tallyLight.update()
+        changeTallyWithSourceNameLiveStatus(event.itemName, event.itemVisible ?: false)
     }
 
     private fun sourceDestroyedEvent(event: SourceDestroyed) {
         logger.info("Received SourceDestroyed event")
-
-        val tallyLight = tallies.find { it.cameraSourceName == event.sourceName } ?: return
-
-        logger.info("Setting Tally Light live status to false, because it has no source in OBS")
-        tallyLight.isLive = false
-        tallyLight.update()
+        changeTallyWithSourceNameLiveStatus(event.sourceName, false)
     }
 
     private fun sourceCreatedEvent(event: SourceCreated) {
         logger.info("Received SourceCreated event")
-
-        val tallyLight = tallies.find { it.cameraSourceName == event.sourceName } ?: return
-
-        logger.info("Setting Tally Light live status to true, because it has just been created in OBS")
-        tallyLight.isLive = true
-        tallyLight.update()
+        changeTallyWithSourceNameLiveStatus(event.sourceName, true)
     }
 
     private fun sourceRenamedEvent(event: SourceRenamed) {
@@ -101,9 +96,21 @@ class TallyLightPlugin : Refreshable {
         tallyLight.cameraSourceName = event.newName ?: return
     }
 
-    fun sendUpdates() {
+    private fun changeTallyWithSourceNameLiveStatus(sourceName: String?, isLive: Boolean) {
+        val tallyLight = tallies.find { it.cameraSourceName == sourceName } ?: return
+
+        logger.info("Setting Tally Light live status to $isLive")
+        tallyLight.isLive = isLive
+        tallyLight.update()
+
+        applyFilters()
+    }
+
+    private fun sendUpdates(async: Boolean = true) {
         logger.fine("Sending tally light updates")
-        tallies.forEach { it.update() }
+        tallies.forEach { it.update(async) }
+
+        applyFilters()
     }
 
     override fun refreshScenes() {
@@ -114,5 +121,24 @@ class TallyLightPlugin : Refreshable {
         }
 
         sendUpdates()
+    }
+
+    fun enableWriteToFile(writeToFile: Boolean) {
+        TallyLightProperties.writeToFile = writeToFile
+    }
+
+    private fun applyFilters() {
+        if (!TallyLightProperties.enableRehobothFilter) return
+
+        val iptally = tallies.find { it.cameraSourceName == "[camera] IP" }
+        if (iptally == null) {
+            logger.warning("Could not find IP Tally")
+            return
+        }
+
+        val nietIptallies = tallies.filter { it != iptally }
+
+        iptally.isLive = nietIptallies.find { it.isLive } == null
+        iptally.update()
     }
 }

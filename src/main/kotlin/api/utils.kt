@@ -17,7 +17,8 @@ data class JsonErrorResponse(val errors: List<JsonErrorObject>)
 fun respondWithJson(
     response: HttpServletResponse,
     data: Any?,
-    status: Int = HttpServletResponse.SC_OK
+    status: Int = HttpServletResponse.SC_OK,
+    log: Boolean = true
 ) {
     val json = jsonBuilder().toJson(JsonSuccessResponse(data = data))
 
@@ -25,7 +26,10 @@ fun respondWithJson(
     response.addHeader("Access-Control-Allow-Origin", "*")
     response.contentType = "application/json"
     response.writer.println(json)
-    logger.info("Response: $json")
+
+    if (log) {
+        logger.info("Response: $data")
+    }
 }
 
 fun respondWithHtml(

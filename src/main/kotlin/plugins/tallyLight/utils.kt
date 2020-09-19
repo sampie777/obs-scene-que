@@ -24,7 +24,6 @@ fun get(url: String): HttpURLConnection {
     try {
         logger.info("Connection response body: ${connection.body()}")
     } catch (e: IOException) {
-        e.printStackTrace()
     }
     return connection
 }

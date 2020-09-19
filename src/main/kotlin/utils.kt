@@ -3,6 +3,7 @@ import config.Config
 import gui.mainFrame.MainFrame
 import objects.que.Que
 import plugins.PluginLoader
+import plugins.tallyLight.TallyLightPlugin
 import java.awt.Color
 import java.io.File
 import java.io.UnsupportedEncodingException
@@ -59,6 +60,14 @@ fun exitApplication() {
         PluginLoader.disableAll()
     } catch (t: Throwable) {
         logger.warning("Failed to disable plugins")
+        t.printStackTrace()
+    }
+
+    try {
+        logger.info("Disabling TallyLight plugin...")
+        TallyLightPlugin.disable()
+    } catch (t: Throwable) {
+        logger.warning("Failed to disable TallyLight plugin")
         t.printStackTrace()
     }
 

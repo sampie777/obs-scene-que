@@ -2,7 +2,6 @@ package api
 
 
 import plugins.tallyLight.TallyLightPlugin
-import java.net.URLDecoder
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
@@ -12,18 +11,14 @@ import javax.servlet.http.HttpServletResponse
 class TallyLightApiServlet : HttpServlet() {
     private val logger = Logger.getLogger(TallyLightApiServlet::class.java.name)
 
-    private val tallies: HashMap<String, Boolean> = TallyLightPlugin.tallies.map {
-        it.cameraSourceName to false
-    }.toMap() as HashMap<String, Boolean>
-
     operator fun Regex.contains(text: CharSequence?): Boolean = this.matches(text ?: "")
-    private val nameMatcher = """^/set/(.*?)$""".toRegex()
 
     override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
         logger.info("Processing ${request.method} request from : ${request.requestURI}")
 
         when (request.pathInfo) {
             "/preview" -> getIndex(request, response)
+            "/list" -> getList(request, response)
             else -> respondWithNotFound(response)
         }
     }
@@ -32,40 +27,78 @@ class TallyLightApiServlet : HttpServlet() {
         logger.info("Processing ${request.method} request from : ${request.requestURI}")
 
         when (request.pathInfo) {
-            in Regex(nameMatcher.pattern) -> postSet(request, response, request.pathInfo.getPathVariables(nameMatcher))
             else -> respondWithNotFound(response)
         }
     }
 
     private fun getIndex(request: HttpServletRequest, response: HttpServletResponse) {
-        val tallieDivs = tallies.keys.joinToString("") {
-            "<div class=\"live-${tallies[it]}\">${it}</div>"
+        val tallieDivs = TallyLightPlugin.tallies.joinToString("") {
+            "<div class=\"live-${it.isLive}\">${it.cameraSourceName}</div>"
         }
         respondWithHtml(
             response, """
             <html>
 <head>
- <meta http-equiv="refresh" content="1">
     <style>
         body {
             background-color: #555;
             font-size: 32pt;
             color: #333;
         }
-        div {
+
+        #status div {
             width: 200px;
             height: 200px;
             margin: 10px;
             display: inline-block;
             background-color: #aaa;
         }
-        .live-true {
+
+        #status .live-true {
             background-color: red;
         }
     </style>
 </head>
 <body>
-$tallieDivs
+<div id="status"></div>
+
+<script>
+    const apiBaseUrl = "/api/v1";
+    const apiStatusEndpoint = "/tallylight/list";
+    const statusDiv = document.getElementById("status");
+
+    const get = (url) => fetch(url, {
+        method: "GET"
+    });
+
+    function updateWithStatus(status) {
+        // Clear div
+        statusDiv.innerHTML = "";
+
+        status.forEach(tally => {
+            const tallyDiv = document.createElement("div");
+            tallyDiv.classList.add("live-" + tally.isLive);
+            tallyDiv.innerText = tally.cameraSourceName;
+            statusDiv.appendChild(tallyDiv);
+        })
+    }
+
+    function getStatus() {
+        get(apiBaseUrl + apiStatusEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                updateWithStatus(data.data);
+            })
+            .catch(error => console.error('Error getting status', error));
+    }
+
+    getStatus();
+    const updateInterval = window.setInterval(getStatus, 1000);
+
+    function stopUpdates() {
+        window.clearInterval(updateInterval);
+    }
+</script>
 </body>
 </html>
         """.trimIndent(),
@@ -73,25 +106,14 @@ $tallieDivs
         )
     }
 
-    private fun postSet(request: HttpServletRequest, response: HttpServletResponse, params: List<String>) {
-        val decodedTally = URLDecoder.decode(params[0], "utf-8")
-        if (decodedTally !in tallies.keys) {
-            logger.warning("Tally not found: ${params[0]} / $decodedTally")
-            respondWithNotFound(response)
-            return
-        }
-
-        val body = request.body()
-        logger.info("Received request body: $body")
-
-        tallies[decodedTally] = (body == "true")
-
-        respondWithJson(
-            response, mapOf(
-                "result" to "ok",
-                "tallyLight" to decodedTally,
-                "isLive" to tallies[decodedTally]
+    private fun getList(request: HttpServletRequest, response: HttpServletResponse) {
+        val list = TallyLightPlugin.tallies.map { light ->
+            mapOf(
+                "cameraSourceName" to light.cameraSourceName,
+                "host" to light.host,
+                "isLive" to light.isLive
             )
-        )
+        }
+        respondWithJson(response, list, log = false)
     }
 }

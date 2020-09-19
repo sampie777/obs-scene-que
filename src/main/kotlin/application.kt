@@ -33,7 +33,9 @@ fun main(args: Array<String>) {
 
     PluginLoader.loadAll()
     PluginLoader.enableAll()
-    TallyLightPlugin().enable()
+
+    TallyLightPlugin.enableWriteToFile(true)
+    TallyLightPlugin.enable()
 
     Que.enableWriteToFile(true)
     Que.load()

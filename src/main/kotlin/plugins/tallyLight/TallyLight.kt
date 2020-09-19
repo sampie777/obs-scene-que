@@ -1,8 +1,6 @@
 package plugins.tallyLight
 
 
-import api.ApiServer
-import java.net.URLEncoder
 import java.util.logging.Logger
 
 class TallyLight(
@@ -12,22 +10,17 @@ class TallyLight(
 ) {
     private val logger = Logger.getLogger(TallyLight::class.java.name)
 
-    fun update() {
-        Thread {
-            sendUpdateBlocking()
-        }.start()
+    fun update(async: Boolean = true) {
+        val thread = Thread { sendUpdateBlocking() }
+        thread.start()
+
+        if (!async) {
+            thread.join(TallyLightProperties.lightConnectionTimeout)
+        }
     }
 
     private fun sendUpdateBlocking() {
         logger.info("Sending Tally Light update for light: $cameraSourceName")
-
-        try {
-            val encodedSourceName = URLEncoder.encode(cameraSourceName, "utf-8")
-            post("${ApiServer.url()}/api/v1/tallylight/set/$encodedSourceName", "$isLive")
-        } catch (t: Throwable) {
-            logger.warning("Failed to send update to internal tally API: $cameraSourceName")
-            t.printStackTrace()
-        }
 
         if (host.isEmpty()) {
             return
@@ -39,5 +32,9 @@ class TallyLight(
             logger.warning("Failed to send update to tally: $cameraSourceName")
             t.printStackTrace()
         }
+    }
+
+    override fun toString(): String {
+        return "TallyLight(cameraSourceName=$cameraSourceName, host=$host, isLive=$isLive)"
     }
 }
