@@ -9,7 +9,6 @@ import java.util.logging.Logger
 
 open class TallyLightPropertiesHolder(
     var lightConnectionTimeout: Long = 2000,
-    var enableRehobothFilter: Boolean = false,
     var tallyLightsJson: List<TallyLightJson> = emptyList(),
     var filterSettings: HashMap<String, Any> = hashMapOf()
 ) {
@@ -32,7 +31,6 @@ object TallyLightProperties : TallyLightPropertiesHolder() {
 
     private fun loadFromJson(json: TallyLightProperties) {
         lightConnectionTimeout = json.lightConnectionTimeout
-        enableRehobothFilter = json.enableRehobothFilter
         tallyLightsJson = json.tallyLightsJson
         filterSettings = json.filterSettings
     }
