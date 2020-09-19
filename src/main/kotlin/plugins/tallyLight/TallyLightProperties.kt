@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import getCurrentJarDirectory
 import jsonBuilder
 import objects.notifications.Notifications
+import plugins.tallyLight.json.TallyLightJson
 import java.io.File
 import java.util.logging.Logger
 
@@ -11,12 +12,7 @@ open class TallyLightPropertiesHolder(
     var lightConnectionTimeout: Long = 2000,
     var tallyLightsJson: List<TallyLightJson> = emptyList(),
     var filterSettings: HashMap<String, Any> = hashMapOf()
-) {
-    data class TallyLightJson(
-        var cameraSourceName: String,
-        var host: String = ""
-    )
-}
+)
 
 @Suppress("UNCHECKED_CAST")
 object TallyLightProperties : TallyLightPropertiesHolder() {

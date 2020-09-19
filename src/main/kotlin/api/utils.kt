@@ -1,5 +1,7 @@
 package api
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import jsonBuilder
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -36,7 +38,7 @@ fun respondWithHtml(
     response: HttpServletResponse,
     data: Any?,
     status: Int = HttpServletResponse.SC_OK,
-    log: Boolean = true
+    log: Boolean = false
 ) {
     response.status = status
     response.addHeader("Access-Control-Allow-Origin", "*")
@@ -64,3 +66,7 @@ fun HttpServletRequest.getQueryParameter(key: String, default: Any?): Any? {
 fun HttpURLConnection.body() = (this.content as InputStream).bufferedReader().readText()
 fun HttpURLConnection.errorBody() = this.errorStream?.bufferedReader()?.readText()
 fun HttpServletRequest.body() = this.inputStream.bufferedReader().readText()
+
+inline fun <reified T> fromJsonAdvanced(json: String): T {
+    return Gson().fromJson<T>(json, object: TypeToken<T>(){}.type)
+}

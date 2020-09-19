@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-size: 12pt;
+            color: #333;
+        }
+
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #wrapper {
+            padding: 10px;
+            margin: 0;
+            height: 100%;
+        }
+
+        .template {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <div id="tally-list">
+        <!-- Input template -->
+        <div class="tally-input template" id="tally-input-template">
+            <label>
+                <select name="source"
+                        required
+                >
+                    <option>Camera 1</option>
+                </select>
+            </label>
+
+            <label>
+                <input type="text"
+                       name="host"
+                       value=""
+                       placeholder="192.168.178.1"
+                       pattern="((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}"
+                />
+            </label>
+
+            <label>
+                <input type="checkbox"
+                       name="remove"
+                />
+            </label>
+        </div>
+    </div>
+
+    <div>
+        <button id="add-tally">Add new camera/source</button>
+        <button id="save-tallies">Save all</button>
+    </div>
+</div>
+
+<script>
+    const get = (url) => fetch(url, {
+        method: "GET"
+    });
+
+    const post = (url, data = "") => fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data)
+    });
+
+    const apiBaseUrl = window.location.origin + "/api/v1";
+    const api = {
+        tallyLight: {
+            list: {
+                get: () => get(apiBaseUrl + "/tallylight/list"),
+                add: (data) => post(apiBaseUrl + "/tallylight/add", data),
+                addAll: (data) => post(apiBaseUrl + "/tallylight/addAll", data),
+                remove: (data) => post(apiBaseUrl + "/tallylight/remove", data),
+                clear: () => post(apiBaseUrl + "/tallylight/removeAll")
+            },
+            sources: {
+                get: () => get(apiBaseUrl + "/tallylight/sources")
+            },
+            filters: {
+                get: () => get(apiBaseUrl + "/tallylight/filters")
+            },
+        }
+    };
+</script>
+<script>
+    class TallyLight {
+        constructor(sourceName, host) {
+            this.cameraSourceName = sourceName;
+            this.host = host;
+        }
+
+    }
+</script>
+<script>
+    const tallyList = document.getElementById("tally-list");
+    const tallyInputTemplate = document.getElementById("tally-input-template");
+    const addTallyButton = document.getElementById("add-tally");
+    const saveTalliesButton = document.getElementById("save-tallies");
+
+    const updateList = () => {
+        console.log("Updating Tally Light list");
+
+        return api.tallyLight.list.get()
+            .then(r => r.json())
+            .then(data => {
+                tallyList.innerHTML = "";
+                data.data
+                    .map((tally) => new TallyLight(tally.cameraSourceName, tally.host))
+                    .sort((a, b) => a.cameraSourceName.toUpperCase() > b.cameraSourceName.toUpperCase())    // Ignore case
+                    .forEach(addTally);
+            })
+            .catch(error => console.error('Error getting sources', error));
+    }
+
+    const updateSources = () => {
+        console.log("Updating scene sources");
+        return api.tallyLight.sources.get()
+            .then(r => r.json())
+            .then(data => {
+                const options = data.data
+                        .map((source) => `<option>${source}</option>`)
+                        .join("");
+
+                document.querySelectorAll("[name=source]").forEach((select) => {
+                    const selectedValue = select.value;
+                    select.innerHTML = options;
+                    select.value = selectedValue;
+                });
+            })
+            .catch(error => console.error('Error getting sources', error));
+    }
+
+    const addTally = (tallyLight) => {
+        const newInput = tallyInputTemplate.cloneNode(true);
+        newInput.removeAttribute("id");
+        newInput.classList.remove("template");
+
+        if (tallyLight instanceof TallyLight) {
+            newInput.querySelector("[name=source]").value = tallyLight.cameraSourceName;
+            newInput.querySelector("[name=host]").value = tallyLight.host;
+        }
+
+        tallyList.appendChild(newInput);
+    }
+
+    const saveTallies = () => {
+        console.log("Saving Tally Lights");
+        const tallyInputs = Array.from(document.querySelectorAll(".tally-input:not(.template)"));
+
+        const tallyLights = tallyInputs.map((input) => {
+            const sourceName = input.querySelector("[name=source]").value;
+            const host = input.querySelector("[name=host]").value;
+            const remove = input.querySelector("[name=remove]").checked;
+
+            const tallyLight = new TallyLight(sourceName, host);
+
+            if (remove) {
+                console.log("Removing Tally Light", tallyLight);
+                return null
+            }
+
+            return tallyLight
+        })
+        .filter((item) => item != null)
+
+        return api.tallyLight.list.addAll(tallyLights)
+            .then(r => r.json())
+            .then(() => {
+                updateList();
+            })
+            .catch(error => console.error('Error adding tally lights', tallyLights, error));
+    }
+
+    addTallyButton.addEventListener("click", addTally);
+    saveTalliesButton.addEventListener("click", saveTallies);
+
+    updateSources().then(() => {
+        updateList();
+    })
+</script>
+</body>
+</html>

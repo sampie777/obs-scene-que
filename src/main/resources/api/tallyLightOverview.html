@@ -1,0 +1,67 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            background-color: #555;
+            font-size: 32pt;
+            color: #333;
+        }
+
+        #status div {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            display: inline-block;
+            background-color: #aaa;
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        #status .live-true {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="status"></div>
+
+<script>
+    const apiBaseUrl = "/api/v1";
+    const apiStatusEndpoint = "/tallylight/list";
+    const statusDiv = document.getElementById("status");
+
+    const get = (url) => fetch(url, {
+        method: "GET"
+    });
+
+    function updateWithStatus(status) {
+        // Clear div
+        statusDiv.innerHTML = "";
+
+        status.forEach(tally => {
+            const tallyDiv = document.createElement("div");
+            tallyDiv.classList.add("live-" + tally.isLive);
+            tallyDiv.innerText = tally.cameraSourceName;
+            statusDiv.appendChild(tallyDiv);
+        })
+    }
+
+    function getStatus() {
+        get(apiBaseUrl + apiStatusEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                updateWithStatus(data.data);
+            })
+            .catch(error => console.error('Error getting status', error));
+    }
+
+    getStatus();
+    const updateInterval = window.setInterval(getStatus, 1000);
+
+    function stopUpdates() {
+        window.clearInterval(updateInterval);
+    }
+</script>
+</body>
+</html>
