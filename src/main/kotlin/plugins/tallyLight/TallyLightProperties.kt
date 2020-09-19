@@ -10,7 +10,8 @@ import java.util.logging.Logger
 open class TallyLightPropertiesHolder(
     var lightConnectionTimeout: Long = 2000,
     var enableRehobothFilter: Boolean = false,
-    var tallyLightsJson: List<TallyLightJson> = emptyList()
+    var tallyLightsJson: List<TallyLightJson> = emptyList(),
+    var filterSettings: HashMap<String, Any> = hashMapOf()
 ) {
     data class TallyLightJson(
         var cameraSourceName: String,
@@ -18,6 +19,7 @@ open class TallyLightPropertiesHolder(
     )
 }
 
+@Suppress("UNCHECKED_CAST")
 object TallyLightProperties : TallyLightPropertiesHolder() {
     private val logger = Logger.getLogger(TallyLightProperties.toString())
 
@@ -32,9 +34,9 @@ object TallyLightProperties : TallyLightPropertiesHolder() {
         lightConnectionTimeout = json.lightConnectionTimeout
         enableRehobothFilter = json.enableRehobothFilter
         tallyLightsJson = json.tallyLightsJson
+        filterSettings = json.filterSettings
     }
 
-    @Suppress("UNCHECKED_CAST")
     fun load() {
         logger.info("Loading TallyLight properties from: $configFilePath")
         val configFile = File(configFilePath)
@@ -65,12 +67,14 @@ object TallyLightProperties : TallyLightPropertiesHolder() {
         }
 
         loadTallyLights()
+        loadFilterSettings()
     }
 
     fun save() {
         logger.info("Saving TallyLight properties")
 
         saveTallyLights()
+        saveFilterSettings()
 
         if (!writeToFile) {
             return
@@ -109,9 +113,38 @@ object TallyLightProperties : TallyLightPropertiesHolder() {
         }
     }
 
+    private fun loadFilterSettings() {
+        TallyLightPlugin.filters.forEach {
+            try {
+                val filterSetting = filterSettings[it.javaClass.name] as Map<String, Any>? ?: return@forEach
+                it.loadConfig(filterSetting)
+            } catch (t: Throwable) {
+                logger.warning("Failed to load settings for Tally Light filter: ${it.javaClass.name}")
+                t.printStackTrace()
+                Notifications.add("Failed to load settings for Tally Light filter: ${it.javaClass.name}; ${t.localizedMessage}")
+            }
+        }
+    }
+
     private fun saveTallyLights() {
         tallyLightsJson = TallyLightPlugin.tallies.map {
             TallyLightJson(cameraSourceName = it.cameraSourceName, host = it.host)
         }
+    }
+
+    private fun saveFilterSettings() {
+        filterSettings = TallyLightPlugin.filters
+            .map {
+                try {
+                    it.javaClass.name to it.saveConfig()
+                } catch (t: Throwable) {
+                    logger.warning("Failed to save settings for Tally Light filter: ${it.javaClass.name}")
+                    t.printStackTrace()
+                    Notifications.add("Failed to save settings for Tally Light filter: ${it.javaClass.name}; ${t.localizedMessage}")
+                    Pair(it.javaClass.name, null)
+                }
+            }
+            .filter { it.second != null }
+            .toMap(HashMap()) as HashMap<String, Any>
     }
 }

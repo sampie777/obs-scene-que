@@ -6,6 +6,9 @@ import com.google.gson.Gson
 import gui.Refreshable
 import objects.OBSClient
 import objects.OBSState
+import objects.notifications.Notifications
+import plugins.tallyLight.filters.RehobothFilter
+import plugins.tallyLight.filters.TallyLightFilterInterface
 import plugins.tallyLight.websocketEvents.SceneItemVisibilityChanged
 import plugins.tallyLight.websocketEvents.SourceCreated
 import plugins.tallyLight.websocketEvents.SourceDestroyed
@@ -23,6 +26,10 @@ object TallyLightPlugin : Refreshable {
         TallyLight("Camera 5", "")
     )
 
+    val filters: ArrayList<TallyLightFilterInterface> = arrayListOf(
+        RehobothFilter()
+    )
+
     private var isEnabled: Boolean = false
 
     fun enable() {
@@ -34,11 +41,15 @@ object TallyLightPlugin : Refreshable {
 
         GUI.register(this)
 
-        OBSClient.preregisterCallback("TallyLightCallbacks") { controller ->
+        registerOBSCallbacks()
+    }
+
+    private fun registerOBSCallbacks() {
+        OBSClient.preregisterCallback(TallyLightPlugin::class.java.name) { controller ->
             controller.registerEventCallback("SceneItemVisibilityChanged") { payload ->
                 if (!isEnabled) return@registerEventCallback
                 val event = Gson().fromJson(payload, SceneItemVisibilityChanged::class.java)
-                sceneItemVisibilityChanged(event)
+                sceneItemVisibilityChangedEvent(event)
             }
 
             controller.registerEventCallback("SourceDestroyed") { payload ->
@@ -72,7 +83,7 @@ object TallyLightPlugin : Refreshable {
         sendUpdates(async = false)
     }
 
-    private fun sceneItemVisibilityChanged(event: SceneItemVisibilityChanged) {
+    private fun sceneItemVisibilityChangedEvent(event: SceneItemVisibilityChanged) {
         logger.info("Received SceneItemVisibilityChanged for scene: ${event.sceneName}")
         changeTallyWithSourceNameLiveStatus(event.itemName, event.itemVisible ?: false)
     }
@@ -128,17 +139,16 @@ object TallyLightPlugin : Refreshable {
     }
 
     private fun applyFilters() {
-        if (!TallyLightProperties.enableRehobothFilter) return
+        filters.forEach {
+            if (!it.isEnabled) return@forEach
 
-        val iptally = tallies.find { it.cameraSourceName == "[camera] IP" }
-        if (iptally == null) {
-            logger.warning("Could not find IP Tally")
-            return
+            try {
+                it.apply(tallies)
+            } catch (t: Throwable) {
+                logger.severe("Failed to apply filter ${it::class.java.name}")
+                t.printStackTrace()
+                Notifications.add("Failed to apply TallyLight filter ${it::class.java.name}: ${t.localizedMessage}")
+            }
         }
-
-        val nietIptallies = tallies.filter { it != iptally }
-
-        iptally.isLive = nietIptallies.find { it.isLive } == null
-        iptally.update()
     }
 }

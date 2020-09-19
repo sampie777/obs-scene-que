@@ -1,6 +1,7 @@
 package plugins.tallyLight
 
 
+import java.net.NoRouteToHostException
 import java.util.logging.Logger
 
 class TallyLight(
@@ -28,8 +29,10 @@ class TallyLight(
 
         try {
             get("http://${host}/" + if (isLive) "on" else "off")
+        } catch (e: NoRouteToHostException) {
+            logger.warning("Could not connect to tally light: $this")
         } catch (t: Throwable) {
-            logger.warning("Failed to send update to tally: $cameraSourceName")
+            logger.warning("Failed to send update to tally light: $this")
             t.printStackTrace()
         }
     }

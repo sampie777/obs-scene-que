@@ -24,6 +24,7 @@ fun get(url: String): HttpURLConnection {
     try {
         logger.info("Connection response body: ${connection.body()}")
     } catch (e: IOException) {
+        logger.fine("IOException during getting connection body: ${e.localizedMessage}")
     }
     return connection
 }
@@ -55,6 +56,7 @@ fun post(url: String, body: String? = null): HttpURLConnection {
     try {
         logger.info("Connection response body: ${connection.body()}")
     } catch (e: IOException) {
+        logger.fine("IOException during getting connection body: ${e.localizedMessage}")
     }
     return connection
 }
