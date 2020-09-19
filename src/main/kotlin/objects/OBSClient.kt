@@ -256,7 +256,7 @@ object OBSClient {
         setPreviewScene(getNextQueScene()?.scene ?: return)
     }
 
-    private fun loadScenes() {
+    fun loadScenes() {
         logger.info("Retrieving scenes")
         OBSState.clientActivityStatus = OBSClientStatus.LOADING_SCENES
         GUI.refreshOBSStatus()

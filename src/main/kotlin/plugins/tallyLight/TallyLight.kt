@@ -2,6 +2,7 @@ package plugins.tallyLight
 
 
 import java.net.NoRouteToHostException
+import java.net.SocketException
 import java.util.logging.Logger
 
 class TallyLight(
@@ -21,7 +22,7 @@ class TallyLight(
     }
 
     private fun sendUpdateBlocking() {
-        logger.info("Sending Tally Light update for light: $cameraSourceName")
+        logger.info("Sending Tally Light update for light: $this")
 
         if (host.isEmpty()) {
             return
@@ -31,6 +32,13 @@ class TallyLight(
             get("http://${host}/" + if (isLive) "on" else "off")
         } catch (e: NoRouteToHostException) {
             logger.warning("Could not connect to tally light: $this")
+        } catch (e: SocketException) {
+            if (e.message == "Connection reset") {
+                logger.warning("Update is already being send to Tally Light: $this")
+            } else {
+                logger.warning("Failure while sending update to Tally Light: $this")
+                e.printStackTrace()
+            }
         } catch (t: Throwable) {
             logger.warning("Failed to send update to tally light: $this")
             t.printStackTrace()

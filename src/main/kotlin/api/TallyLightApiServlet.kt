@@ -2,6 +2,7 @@ package api
 
 
 import com.google.gson.Gson
+import objects.OBSClient
 import objects.OBSState
 import plugins.tallyLight.TallyLight
 import plugins.tallyLight.TallyLightPlugin
@@ -150,10 +151,13 @@ class TallyLightApiServlet : HttpServlet() {
         }
 
         logger.info("Adding all Tally Lights: $tallyLights")
-        TallyLightPlugin.tallies.clear()
+        TallyLightPlugin.removeAllTallies()
         TallyLightPlugin.tallies.addAll(tallyLights)
 
         respondWithJson(response, listJson)
+
+        // Update lights
+        OBSClient.loadScenes()
     }
 
     private fun postRemove(request: HttpServletRequest, response: HttpServletResponse) {
@@ -169,10 +173,22 @@ class TallyLightApiServlet : HttpServlet() {
             return
         }
 
+        val tallyLight = try {
+            TallyLight(cameraSourceName = tallyLightJson.cameraSourceName, host = tallyLightJson.host)
+        } catch (e: Exception) {
+            logger.info("Exception caught while turning JSON into Tally Light object: $tallyLightJson")
+            e.printStackTrace()
+            respondWithNotFound(response)
+            return
+        }
+
         logger.info("Removing Tally Light: $tallyLightJson")
+        tallyLight.isLive = false
+        tallyLight.update()
+
         TallyLightPlugin.tallies.removeIf {
-            it.cameraSourceName == tallyLightJson.cameraSourceName
-                    && it.host == tallyLightJson.host
+            it.cameraSourceName == tallyLight.cameraSourceName
+                    && it.host == tallyLight.host
         }
 
         respondWithJson(response, tallyLightJson)
@@ -182,7 +198,7 @@ class TallyLightApiServlet : HttpServlet() {
         logger.info("RemoveAll request")
 
         logger.info("Removing all Tally Lights")
-        TallyLightPlugin.tallies.clear()
+        TallyLightPlugin.removeAllTallies()
 
         respondWithJson(response, "ok")
     }

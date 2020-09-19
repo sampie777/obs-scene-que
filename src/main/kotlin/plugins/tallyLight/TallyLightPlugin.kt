@@ -100,26 +100,55 @@ object TallyLightPlugin : Refreshable {
 
     private fun sourceRenamedEvent(event: SourceRenamed) {
         logger.info("Received SourceRenamed event")
+        if (event.newName == null) {
+            logger.warning("Cannot process null newName for event: $event")
+            return
+        }
 
-        val tallyLight = tallies.find { it.cameraSourceName == event.previousName } ?: return
+        tallies.filter { it.cameraSourceName == event.previousName }
+            .forEach { tallyLight ->
 
-        logger.info("Renaming Tally Light source name from '${event.previousName}' to '${event.newName}'")
-        tallyLight.cameraSourceName = event.newName ?: return
+                logger.info("Renaming Tally Light source name from '${event.previousName}' to '${event.newName}'")
+                tallyLight.cameraSourceName = event.newName
+            }
     }
 
     private fun changeTallyWithSourceNameLiveStatus(sourceName: String?, isLive: Boolean) {
-        val tallyLight = tallies.find { it.cameraSourceName == sourceName } ?: return
+        tallies.filter { it.cameraSourceName == sourceName }
+            .forEach { tallyLight ->
+                logger.info("Setting live status to $isLive for Tally Light: $tallyLight")
+                tallyLight.isLive = isLive
 
-        logger.info("Setting Tally Light live status to $isLive")
-        tallyLight.isLive = isLive
-        tallyLight.update()
+                updateTallyLightConsistent(tallyLight)
+            }
 
         applyFilters()
     }
 
+    // Make sure the light is always on if one of its clones is live. Else, use the new state
+    private fun updateTallyLightConsistent(tallyLight: TallyLight, async: Boolean = true, bulkUpdate: Boolean = false) {
+        if (tallyLight.isLive && !bulkUpdate) {
+            tallyLight.update(async)
+            return
+        }
+
+        val sameTallyLights = tallies.filter { it.host == tallyLight.host }
+        val oneOfThemIsLive = sameTallyLights.find { it.isLive }
+
+        if (oneOfThemIsLive == tallyLight || oneOfThemIsLive == null) {
+            tallyLight.update(async)
+            return
+        }
+
+        logger.info("Leaving the light on for $tallyLight, because of cloned Tally Light: $oneOfThemIsLive")
+        if (!bulkUpdate) {
+            oneOfThemIsLive.update(async)
+        }
+    }
+
     private fun sendUpdates(async: Boolean = true) {
         logger.fine("Sending tally light updates")
-        tallies.forEach { it.update(async) }
+        tallies.forEach { updateTallyLightConsistent(it, async, bulkUpdate = true) }
 
         applyFilters()
     }
@@ -127,7 +156,8 @@ object TallyLightPlugin : Refreshable {
     override fun refreshScenes() {
         OBSState.scenes.forEach { scene ->
             scene.sources.forEach { source ->
-                tallies.find { it.cameraSourceName == source.name }?.isLive = source.isVisible
+                tallies.filter { it.cameraSourceName == source.name }
+                    .forEach { it.isLive = source.isVisible }
             }
         }
 
@@ -150,5 +180,11 @@ object TallyLightPlugin : Refreshable {
                 Notifications.add("Failed to apply TallyLight filter ${it::class.java.name}: ${t.localizedMessage}")
             }
         }
+    }
+
+    fun removeAllTallies() {
+        tallies.forEach { it.isLive = false }
+        sendUpdates()
+        tallies.clear()
     }
 }
