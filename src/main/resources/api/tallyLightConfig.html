@@ -7,55 +7,111 @@
         * {
             box-sizing: border-box;
             font-size: 12pt;
-            color: #333;
+            color: #5b5a5a;
+            font-family: "Arial Black", Gadget, sans-serif;
         }
 
         html, body {
             height: 100%;
             padding: 0;
             margin: 0;
+            background-color: #f1f1f1;
         }
 
         #wrapper {
             padding: 10px;
-            margin: 0;
+            margin: 0 auto;
             height: 100%;
+            max-width: 700px;
         }
 
         .template {
             display: none;
         }
+
+        #tally-list {
+            margin-bottom: 15px;
+            border-collapse: collapse;
+        }
+
+        #tally-list th {
+            padding: 6px 14px 12px;
+        }
+
+        #tally-list .tally-input {
+            margin: 5px 0;
+        }
+
+        #tally-list .tally-input:hover td{
+            border: 1px solid #bbb;
+            border-width: 1px 0;
+        }
+
+        #tally-list .tally-input td:first-of-type{
+            border-width: 0;
+        }
+
+        #tally-list .tally-input td:last-of-type{
+            text-align: center;
+        }
+
+        #tally-list .tally-input select {
+            padding: 4px 9px;
+        }
+
+        #tally-list .tally-input input[type=text] {
+            padding: 10px;
+            border-width: 0;
+            background: none;
+        }
+
+        button {
+            padding: 5px 25px;
+        }
     </style>
 </head>
 <body>
 <div id="wrapper">
-    <div id="tally-list">
+    <table id="tally-list">
+        <thead>
+        <tr>
+            <th>Source</th>
+            <th>Tally Host</th>
+            <th>Remove?</th>
+        </tr>
+        </thead>
+
+        <tbody>
         <!-- Input template -->
-        <div class="tally-input template" id="tally-input-template">
-            <label>
-                <select name="source"
-                        required
-                >
-                    <option>Camera 1</option>
-                </select>
-            </label>
+        <tr class="tally-input template" id="tally-input-template">
+            <td>
+                <label>
+                    <select name="source"
+                            required>
+                        <option>Camera 1</option>
+                    </select>
+                </label>
+            </td>
 
-            <label>
-                <input type="text"
-                       name="host"
-                       value=""
-                       placeholder="192.168.178.1"
-                       pattern="((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}"
-                />
-            </label>
+            <td>
+                <label>
+                    <input type="text"
+                           name="host"
+                           value=""
+                           placeholder="192.168.178.1"
+                           pattern="((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}"/>
+                </label>
+            </td>
 
-            <label>
-                <input type="checkbox"
-                       name="remove"
-                />
-            </label>
-        </div>
-    </div>
+            <td>
+                <label>
+                    <input type="checkbox"
+                           name="remove"/>
+                </label>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
     <div>
         <button id="add-tally">Add new camera/source</button>
@@ -64,6 +120,7 @@
 </div>
 
 <script>
+    /* API */
     const get = (url) => fetch(url, {
         method: "GET"
     });
@@ -93,6 +150,7 @@
     };
 </script>
 <script>
+    /* CLASSES */
     class TallyLight {
         constructor(sourceName, host) {
             this.cameraSourceName = sourceName;
@@ -102,7 +160,8 @@
     }
 </script>
 <script>
-    const tallyList = document.getElementById("tally-list");
+    /* PAGE */
+    const tallyList = document.querySelector("#tally-list tbody");
     const tallyInputTemplate = document.getElementById("tally-input-template");
     const addTallyButton = document.getElementById("add-tally");
     const saveTalliesButton = document.getElementById("save-tallies");
@@ -128,8 +187,8 @@
             .then(r => r.json())
             .then(data => {
                 const options = data.data
-                        .map((source) => `<option>${source}</option>`)
-                        .join("");
+                    .map((source) => `<option>${source}</option>`)
+                    .join("");
 
                 document.querySelectorAll("[name=source]").forEach((select) => {
                     const selectedValue = select.value;
@@ -171,7 +230,7 @@
 
             return tallyLight
         })
-        .filter((item) => item != null)
+            .filter((item) => item != null)
 
         return api.tallyLight.list.addAll(tallyLights)
             .then(r => r.json())
