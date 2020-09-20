@@ -6,6 +6,7 @@ import objects.OBSClient
 import objects.OBSState
 import plugins.tallyLight.TallyLight
 import plugins.tallyLight.TallyLightPlugin
+import plugins.tallyLight.json.TallyLightFilterJson
 import plugins.tallyLight.json.TallyLightJson
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
@@ -27,7 +28,7 @@ class TallyLightApiServlet : HttpServlet() {
             "/web/config" -> getConfigWebPage(request, response)
             "/list" -> getList(request, response)
             "/sources" -> getSources(request, response)
-            "/filters" -> getFilters(request, response)
+            "/filters/list" -> getFilters(request, response)
             else -> respondWithNotFound(response)
         }
     }
@@ -40,6 +41,7 @@ class TallyLightApiServlet : HttpServlet() {
             "/addAll" -> postAddAll(request, response)
             "/remove" -> postRemove(request, response)
             "/removeAll" -> postRemoveAll(request, response)
+            "/filters/saveAll" -> postFiltersSaveAll(request, response)
             else -> respondWithNotFound(response)
         }
     }
@@ -79,9 +81,9 @@ class TallyLightApiServlet : HttpServlet() {
 
     private fun getFilters(request: HttpServletRequest, response: HttpServletResponse) {
         val list = TallyLightPlugin.filters.map { filter ->
-            mapOf(
-                "name" to filter.javaClass.name,
-                "enabled" to filter.isEnabled
+            TallyLightFilterJson(
+                filter.javaClass.name,
+                filter.isEnabled
             )
         }
 
@@ -201,5 +203,35 @@ class TallyLightApiServlet : HttpServlet() {
         TallyLightPlugin.removeAllTallies()
 
         respondWithJson(response, "ok")
+    }
+
+    private fun postFiltersSaveAll(request: HttpServletRequest, response: HttpServletResponse) {
+        logger.info("SaveAll filters request")
+        val body = request.body()
+
+        val listJson = try {
+            fromJsonAdvanced(body) as List<TallyLightFilterJson>
+        } catch (e: Exception) {
+            logger.info("Exception caught while turning post body into json object: $body")
+            e.printStackTrace()
+            respondWithNotFound(response)
+            return
+        }
+
+        TallyLightPlugin.filters.forEach { filter ->
+            val filterJson = listJson.find { it.className == filter.javaClass.name } ?: return@forEach
+
+            if (filter.isEnabled == filterJson.enabled) {
+                return@forEach
+            }
+
+            logger.info("Changing enabled status for filter $filter to: ${filterJson.enabled}");
+            filter.isEnabled = filterJson.enabled
+        }
+
+        respondWithJson(response, listJson)
+
+        // Update lights
+        TallyLightPlugin.applyFilters()
     }
 }

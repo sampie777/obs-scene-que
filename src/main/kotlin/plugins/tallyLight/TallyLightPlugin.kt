@@ -168,7 +168,7 @@ object TallyLightPlugin : Refreshable {
         TallyLightProperties.writeToFile = writeToFile
     }
 
-    private fun applyFilters() {
+    fun applyFilters() {
         filters.forEach {
             if (!it.isEnabled) return@forEach
 

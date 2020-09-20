@@ -35,4 +35,8 @@ class RehobothFilter : TallyLightFilterInterface {
         map["ipCameraSourceName"] = ipCameraSourceName
         return map
     }
+
+    override fun toString(): String {
+        return "RehobothFilter(isEnabled=$isEnabled, ipCameraSourceName=$ipCameraSourceName)"
+    }
 }

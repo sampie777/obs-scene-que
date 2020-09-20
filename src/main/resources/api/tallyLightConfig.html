@@ -29,94 +29,163 @@
             display: none;
         }
 
-        #tally-list {
+        table {
             margin-bottom: 15px;
             border-collapse: collapse;
+            width: 100%;
         }
 
-        #tally-list th {
+        table th {
             padding: 6px 14px 12px;
         }
 
-        #tally-list .tally-input {
+        table tr {
             margin: 5px 0;
         }
 
-        #tally-list .tally-input:hover td{
-            border: 1px solid #bbb;
+        table tbody tr:hover td {
+            border: 0 solid #ddd;
             border-width: 1px 0;
         }
 
-        #tally-list .tally-input td:first-of-type{
-            border-width: 0;
-        }
-
-        #tally-list .tally-input td:last-of-type{
+        table tbody td:last-of-type {
             text-align: center;
         }
 
-        #tally-list .tally-input select {
+        select {
             padding: 4px 9px;
-        }
-
-        #tally-list .tally-input input[type=text] {
-            padding: 10px;
-            border-width: 0;
-            background: none;
         }
 
         button {
             padding: 5px 25px;
         }
+
+        input[type=text] {
+            padding: 10px;
+            border-width: 0;
+            background: none;
+        }
+
+        section {
+            margin-bottom: 45px;
+        }
+
+        hr {
+            border: none;
+            border-bottom: 4px double #dcdcdc;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 29pt;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 0px 1px 2px #bebebe;
+            color: rgb(241, 241, 241);
+            border-bottom: 1px solid #ddd;
+            width: 80%;
+            margin: 20px auto;
+            padding: 13px 0;
+        }
+
+        .action-buttons-div {
+            text-align: center;
+        }
+
+        #tally-list .tally-input td:first-of-type {
+            border-width: 0;
+        }
+
+        .filter-name {
+            display: inline-block;
+            padding: 13px 7px;
+        }
     </style>
 </head>
 <body>
 <div id="wrapper">
-    <table id="tally-list">
-        <thead>
-        <tr>
-            <th>Source</th>
-            <th>Tally Host</th>
-            <th>Remove?</th>
-        </tr>
-        </thead>
+    <section id="tally-config">
+        <h1>Tally Lights</h1>
 
-        <tbody>
-        <!-- Input template -->
-        <tr class="tally-input template" id="tally-input-template">
-            <td>
-                <label>
-                    <select name="source"
-                            required>
-                        <option>Camera 1</option>
-                    </select>
-                </label>
-            </td>
+        <table id="tally-list">
+            <thead>
+            <tr>
+                <th>Source</th>
+                <th>Tally Host</th>
+                <th>Remove?</th>
+            </tr>
+            </thead>
 
-            <td>
-                <label>
-                    <input type="text"
-                           name="host"
-                           value=""
-                           placeholder="192.168.178.1"
-                           pattern="((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}"/>
-                </label>
-            </td>
+            <tbody>
+            <!-- Input template -->
+            <tr class="tally-input template" id="tally-input-template">
+                <td>
+                    <label>
+                        <select name="source"
+                                required>
+                            <option>Camera 1</option>
+                        </select>
+                    </label>
+                </td>
 
-            <td>
-                <label>
-                    <input type="checkbox"
-                           name="remove"/>
-                </label>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                <td>
+                    <label>
+                        <input type="text"
+                               name="host"
+                               value=""
+                               placeholder="192.168.178.1"
+                               pattern="((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}"/>
+                    </label>
+                </td>
 
-    <div>
-        <button id="add-tally">Add new camera/source</button>
-        <button id="save-tallies">Save all</button>
-    </div>
+                <td>
+                    <label>
+                        <input type="checkbox"
+                               name="remove"/>
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="action-buttons-div">
+            <button id="add-tally">Add new camera/source</button>
+            <button id="save-tallies">Save all</button>
+        </div>
+    </section>
+
+    <section id="filter-config">
+        <h1>Filters</h1>
+
+        <table id="filter-list">
+            <thead>
+            <tr>
+                <th>Filter</th>
+                <th>Enabled</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <!-- Input template -->
+            <tr class="filter-edit template" id="filter-edit-template">
+                <td>
+                    <span class="filter-name" data-classname=""></span>
+                </td>
+
+                <td>
+                    <label>
+                        <input type="checkbox"
+                               name="enabled"/>
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="action-buttons-div">
+            <button id="save-filters">Save changes</button>
+        </div>
+    </section>
 </div>
 
 <script>
@@ -144,7 +213,8 @@
                 get: () => get(apiBaseUrl + "/tallylight/sources")
             },
             filters: {
-                get: () => get(apiBaseUrl + "/tallylight/filters")
+                get: () => get(apiBaseUrl + "/tallylight/filters/list"),
+                saveAll: (data) => post(apiBaseUrl + "/tallylight/filters/saveAll", data)
             },
         }
     };
@@ -156,11 +226,17 @@
             this.cameraSourceName = sourceName;
             this.host = host;
         }
+    }
 
+    class Filter {
+        constructor(className, enabled) {
+            this.className = className;
+            this.enabled = enabled;
+        }
     }
 </script>
 <script>
-    /* PAGE */
+    /* TALLY CONFIG */
     const tallyList = document.querySelector("#tally-list tbody");
     const tallyInputTemplate = document.getElementById("tally-input-template");
     const addTallyButton = document.getElementById("add-tally");
@@ -178,7 +254,7 @@
                     .sort((a, b) => a.cameraSourceName.toUpperCase() > b.cameraSourceName.toUpperCase())    // Ignore case
                     .forEach(addTally);
             })
-            .catch(error => console.error('Error getting sources', error));
+            .catch(error => console.error('Error getting Tally Lights', error));
     }
 
     const updateSources = () => {
@@ -246,6 +322,65 @@
     updateSources().then(() => {
         updateList();
     })
+</script>
+<script>
+    /* FILTER CONFIG */
+    const filterList = document.querySelector("#filter-list tbody");
+    const filterEditTemplate = document.getElementById("filter-edit-template");
+    const saveFiltersButton = document.getElementById("save-filters");
+
+    const updateFilterList = () => {
+        console.log("Updating filter list");
+
+        return api.tallyLight.filters.get()
+            .then(r => r.json())
+            .then(data => {
+                filterList.innerHTML = "";
+                data.data
+                    .map((filter) => new Filter(filter.className, filter.enabled))
+                    .sort((a, b) => a.className.toUpperCase() > b.className.toUpperCase())    // Ignore case
+                    .forEach(addFilter);
+            })
+            .catch(error => console.error('Error getting filters', error));
+    }
+
+    const addFilter = (filter) => {
+        const newInput = filterEditTemplate.cloneNode(true);
+        newInput.removeAttribute("id");
+        newInput.classList.remove("template");
+
+        if (filter instanceof Filter) {
+            newInput.querySelector(".filter-name").dataset.classname = filter.className;
+            newInput.querySelector(".filter-name").innerHTML = filter.className;
+            newInput.querySelector("[name=enabled]").checked = filter.enabled;
+        }
+
+        filterList.appendChild(newInput);
+    }
+
+    const saveFilters = () => {
+        console.log("Saving filters");
+        const filterEdits = Array.from(document.querySelectorAll(".filter-edit:not(.template)"));
+
+        const filters = filterEdits.map((element) => {
+            const className = element.querySelector(".filter-name").dataset.classname;
+            const enabled = element.querySelector("[name=enabled]").checked;
+
+            return new Filter(className, enabled)
+        })
+            .filter((item) => item != null)
+
+        return api.tallyLight.filters.saveAll(filters)
+            .then(r => r.json())
+            .then(() => {
+                updateFilterList();
+            })
+            .catch(error => console.error('Error saving filter', filters, error));
+    }
+
+    saveFiltersButton.addEventListener("click", saveFilters);
+
+    updateFilterList();
 </script>
 </body>
 </html>
