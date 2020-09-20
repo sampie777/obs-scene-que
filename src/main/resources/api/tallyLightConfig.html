@@ -123,6 +123,7 @@ Created by: Samuel-Anton Jansen
             transition: all 500ms;
             max-width: 400px;
             color: #8b7fa2;
+            box-shadow: 2px 3px 4px -2px #00000029;
         }
 
         .notification-error {
@@ -339,6 +340,14 @@ Created by: Samuel-Anton Jansen
         body: JSON.stringify(data)
     });
 
+    const throwErrorsIfNotOk = (response) => {
+        if (response.status === 404) {
+            throw Error(`Could not connect to server (${response.status})`);
+        } else if(!response.ok) {
+            throw Error(`Request failed: ${response.status} ${response.statusText}`);
+        }
+    }
+
     const apiBaseUrl = window.location.origin + "/api/v1";
     const api = {
         tallyLight: {
@@ -370,6 +379,7 @@ Created by: Samuel-Anton Jansen
         console.log("Updating Tally Light list");
 
         return api.tallyLight.list.get()
+            .then(throwErrorsIfNotOk)
             .then(r => r.json())
             .then(data => {
                 tallyList.innerHTML = "";
@@ -387,6 +397,7 @@ Created by: Samuel-Anton Jansen
     const updateSources = () => {
         console.log("Updating scene sources");
         return api.tallyLight.sources.get()
+            .then(throwErrorsIfNotOk)
             .then(r => r.json())
             .then(data => {
                 const options = data.data
@@ -439,6 +450,7 @@ Created by: Samuel-Anton Jansen
             .filter((item) => item != null)
 
         return api.tallyLight.list.addAll(tallyLights)
+            .then(throwErrorsIfNotOk)
             .then(r => r.json())
             .then(() => {
                 addNotification(new Notification("Tally Lights saved!", "", Notification.SUCCESS));
@@ -467,6 +479,7 @@ Created by: Samuel-Anton Jansen
         console.log("Updating filter list");
 
         return api.tallyLight.filters.get()
+            .then(throwErrorsIfNotOk)
             .then(r => r.json())
             .then(data => {
                 filterList.innerHTML = "";
@@ -508,6 +521,7 @@ Created by: Samuel-Anton Jansen
             .filter((item) => item != null)
 
         return api.tallyLight.filters.saveAll(filters)
+            .then(throwErrorsIfNotOk)
             .then(r => r.json())
             .then(() => {
                 addNotification(new Notification("Filters saved!", "", Notification.SUCCESS));
