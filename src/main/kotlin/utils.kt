@@ -55,6 +55,8 @@ fun exitApplication() {
         t.printStackTrace()
     }
 
+    MainFrame.getInstance()?.isVisible = false
+
     try {
         logger.info("Disabling plugins...")
         PluginLoader.disableAll()

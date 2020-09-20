@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!--
+Created by: Samuel-Anton Jansen
+-->
 <html>
 <head>
     <meta charset="utf-8">
@@ -101,6 +104,67 @@
             padding: 13px 7px;
         }
     </style>
+    <style>
+        /* NOTIFICATIONS */
+        #notifications {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 20px;
+            transition: all 1s;
+        }
+
+        .notification {
+            background-color: #e7daff;
+            padding: 15px 21px;
+            border-radius: 10px;
+            border: 1px solid #cbbfe1;
+            margin-bottom: 13px;
+            transition: all 500ms;
+            max-width: 400px;
+            color: #8b7fa2;
+        }
+
+        .notification-error {
+            background-color: #ffdae3;
+            color: #a27f87;
+        }
+
+        .notification-error .notification-title, .notification-error .notification-close {
+            color: #daa2b7;
+        }
+
+        .notification-success {
+            background-color: #e2ffda;
+            color: #88a27f;
+        }
+
+        .notification-success .notification-title, .notification-success .notification-close {
+            color: #a2daa8;
+        }
+
+        .notification-title {
+            font-weight: bold;
+            font-size: 11pt;
+            color: #b6a2da;
+            padding: 0 0px 4px 0;
+        }
+
+        .notification-message {
+            color: inherit;
+        }
+
+        .notification-close {
+            color: #b6a2da;
+            text-decoration: none;
+            font-size: 9pt;
+            float: right;
+        }
+
+        .notification-close:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <div id="wrapper">
@@ -188,6 +252,82 @@
     </section>
 </div>
 
+<div id="notifications">
+    <div class="notification template"
+         id="notification-template">
+        <a href="javascript:void(0);" class="notification-close">close</a>
+        <div class="notification-title"></div>
+        <div class="notification-message"></div>
+    </div>
+</div>
+
+<script>
+    /* CLASSES */
+    class TallyLight {
+        constructor(sourceName, host) {
+            this.cameraSourceName = sourceName;
+            this.host = host;
+        }
+    }
+
+    class Filter {
+        constructor(className, enabled) {
+            this.className = className;
+            this.enabled = enabled;
+        }
+    }
+
+    class Notification {
+        constructor(title, message, type) {
+            this.title = title;
+            this.message = message;
+            this.type = type;
+        }
+
+        static INFO = "info";
+        static SUCCESS = "success";
+        static ERROR = "error";
+    }
+</script>
+<script>
+    /* NOTIFICATIONS */
+    const notificationsParent = document.querySelector("#notifications");
+    const notificationTemplate = document.querySelector("#notification-template");
+    const notificationDuration = 10_000;
+
+    const getTransitionDurationForElement = (notificationElement) => {
+        const transitionDurationString = window.getComputedStyle(notificationElement).transitionDuration;
+        return transitionDurationString.substring(0, transitionDurationString.length - 1) * 1000;
+    }
+
+    const removeNotification = (notificationElement) => {
+        console.debug("Removing notification:", notificationElement);
+        notificationElement.style.opacity = "0";
+
+        const transitionDuration = getTransitionDurationForElement(notificationElement);
+        window.setTimeout(() => notificationElement.remove(), transitionDuration);
+    }
+
+    const addNotification = (notification) => {
+        console.info("Adding notification: ", notification);
+        const template = notificationTemplate.cloneNode(true);
+        template.removeAttribute("id");
+        template.classList.remove("template");
+
+        if (notification instanceof Notification) {
+            template.querySelector(".notification-title").innerHTML = notification.title;
+            template.querySelector(".notification-message").innerHTML = notification.message;
+            template.classList.add("notification-" + notification.type);
+        }
+
+        template.querySelector(".notification-close")
+            .addEventListener("click", () => removeNotification(template));
+
+        notificationsParent.appendChild(template);
+
+        window.setTimeout(removeNotification, notificationDuration, template);
+    }
+</script>
 <script>
     /* API */
     const get = (url) => fetch(url, {
@@ -220,22 +360,6 @@
     };
 </script>
 <script>
-    /* CLASSES */
-    class TallyLight {
-        constructor(sourceName, host) {
-            this.cameraSourceName = sourceName;
-            this.host = host;
-        }
-    }
-
-    class Filter {
-        constructor(className, enabled) {
-            this.className = className;
-            this.enabled = enabled;
-        }
-    }
-</script>
-<script>
     /* TALLY CONFIG */
     const tallyList = document.querySelector("#tally-list tbody");
     const tallyInputTemplate = document.getElementById("tally-input-template");
@@ -254,7 +378,10 @@
                     .sort((a, b) => a.cameraSourceName.toUpperCase() > b.cameraSourceName.toUpperCase())    // Ignore case
                     .forEach(addTally);
             })
-            .catch(error => console.error('Error getting Tally Lights', error));
+            .catch(error => {
+                console.error('Error getting Tally Lights', error);
+                addNotification(new Notification("Error getting Tally Lights", error.message, Notification.ERROR));
+            });
     }
 
     const updateSources = () => {
@@ -272,7 +399,10 @@
                     select.value = selectedValue;
                 });
             })
-            .catch(error => console.error('Error getting sources', error));
+            .catch(error => {
+                console.error('Error getting sources', error);
+                addNotification(new Notification("Error getting sources", error.message, Notification.ERROR));
+            });
     }
 
     const addTally = (tallyLight) => {
@@ -311,9 +441,13 @@
         return api.tallyLight.list.addAll(tallyLights)
             .then(r => r.json())
             .then(() => {
+                addNotification(new Notification("Tally Lights saved!", "", Notification.SUCCESS));
                 updateList();
             })
-            .catch(error => console.error('Error adding tally lights', tallyLights, error));
+            .catch(error => {
+                console.error('Error saving tally lights', tallyLights, error)
+                addNotification(new Notification("Error saving Tally Lights", error.message, Notification.ERROR));
+            });
     }
 
     addTallyButton.addEventListener("click", addTally);
@@ -341,7 +475,10 @@
                     .sort((a, b) => a.className.toUpperCase() > b.className.toUpperCase())    // Ignore case
                     .forEach(addFilter);
             })
-            .catch(error => console.error('Error getting filters', error));
+            .catch(error => {
+                console.error('Error getting filters', error);
+                addNotification(new Notification("Error getting filters", error.message, Notification.ERROR));
+            });
     }
 
     const addFilter = (filter) => {
@@ -373,9 +510,13 @@
         return api.tallyLight.filters.saveAll(filters)
             .then(r => r.json())
             .then(() => {
+                addNotification(new Notification("Filters saved!", "", Notification.SUCCESS));
                 updateFilterList();
             })
-            .catch(error => console.error('Error saving filter', filters, error));
+            .catch(error => {
+                console.error('Error saving filters', filters, error);
+                addNotification(new Notification("Error saving filters", error.message, Notification.ERROR));
+            });
     }
 
     saveFiltersButton.addEventListener("click", saveFilters);
