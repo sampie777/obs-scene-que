@@ -346,6 +346,7 @@ Created by: Samuel-Anton Jansen
         } else if(!response.ok) {
             throw Error(`Request failed: ${response.status} ${response.statusText}`);
         }
+        return response;
     }
 
     const apiBaseUrl = window.location.origin + "/api/v1";
