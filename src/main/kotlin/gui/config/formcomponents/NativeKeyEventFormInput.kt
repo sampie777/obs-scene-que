@@ -49,7 +49,7 @@ class NativeKeyEventFormInput(
 
     private fun setButtonText() {
         if (keyEvent == null) {
-            button.text = "Assign..."
+            button.text = "Click to Assign..."
             button.toolTipText = "Click to assign"
         } else {
             button.text = keyEventToString(keyEvent)
