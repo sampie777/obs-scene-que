@@ -8,6 +8,7 @@ import objects.que.Que
 import org.jnativehook.keyboard.NativeKeyEvent
 import kotlin.test.*
 
+@Suppress("DEPRECATION")
 class GlobalKeyboardHookTest {
 
     private val mockPlugin = MockPlugin()
