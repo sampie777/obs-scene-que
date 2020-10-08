@@ -1,4 +1,5 @@
 import config.Config
+import org.jnativehook.GlobalScreen
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -6,6 +7,7 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.util.*
 import java.util.logging.*
+
 
 object LogService {
 
@@ -60,6 +62,14 @@ object LogService {
             logger.log(logRecord)
         }
         logger.info("--- END ---")
+    }
+
+    fun setupLoggingForGlobalScreen() {
+        // Get the logger for "com.github.kwhat.jnativehook" and set the level to warning.
+        val logger = Logger.getLogger(GlobalScreen::class.java.getPackage().name)
+
+        logger.level = Level.WARNING
+        logger.useParentHandlers = false
     }
 
     /**

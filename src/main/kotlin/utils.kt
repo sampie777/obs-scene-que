@@ -1,7 +1,10 @@
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import config.Config
+import gui.globalHooks.GlobalKeyboardHook
 import gui.mainFrame.MainFrame
 import objects.que.Que
+import org.jnativehook.keyboard.NativeKeyEvent
 import plugins.PluginLoader
 import java.awt.Color
 import java.io.File
@@ -62,6 +65,8 @@ fun exitApplication() {
         t.printStackTrace()
     }
 
+    GlobalKeyboardHook.unregister()
+
     try {
         logger.info("Saving configuration...")
         Que.save()
@@ -109,9 +114,28 @@ fun getFileExtension(file: File): String {
 
 fun Date.format(format: String): String? = SimpleDateFormat(format).format(this)
 
-internal fun jsonBuilder() =
-    GsonBuilder()
+internal fun jsonBuilder(prettyPrint: Boolean = true): Gson {
+    val builder = GsonBuilder()
         .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
         .serializeNulls()
-        .setPrettyPrinting()
-        .create()
+
+    if (prettyPrint) {
+        builder.setPrettyPrinting()
+    }
+
+    return builder.create()
+}
+
+
+fun keyEventToString(e: NativeKeyEvent?): String {
+    if (e == null) {
+        return ""
+    }
+
+    return listOf(
+        NativeKeyEvent.getModifiersText(e.modifiers),
+        NativeKeyEvent.getKeyText(e.keyCode)
+    )
+        .filter { !it.isBlank() }
+        .joinToString("+")
+}

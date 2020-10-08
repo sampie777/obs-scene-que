@@ -1,6 +1,7 @@
 package config
 
 import getCurrentJarDirectory
+import objects.json.NativeKeyEventJson
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point
@@ -148,57 +149,62 @@ object PropertyLoader {
     }
 
     fun stringToTypedValue(value: String, name: String, type: Class<*>): Any? {
-        if (type == String::class.java) return value
-        if (type == Boolean::class.javaPrimitiveType) return java.lang.Boolean.parseBoolean(value)
-        if (type == Int::class.javaPrimitiveType) return value.toInt()
-        if (type == Float::class.javaPrimitiveType) return value.toFloat()
-        if (type == Long::class.javaPrimitiveType) return value.toLong()
-        if (type == Double::class.javaPrimitiveType) return value.toDouble()
-        if (type == Color::class.java) {
-            val rgb = value.split(defaultValueDelimiter)
-            if (rgb.size < 3) {
-                throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
-            }
-            return Color(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt())
-        }
-        if (type == HashMap::class.java) {
-            if (value.isEmpty()) {
-                return HashMap<String, Int>()
-            }
-            return value.split(sceneValuesDelimiter)
-                .map {
-                    val pair: List<String> = it.split(sceneValuePairDelimiter)
-                    if (pair.size != 2) {
-                        logger.warning("Invalid property pair: $it")
-                    }
-                    pair
+        when (type) {
+            String::class.java -> return value
+            Boolean::class.javaPrimitiveType -> return java.lang.Boolean.parseBoolean(value)
+            Int::class.javaPrimitiveType -> return value.toInt()
+            Float::class.javaPrimitiveType -> return value.toFloat()
+            Long::class.javaPrimitiveType -> return value.toLong()
+            Double::class.javaPrimitiveType -> return value.toDouble()
+            Color::class.java -> {
+                val rgb = value.split(defaultValueDelimiter)
+                if (rgb.size < 3) {
+                    throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
                 }
-                .filter { it.size == 2 }
-                .map { it[0] to it[1].toInt() }
-                .toMap(HashMap())
-        }
-        if (type == ArrayList::class.java) {
-            if (value.isEmpty()) {
-                return ArrayList<String>()
+                return Color(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt())
             }
-            return value.split(sceneValuesDelimiter)
-        }
-        if (type == Point::class.java) {
-            val values = value.split(defaultValueDelimiter)
-            if (values.size != 2) {
-                throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
+            HashMap::class.java -> {
+                if (value.isEmpty()) {
+                    return HashMap<String, Int>()
+                }
+                return value.split(sceneValuesDelimiter)
+                    .map {
+                        val pair: List<String> = it.split(sceneValuePairDelimiter)
+                        if (pair.size != 2) {
+                            logger.warning("Invalid property pair: $it")
+                        }
+                        pair
+                    }
+                    .filter { it.size == 2 }
+                    .map { it[0] to it[1].toInt() }
+                    .toMap(HashMap())
             }
-            return Point(values[0].toInt(), values[1].toInt())
-        }
-        if (type == Dimension::class.java) {
-            val values = value.split(defaultValueDelimiter)
-            if (values.size != 2) {
-                throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
+            ArrayList::class.java -> {
+                if (value.isEmpty()) {
+                    return ArrayList<String>()
+                }
+                return value.split(sceneValuesDelimiter)
             }
-            return Dimension(values[0].toInt(), values[1].toInt())
+            Point::class.java -> {
+                val values = value.split(defaultValueDelimiter)
+                if (values.size != 2) {
+                    throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
+                }
+                return Point(values[0].toInt(), values[1].toInt())
+            }
+            Dimension::class.java -> {
+                val values = value.split(defaultValueDelimiter)
+                if (values.size != 2) {
+                    throw IllegalArgumentException("Configuration parameter '$name' has invalid value: $value")
+                }
+                return Dimension(values[0].toInt(), values[1].toInt())
+            }
+            NativeKeyEventJson::class.java -> {
+                return NativeKeyEventJson.fromJson(value)
+            }
+            else -> throw IllegalArgumentException("Unknown configuration value type: " + type.name)
         }
 
-        throw IllegalArgumentException("Unknown configuration value type: " + type.name)
     }
 
     private fun typedValueToPropertyValue(props: Properties, name: String, type: Class<*>, value: Any?) {
@@ -207,45 +213,38 @@ object PropertyLoader {
             return
         }
 
-        if (type == Color::class.java) {
-            val color = value as Color
-            val stringValue = listOf(color.red, color.green, color.blue).joinToString(defaultValueDelimiter)
-            props.setProperty(name, stringValue)
-            return
-        }
-        if (type == HashMap::class.java) {
-            val hashmap = value as HashMap<*, *>
-            val stringValue = hashmap.entries.stream()
-                .map { (key, v) -> "$key$sceneValuePairDelimiter$v" }
-                .toArray()
-                .joinToString(sceneValuesDelimiter)
-
-            props.setProperty(name, stringValue)
-            return
-        }
-        if (type == ArrayList::class.java) {
-            val list = value as ArrayList<*>
-            val stringValue = list.joinToString(sceneValuesDelimiter)
-
-            props.setProperty(name, stringValue)
-            return
-        }
-        if (type == Point::class.java) {
-            val point = value as Point
-            val stringValue = point.x.toString() + defaultValueDelimiter + point.y
-
-            props.setProperty(name, stringValue)
-            return
-        }
-        if (type == Dimension::class.java) {
-            val dimension = value as Dimension
-            val stringValue = dimension.width.toString() + defaultValueDelimiter + dimension.height
-
-            props.setProperty(name, stringValue)
-            return
+        val stringValue = when (type) {
+            Color::class.java -> {
+                val color = value as Color
+                listOf(color.red, color.green, color.blue).joinToString(defaultValueDelimiter)
+            }
+            HashMap::class.java -> {
+                val hashmap = value as HashMap<*, *>
+                hashmap.entries.stream()
+                    .map { (key, v) -> "$key$sceneValuePairDelimiter$v" }
+                    .toArray()
+                    .joinToString(sceneValuesDelimiter)
+            }
+            ArrayList::class.java -> {
+                val list = value as ArrayList<*>
+                list.joinToString(sceneValuesDelimiter)
+            }
+            Point::class.java -> {
+                val point = value as Point
+                point.x.toString() + defaultValueDelimiter + point.y
+            }
+            Dimension::class.java -> {
+                val dimension = value as Dimension
+                dimension.width.toString() + defaultValueDelimiter + dimension.height
+            }
+            NativeKeyEventJson::class.java -> {
+                (value as NativeKeyEventJson).toJson()
+            }
+            else -> value.toString()
         }
 
-        props.setProperty(name, value.toString())
+        props.setProperty(name, stringValue)
+
     }
 
     private fun createNewPropertiesFile(): Boolean {
