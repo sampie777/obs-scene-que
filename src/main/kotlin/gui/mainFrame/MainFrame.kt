@@ -3,6 +3,7 @@ package gui.mainFrame
 import GUI
 import config.Config
 import gui.Refreshable
+import gui.globalHooks.GlobalKeyboardHook
 import gui.menu.MenuBar
 import gui.utils.loadIcon
 import objects.ApplicationInfo
@@ -37,6 +38,8 @@ class MainFrame : JFrame(), Refreshable {
         addWindowListener(MainFrameWindowAdapter(this))
 
         initGUI()
+
+        GlobalKeyboardHook.register()
     }
 
     private fun initGUI() {

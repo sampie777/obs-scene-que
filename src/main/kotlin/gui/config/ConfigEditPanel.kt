@@ -69,6 +69,22 @@ class ConfigEditPanel : JPanel() {
                 "When activating an 'Activate After Previous'-Queue Item,\nalso activate the next 'Activate After Previous'-Queue Items"
             )
         )
+        formComponents.add(
+            NativeKeyEventFormInput(
+                "globalKeyEventPreviousQueueItem",
+                "Global key for activating Previous Queue",
+                allowEmpty = true,
+                toolTipText = "Click the Assign button and hit your keys. Click again to clear."
+            )
+        )
+        formComponents.add(
+            NativeKeyEventFormInput(
+                "globalKeyEventNextQueueItem",
+                "Global key for activating Next Queue",
+                allowEmpty = true,
+                toolTipText = "Click the Assign button and hit your keys. Click again to clear."
+            )
+        )
 
         formComponents.add(HeaderFormComponent("Web control"))
         formComponents.add(

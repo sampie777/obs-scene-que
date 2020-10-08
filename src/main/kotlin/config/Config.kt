@@ -1,6 +1,7 @@
 package config
 
 import getCurrentJarDirectory
+import objects.json.NativeKeyEventJson
 import objects.notifications.Notifications
 import objects.que.Que
 import java.awt.Dimension
@@ -46,6 +47,9 @@ object Config {
     var quickAccessButtonQueItems: ArrayList<String> = ArrayList()
     var quickAccessButtonDisplayIcon: Boolean = true
 
+    // Queue control
+    var globalKeyEventNextQueueItem: NativeKeyEventJson? = null
+    var globalKeyEventPreviousQueueItem: NativeKeyEventJson? = null
     var activateNextSubQueueItemsOnMouseActivationQueueItem: Boolean = true
     var activateNextSubQueueItemsOnMouseActivationSubQueueItem: Boolean = false
 
