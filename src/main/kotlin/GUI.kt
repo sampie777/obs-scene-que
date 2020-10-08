@@ -38,6 +38,19 @@ object GUI {
         }
     }
 
+    fun refreshQueueName() {
+        components.toTypedArray().forEach {
+            try {
+                it.refreshQueueName()
+            } catch (e: AbstractMethodError) {
+                logger.severe("Function refreshQueueName is not implemented for component: ${it::class.java}")
+            } catch (t: Throwable) {
+                logger.severe("Failed to execute refreshQueueName for component: ${it::class.java}")
+                t.printStackTrace()
+            }
+        }
+    }
+
     fun refreshOBSStatus() {
         val componentsCopy = components.toTypedArray()
         for (component in componentsCopy) {

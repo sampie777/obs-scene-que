@@ -1,10 +1,11 @@
 package gui.config
 
 import config.Config
+import gui.HotKeysMapping
 import gui.mainFrame.MainFrame
+import gui.utils.addHotKeyMapping
 import themes.Theme
 import java.awt.Dimension
-import java.awt.event.KeyEvent
 import java.util.logging.Logger
 import javax.swing.Box
 import javax.swing.BoxLayout
@@ -26,12 +27,12 @@ class ConfigActionPanel(private val frame: ConfigFrame) : JPanel() {
         border = EmptyBorder(0, 10, 10, 10)
 
         saveButton.addActionListener { saveConfigAndClose() }
-        saveButton.mnemonic = KeyEvent.VK_S
+        saveButton.addHotKeyMapping(HotKeysMapping.SAVE_BUTTON)
         frame.rootPane.defaultButton = saveButton
 
         val cancelButton = JButton("Cancel")
         cancelButton.addActionListener { cancelWindow() }
-        cancelButton.mnemonic = KeyEvent.VK_C
+        cancelButton.addHotKeyMapping(HotKeysMapping.CANCEL_BUTTON)
 
         add(Box.createHorizontalGlue())
         add(saveButton)

@@ -18,14 +18,19 @@ internal object QueLoader {
 
     private var lastSavedData: String = ""
 
-    fun load() {
-        val queFile = File(Config.queFile)
+    fun load(): Boolean {
+        return load(File(Config.queFile))
+    }
+
+    fun load(queFile: File): Boolean {
         logger.info("Loading queue from file: ${queFile.absolutePath}")
+
+        lastSavedData = ""
 
         if (!queFile.exists()) {
             logger.info("Queue file not found")
             Que.clear()
-            return
+            return false
         }
 
         // Create backwards compatibility
@@ -37,8 +42,8 @@ internal object QueLoader {
             } catch (e: Exception) {
                 logger.severe("Failed to json queue from file")
                 e.printStackTrace()
-                Notifications.add("Failed to read file: ${e.localizedMessage}", "Queue")
-                return
+                Notifications.popup("Failed to read file: ${e.localizedMessage}", "Queue")
+                return false
             }
 
             Que.setList(queList)
@@ -48,20 +53,24 @@ internal object QueLoader {
             } catch (e: Exception) {
                 logger.severe("Failed to json queue from file")
                 e.printStackTrace()
-                Notifications.add("Failed to read file: ${e.localizedMessage}", "Queue")
-                return
+                Notifications.popup("Failed to read file: ${e.localizedMessage}", "Queue")
+                return false
             }
 
             if (!fromJson(json)) {
-                return
+                logger.info("Could not load Queue from json")
+                return false
             }
         }
 
-        val fileName = File(Config.queFile).nameWithoutExtension
+        val fileName = queFile.nameWithoutExtension
         if (fileName != Que.name) {
             logger.info("Renaming que to file name: $fileName")
             Que.name = fileName
         }
+
+        Config.queFile = queFile.absolutePath
+        return true
     }
 
     fun loadQueItemFromJson(jsonQueueItem: JsonQueue.QueueItem): QueItem? {
@@ -103,7 +112,7 @@ internal object QueLoader {
         } catch (e: Exception) {
             logger.warning("Failed to convert Queue to json")
             e.printStackTrace()
-            Notifications.add("Failed to save Queue to file: ${e.localizedMessage}", "Queue")
+            Notifications.popup("Failed to save Queue to file: ${e.localizedMessage}", "Queue")
             return
         }
 
@@ -121,7 +130,7 @@ internal object QueLoader {
             } catch (e: Exception) {
                 logger.severe("Failed to save json to file")
                 e.printStackTrace()
-                Notifications.add("Failed to save Queue to file: ${e.localizedMessage}", "Queue")
+                Notifications.popup("Failed to save Queue to file: ${e.localizedMessage}", "Queue")
             }
         }
 
@@ -161,6 +170,12 @@ internal object QueLoader {
     }
 
     fun fromJson(json: String): Boolean {
+        if (json.isBlank()) {
+            logger.warning("Cannot load empty json string as Queue")
+            Notifications.popup("Failed to load Queue from file: file is empty", "Queue")
+            return false
+        }
+
         try {
             val jsonQue = jsonQueFromJson(json) ?: return false
 
@@ -175,7 +190,7 @@ internal object QueLoader {
         } catch (e: Exception) {
             logger.warning("Failed to load Queue from JSON: $json")
             e.printStackTrace()
-            Notifications.add("Failed to load Queue from file: ${e.localizedMessage}", "Queue")
+            Notifications.popup("Failed to load Queue from file: ${e.localizedMessage}", "Queue")
         }
         return false
     }

@@ -1,8 +1,11 @@
 package gui.utils
 
+import gui.HotKeysMapping
 import gui.mainFrame.MainFrame
 import java.awt.*
 import java.awt.event.ActionEvent
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import java.net.URL
 import java.util.logging.Logger
@@ -80,3 +83,51 @@ fun isCtrlClick(modifiers: Int): Boolean = modifiers.and(ActionEvent.CTRL_MASK) 
 fun getMainMenu(menu: JMenu) = (menu.popupMenu.invoker.parent as JPopupMenu).invoker
 
 fun JSplitPane.divider(): BasicSplitPaneDivider = this.components.find { it is BasicSplitPaneDivider} as BasicSplitPaneDivider
+
+fun JMenu.addHotKeyMapping(hotKeyMapping: HotKeysMapping) {
+    addHotKey(hotKeyMapping.key)
+}
+
+fun JMenu.addHotKey(hotKey: Int?) {
+    if (hotKey == null || hotKey == KeyEvent.VK_UNDEFINED) {
+        return
+    }
+
+    mnemonic = hotKey
+}
+
+fun JMenuItem.addHotKeyMapping(hotKeyMapping: HotKeysMapping, ctrl: Boolean = true, alt: Boolean = true, shift: Boolean = false) {
+    addHotKey(hotKeyMapping.key, ctrl, alt, shift)
+}
+
+fun JMenuItem.addHotKey(hotKey: Int?, ctrl: Boolean = true, alt: Boolean = true, shift: Boolean = false) {
+    if (hotKey == null || hotKey == KeyEvent.VK_UNDEFINED) {
+        return
+    }
+
+    var mask = 0
+    if (ctrl) {
+        mask = mask.or(InputEvent.CTRL_MASK)
+    }
+    if (alt) {
+        mask = mask.or(InputEvent.ALT_MASK)
+    }
+    if (shift) {
+        mask = mask.or(InputEvent.SHIFT_MASK)
+    }
+
+    mnemonic = hotKey
+    accelerator = KeyStroke.getKeyStroke(hotKey, mask)
+}
+
+fun AbstractButton.addHotKeyMapping(hotKeyMapping: HotKeysMapping) {
+    addHotKey(hotKeyMapping.key)
+}
+
+fun AbstractButton.addHotKey(hotKey: Int?) {
+    if (hotKey == null || hotKey == KeyEvent.VK_UNDEFINED) {
+        return
+    }
+
+    mnemonic = hotKey
+}

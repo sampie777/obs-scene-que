@@ -7,6 +7,7 @@ interface Refreshable {
     fun switchedScenes() {}
     fun refreshScenes() {}
     fun refreshQueItems() {}
+    fun refreshQueueName() {}
 
     fun refreshOBSStatus() {}
 
