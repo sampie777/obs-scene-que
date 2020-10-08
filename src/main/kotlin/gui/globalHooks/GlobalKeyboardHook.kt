@@ -39,7 +39,6 @@ object GlobalKeyboardHook : NativeKeyListener {
         } catch (t: Throwable) {
             logger.warning("There was a problem unregistering the native hook")
             t.printStackTrace()
-            return
         }
     }
 

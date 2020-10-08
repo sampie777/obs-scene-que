@@ -1,7 +1,6 @@
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import config.Config
-import gui.globalHooks.GlobalKeyboardHook
 import gui.mainFrame.MainFrame
 import objects.que.Que
 import org.jnativehook.keyboard.NativeKeyEvent
@@ -65,8 +64,6 @@ fun exitApplication() {
         t.printStackTrace()
     }
 
-    GlobalKeyboardHook.unregister()
-
     try {
         logger.info("Saving configuration...")
         Que.save()
@@ -75,6 +72,9 @@ fun exitApplication() {
         logger.warning("Failed to save configuration")
         t.printStackTrace()
     }
+
+    // This seems to prevent application shutdown
+//    GlobalKeyboardHook.unregister()
 
     logger.info("Shutdown finished")
     exitProcess(0)

@@ -59,9 +59,9 @@ class MainFrame : JFrame(), Refreshable {
         }
 
         jMenuBar = MenuBar()
-        title = ApplicationInfo.name + " - " + Que.name
         defaultCloseOperation = EXIT_ON_CLOSE
         iconImage = loadIcon("/icon-512.png")
+        refreshQueueName()
     }
 
     fun rebuildGui() {
@@ -76,6 +76,10 @@ class MainFrame : JFrame(), Refreshable {
             repaint()
             logger.info("GUI rebuild done")
         }
+    }
+
+    override fun refreshQueueName() {
+        title = ApplicationInfo.name + " - " + Que.name
     }
 
     fun saveWindowPosition() {

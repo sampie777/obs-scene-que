@@ -55,8 +55,6 @@ class ConfigEditPanel : JPanel() {
         formComponents.add(BooleanFormInput("quickAccessButtonDisplayIcon", "Quick Access Button display plugin icon"))
 
         formComponents.add(HeaderFormComponent("Queue"))
-        formComponents.add(StringFormInput("queFile", "Queue file", false))
-        formComponents.add(StringFormInput("pluginDirectory", "Plugin directory", false))
         formComponents.add(
             BooleanFormInput(
                 "activateNextSubQueueItemsOnMouseActivationQueueItem",
@@ -85,6 +83,7 @@ class ConfigEditPanel : JPanel() {
                 toolTipText = "Click the Assign button and hit your keys. Click again to clear."
             )
         )
+        formComponents.add(StringFormInput("pluginDirectory", "Plugin directory", false))
 
         formComponents.add(HeaderFormComponent("Web control"))
         formComponents.add(

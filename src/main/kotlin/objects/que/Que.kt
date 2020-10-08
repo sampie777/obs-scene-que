@@ -1,10 +1,12 @@
 package objects.que
 
 import GUI
+import config.Config
 import objects.ApplicationInfo
 import objects.OBSState
 import objects.notifications.Notifications
 import plugins.obs.queItems.ObsSceneQueItem
+import java.io.File
 import java.util.logging.Logger
 
 object Que {
@@ -239,12 +241,19 @@ object Que {
     }
 
     fun load() {
-        QueLoader.load()
-        GUI.refreshQueItems()
+        load(File(Config.queFile))
+    }
+
+    fun load(queFile: File) {
+        if (QueLoader.load(queFile)) {
+            GUI.refreshQueueName()
+            GUI.refreshQueItems()
+        }
     }
 
     fun save() {
         QueLoader.save()
+        GUI.refreshQueueName()
     }
 
     fun enableWriteToFile(value: Boolean) {

@@ -1,9 +1,10 @@
 package gui.menu
 
+import gui.HotKeysMapping
+import gui.utils.addHotKeyMapping
 import objects.notifications.Notifications
 import plugins.PluginLoader
 import themes.Theme
-import java.awt.event.KeyEvent
 import java.util.logging.Logger
 import javax.swing.BorderFactory
 import javax.swing.JMenu
@@ -17,7 +18,7 @@ class PluginMenu : JMenu("Plugins") {
 
     private fun initGui() {
         popupMenu.border = BorderFactory.createLineBorder(Theme.get.BORDER_COLOR)
-        mnemonic = KeyEvent.VK_U
+        addHotKeyMapping(HotKeysMapping.PLUGIN_MENU)
 
         PluginLoader.allPlugins.forEach {
             try {

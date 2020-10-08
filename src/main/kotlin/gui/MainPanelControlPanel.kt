@@ -2,11 +2,11 @@ package gui
 
 import GUI
 import gui.quickAccessButtons.QuickAccessButtonPanel
+import gui.utils.addHotKeyMapping
 import objects.que.Que
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
-import java.awt.event.KeyEvent
 import java.util.logging.Logger
 import javax.swing.*
 import javax.swing.border.EmptyBorder
@@ -36,8 +36,8 @@ class MainPanelControlPanel : JPanel(), Refreshable {
         previousQueItemButton.addActionListener { activatePreviousQueItem() }
         nextQueItemButton.addActionListener { activateNextQueItem() }
 
-        previousQueItemButton.mnemonic = KeyEvent.VK_P
-        nextQueItemButton.mnemonic = KeyEvent.VK_N
+        previousQueItemButton.addHotKeyMapping(HotKeysMapping.PREVIOUS_QUEUE_ITEM)
+        nextQueItemButton.addHotKeyMapping(HotKeysMapping.NEXT_QUEUE_ITEM)
 
         val buttonPanel = JPanel()
         buttonPanel.layout = BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS)
