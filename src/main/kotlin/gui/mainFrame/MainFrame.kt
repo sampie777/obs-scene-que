@@ -55,7 +55,7 @@ class MainFrame : JFrame(), Refreshable {
 
             setFullscreen(Config.mainWindowsIsFullscreen)
         } else {
-            setSize(1000, 600)
+            setSize(1300,760)
         }
 
         jMenuBar = MenuBar()

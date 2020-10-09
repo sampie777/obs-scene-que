@@ -36,6 +36,12 @@ You can download all versions from [GitHub](https://github.com/sampie777/obs-sce
 
 Create a queue by drag-and-dropping scenes or other queue items from the Sources panel (left panel) to the queue list (middle panel).
 
+##### Queue files
+
+To prevent any sudden loss of your Queue, every change is saved to the Queue file. This is a _.json_ file and can be found by default in the same folder as the OBS Scene Queue application. 
+
+Queues can be saved to and opened from different files. The default file is 'default-que.json'. Opening a Queue file will save the current Queue and instantly load the new Queue. 
+
 #### Control
 
 Control the queue by using the control buttons "Previous" and "Next". These buttons will show which queue item will be previous or next. Using the separate control window, the current queue item will also be displayed for clarity. 

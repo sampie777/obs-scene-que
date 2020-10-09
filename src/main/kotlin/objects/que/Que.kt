@@ -13,7 +13,8 @@ object Que {
 
     private val logger = Logger.getLogger(Que.toString())
 
-    var name: String = "default-que"
+    const val defaultName: String = "default-que"
+    var name: String = defaultName
     var applicationVersion: String = ApplicationInfo.version
 
     private var list: ArrayList<QueItem> = ArrayList()
