@@ -183,10 +183,7 @@ object PropertyLoader {
                     .toMap(HashMap())
             }
             ArrayList::class.java -> {
-                if (value.isEmpty()) {
-                    return ArrayList<String>()
-                }
-                return value.split(sceneValuesDelimiter)
+                return Gson().fromJson(value, ArrayList::class.java)
             }
             Point::class.java -> {
                 val values = value.split(defaultValueDelimiter)
@@ -232,8 +229,7 @@ object PropertyLoader {
                     .joinToString(sceneValuesDelimiter)
             }
             ArrayList::class.java -> {
-                val list = value as ArrayList<*>
-                list.joinToString(sceneValuesDelimiter)
+                jsonBuilder(prettyPrint = false).toJson(value)
             }
             Point::class.java -> {
                 val point = value as Point
