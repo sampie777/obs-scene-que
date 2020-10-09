@@ -3,6 +3,7 @@ package gui.menu
 import GUI
 import config.Config
 import gui.HotKeysMapping
+import gui.Refreshable
 import gui.utils.addHotKeyMapping
 import gui.utils.getMainFrameComponent
 import objects.que.Que
@@ -15,10 +16,14 @@ import javax.swing.JMenu
 import javax.swing.JMenuItem
 import javax.swing.filechooser.FileNameExtensionFilter
 
-class QueueMenu : JMenu("Queue") {
+class QueueMenu : JMenu("Queue"), Refreshable {
     private val logger = Logger.getLogger(QueueMenu::class.java.name)
 
+    private val recentFilesMenu = JMenu("Recent files")
+
     init {
+        GUI.register(this)
+
         initGui()
     }
 
@@ -29,6 +34,7 @@ class QueueMenu : JMenu("Queue") {
         val newItem = JMenuItem("New...")
         val saveAsItem = JMenuItem("Save as...")
         val openItem = JMenuItem("Open...")
+        initRecentFilesMenu()
 
         // Set alt keys
         newItem.addHotKeyMapping(HotKeysMapping.FILE_NEW_ITEM, ctrl = true, alt = false, shift = false)
@@ -38,10 +44,42 @@ class QueueMenu : JMenu("Queue") {
         add(newItem)
         add(saveAsItem)
         add(openItem)
+        addSeparator()
+        add(recentFilesMenu)
 
         newItem.addActionListener { newFile() }
         saveAsItem.addActionListener { saveAsFile() }
         openItem.addActionListener { openFile() }
+    }
+
+    private fun initRecentFilesMenu() {
+        recentFilesMenu.popupMenu.border = BorderFactory.createLineBorder(Theme.get.BORDER_COLOR)
+
+        recentFilesMenu.menuComponents.forEach {
+            recentFilesMenu.remove(it)
+        }
+
+        Config.recentQueueFiles
+            .map { File(it) }
+            .filter {
+                if (!it.exists()) {
+                    logger.info("Removing non existing recent Queue file from recent files list: ${it.absolutePath}")
+                    Config.recentQueueFiles.remove(it.absolutePath)
+                }
+
+                it.exists()
+            }
+            .forEach { file ->
+                val itemText = file.parentFile.name + File.separator + file.name
+
+                val menuItem = JMenuItem(itemText)
+                menuItem.addActionListener { openFile(file) }
+                recentFilesMenu.add(menuItem)
+            }
+    }
+
+    override fun refreshQueueName() {
+        initRecentFilesMenu()
     }
 
     private fun newFile() {
@@ -65,12 +103,20 @@ class QueueMenu : JMenu("Queue") {
     private fun openFile() {
         logger.info("Creating file chooser for Open File")
 
+        val file = requestOpenFileLocation() ?: return
+
+        openFile(file)
+    }
+
+    private fun openFile(file: File) {
+        logger.info("Opening file name: ${file.absolutePath}")
+
         // Save current queue changes
         Que.save()
 
-        val file = requestOpenFileLocation() ?: return
-
-        Que.load(file)
+        if (!Que.load(file)) {
+            return
+        }
     }
 
     private fun createFileChooser(fileName: String): JFileChooser {

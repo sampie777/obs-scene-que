@@ -40,8 +40,9 @@ object Config {
     var sourcePanelLastOpenedTab: String = "OBS"
     var detailPanelLastOpenedTab: String = ""
 
-    var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + Que.name + ".json"
     var pluginDirectory: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + "plugins"
+    var queFile: String = getCurrentJarDirectory(this).absolutePath + File.separatorChar + Que.name + ".json"
+    var recentQueueFiles: HashSet<String> = HashSet()
 
     var quickAccessButtonCount: Int = 24
     var quickAccessButtonQueItems: ArrayList<String> = ArrayList()
