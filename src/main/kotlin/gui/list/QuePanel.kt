@@ -83,7 +83,7 @@ class QuePanel : JPanel(), Refreshable, QueItemDropComponent {
                     return
                 }
 
-                logger.info("[MouseEvent] Unhandled mouse click on Queue Panel list")
+                logger.fine("[MouseEvent] Unhandled mouse click on Queue Panel list")
             }
         })
 

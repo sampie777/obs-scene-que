@@ -16,7 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter
 class QueueMenu : JMenu("Queue"), Refreshable {
     private val logger = Logger.getLogger(QueueMenu::class.java.name)
 
-    val recentFilesMenu = JMenu("Recent files")
+    val recentFilesMenu = JMenu("Open recent")
 
     init {
         GUI.register(this)
@@ -41,7 +41,6 @@ class QueueMenu : JMenu("Queue"), Refreshable {
         add(newItem)
         add(saveAsItem)
         add(openItem)
-        addSeparator()
         add(recentFilesMenu)
 
         newItem.addActionListener { newFile() }
@@ -60,12 +59,22 @@ class QueueMenu : JMenu("Queue"), Refreshable {
             .map { File(it) }
             .filter { removeNonExistingFilesFromRecentFiles(it) }
             .forEach { file ->
-                val itemText = file.parentFile.name + File.separator + file.name
+                val itemText = menuItemTextForFile(file)
 
                 val menuItem = JMenuItem(itemText)
                 menuItem.addActionListener { openFile(file) }
                 recentFilesMenu.add(menuItem)
             }
+    }
+
+    private fun menuItemTextForFile(file: File): String {
+        if (file.parentFile == null) {
+            return file.absolutePath
+        }
+
+        val prefix = if (file.parentFile.parentFile != null) "..." else ""
+
+        return prefix + File.separator + file.parentFile.name + File.separator + file.name
     }
 
     private fun removeNonExistingFilesFromRecentFiles(it: File): Boolean {
@@ -92,9 +101,8 @@ class QueueMenu : JMenu("Queue"), Refreshable {
         logger.info("Creating new Queue file")
         val file = requestFileSaveLocation("New") ?: return
 
-        Config.queFile = file.absolutePath
         Que.clear()
-        Que.save()
+        Que.save(file)
         GUI.refreshQueItems()
     }
 
@@ -102,8 +110,7 @@ class QueueMenu : JMenu("Queue"), Refreshable {
         logger.info("Creating file chooser for Save As File")
         val file = requestFileSaveLocation("Save As...") ?: return
 
-        Config.queFile = file.absolutePath
-        Que.save()
+        Que.save(file)
     }
 
     private fun openFile() {

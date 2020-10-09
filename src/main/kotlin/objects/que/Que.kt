@@ -256,10 +256,17 @@ object Que {
     }
 
     fun save() {
-        QueLoader.save()
+        save(File(Config.queFile))
+    }
+
+    fun save(queFile: File): Boolean {
+        if (!QueLoader.save(queFile)) {
+            return false
+        }
 
         Config.recentQueueFiles.add(Config.queFile)
         GUI.refreshQueueName()
+        return true
     }
 
     fun enableWriteToFile(value: Boolean) {

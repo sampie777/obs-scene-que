@@ -52,7 +52,7 @@ class QueLoaderTest {
         PluginLoader.queItemPlugins.add(ObsPlugin())
         Config.queFile = javaClass.getResource("/objects/que/que1_valid.json").file
 
-        QueLoader.load()
+        assertTrue(QueLoader.load())
 
         assertEquals(0, Notifications.unreadNotifications)
         assertEquals("que1_valid", Que.name)
@@ -66,7 +66,7 @@ class QueLoaderTest {
         Que.name = "default-que"
         Que.add(QueItemMock(MockPlugin(), "item1"))
 
-        QueLoader.load()
+        assertFalse(QueLoader.load())
 
         assertEquals(1, Notifications.list.size)
         assertTrue(Notifications.list[0].message.contains("Failed to load Queue from json"))
@@ -82,7 +82,7 @@ class QueLoaderTest {
         Que.add(mockPlugin.configStringToQueItem("3"))
         Config.queFile = "garbageFile"
 
-        QueLoader.load()
+        assertFalse(QueLoader.load())
 
         assertEquals(0, Que.size())
     }
@@ -93,7 +93,7 @@ class QueLoaderTest {
         Que.name = "default-que"
         Que.add(QueItemMock(MockPlugin(), "item1"))
 
-        QueLoader.load()
+        assertFalse(QueLoader.load())
 
         assertEquals(1, Notifications.unreadNotifications)
         assertTrue(Notifications.list[0].message.contains("Failed to read file"))
@@ -340,7 +340,7 @@ class QueLoaderTest {
         Que.name = "name1"
         Config.queFile = javaClass.getResource("/objects/que/que1_valid.json").file
 
-        QueLoader.save()
+        assertTrue(QueLoader.save())
 
         assertEquals(0, Notifications.unreadNotifications)
         assertEquals("que1_valid", Que.name)
