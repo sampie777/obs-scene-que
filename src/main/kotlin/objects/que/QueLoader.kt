@@ -161,12 +161,11 @@ internal object QueLoader {
             }
         }
 
-        val jsonQueue = JsonQueue.Queue(
+        return JsonQueue.Queue(
             name = Que.name,
             applicationVersion = Que.applicationVersion,
             queueItems = jsonQueItems
         )
-        return jsonQueue
     }
 
     fun fromJson(json: String): Boolean {

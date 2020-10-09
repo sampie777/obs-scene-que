@@ -3,7 +3,6 @@ package api
 import config.Config
 import mocks.MockPlugin
 import mocks.QueItemMock
-import objects.ApplicationInfo
 import objects.notifications.Notifications
 import objects.que.Que
 import org.eclipse.jetty.http.HttpStatus
@@ -91,8 +90,8 @@ class QueueApiServletTest {
         assertEquals(
             """{
   "data": {
-    "name": "default-que",
-    "applicationVersion": "${ApplicationInfo.version}",
+    "name": "${Que.name}",
+    "applicationVersion": "${Que.applicationVersion}",
     "queueItems": [
       {
         "pluginName": "MockPlugin",
