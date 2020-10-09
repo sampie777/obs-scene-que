@@ -104,8 +104,12 @@ internal object QueLoader {
         return item
     }
 
-    fun save() {
-        Que.name = File(Config.queFile).nameWithoutExtension
+    fun save(): Boolean {
+        return save(File(Config.queFile))
+    }
+
+    fun save(queFile: File): Boolean {
+        Que.name = queFile.nameWithoutExtension
 
         val json = try {
             queToJsonString()
@@ -113,28 +117,31 @@ internal object QueLoader {
             logger.warning("Failed to convert Queue to json")
             e.printStackTrace()
             Notifications.popup("Failed to save Queue to file: ${e.localizedMessage}", "Queue")
-            return
+            return false
         }
 
         if (json == lastSavedData) {
             logger.fine("No changes in queue, so skipping save")
-            return
+            return true
         }
 
         if (!writeToFile) {
             logger.info("writeToFile is turned off, so not saving queue to file")
         } else {
-            logger.info("Saving queue to file: ${Config.queFile}")
+            logger.info("Saving queue to file: $queFile")
             try {
-                File(Config.queFile).writeText(json)
+                queFile.writeText(json)
             } catch (e: Exception) {
                 logger.severe("Failed to save json to file")
                 e.printStackTrace()
                 Notifications.popup("Failed to save Queue to file: ${e.localizedMessage}", "Queue")
+                return false
             }
         }
 
         lastSavedData = json
+        Config.queFile = queFile.absolutePath
+        return true
     }
 
     fun queToJsonString(): String {
