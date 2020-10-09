@@ -36,7 +36,7 @@ class MainFrameTest {
 
         assertNotEquals(1112, frame.location.x)
         assertNotEquals(1113, frame.location.y)
-        assertEquals(Dimension(1000, 600), frame.size)
+        assertEquals(Dimension(1300, 760), frame.size)
     }
 
     @Test
