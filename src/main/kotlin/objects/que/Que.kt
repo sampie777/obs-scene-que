@@ -244,15 +244,21 @@ object Que {
         load(File(Config.queFile))
     }
 
-    fun load(queFile: File) {
-        if (QueLoader.load(queFile)) {
-            GUI.refreshQueueName()
-            GUI.refreshQueItems()
+    fun load(queFile: File): Boolean {
+        if (!QueLoader.load(queFile)) {
+            return false
         }
+
+        Config.recentQueueFiles.add(queFile.absolutePath)
+        GUI.refreshQueueName()
+        GUI.refreshQueItems()
+        return true
     }
 
     fun save() {
         QueLoader.save()
+
+        Config.recentQueueFiles.add(Config.queFile)
         GUI.refreshQueueName()
     }
 

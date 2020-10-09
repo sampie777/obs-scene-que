@@ -1,6 +1,8 @@
 package config
 
+import com.google.gson.Gson
 import getCurrentJarDirectory
+import jsonBuilder
 import objects.json.NativeKeyEventJson
 import java.awt.Color
 import java.awt.Dimension
@@ -12,6 +14,7 @@ import java.lang.reflect.Modifier
 import java.util.*
 import java.util.logging.Logger
 import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 object PropertyLoader {
     private val logger = Logger.getLogger(PropertyLoader.toString())
@@ -202,6 +205,9 @@ object PropertyLoader {
             NativeKeyEventJson::class.java -> {
                 return NativeKeyEventJson.fromJson(value)
             }
+            HashSet::class.java -> {
+                return Gson().fromJson(value, HashSet::class.java)
+            }
             else -> throw IllegalArgumentException("Unknown configuration value type: " + type.name)
         }
 
@@ -239,6 +245,9 @@ object PropertyLoader {
             }
             NativeKeyEventJson::class.java -> {
                 (value as NativeKeyEventJson).toJson()
+            }
+            HashSet::class.java -> {
+                jsonBuilder(prettyPrint = false).toJson(value)
             }
             else -> value.toString()
         }
