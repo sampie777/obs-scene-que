@@ -30,6 +30,13 @@ internal object QueLoader {
         if (!queFile.exists()) {
             logger.info("Queue file not found")
             Que.clear()
+
+            if (queFile.nameWithoutExtension != Que.defaultName) {
+                Notifications.popup(
+                    "Queue file not found: \n${queFile.absolutePath}",
+                    "Queue"
+                )
+            }
             return false
         }
 
