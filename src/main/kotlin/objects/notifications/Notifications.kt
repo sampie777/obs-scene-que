@@ -10,6 +10,7 @@ object Notifications {
 
     val list: ArrayList<Notification> = ArrayList()
     var unreadNotifications: Int = 0
+    var enablePopups: Boolean = false
 
     fun add(notification: Notification, markAsRead: Boolean = false) {
         logger.info("Adding new notification: $notification")
@@ -37,8 +38,12 @@ object Notifications {
         markAllAsRead()
     }
 
-    fun popup(notification: Notification, markAsRead: Boolean = true) {
+    fun popup(notification: Notification, markAsRead: Boolean = enablePopups) {
         add(notification, markAsRead)
+
+        if (!enablePopups) {
+            return
+        }
 
         JOptionPane.showMessageDialog(
             MainFrame.getInstance(),
@@ -48,7 +53,7 @@ object Notifications {
         )
     }
 
-    fun popup(message: String, subject: String = "", markAsRead: Boolean = true) {
+    fun popup(message: String, subject: String = "", markAsRead: Boolean = enablePopups) {
         popup(Notification(message, subject), markAsRead)
     }
 }

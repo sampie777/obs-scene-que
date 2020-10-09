@@ -10,16 +10,13 @@ import objects.que.Que
 import themes.Theme
 import java.io.File
 import java.util.logging.Logger
-import javax.swing.BorderFactory
-import javax.swing.JFileChooser
-import javax.swing.JMenu
-import javax.swing.JMenuItem
+import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 
 class QueueMenu : JMenu("Queue"), Refreshable {
     private val logger = Logger.getLogger(QueueMenu::class.java.name)
 
-    private val recentFilesMenu = JMenu("Recent files")
+    val recentFilesMenu = JMenu("Recent files")
 
     init {
         GUI.register(this)
@@ -52,7 +49,7 @@ class QueueMenu : JMenu("Queue"), Refreshable {
         openItem.addActionListener { openFile() }
     }
 
-    private fun initRecentFilesMenu() {
+    fun initRecentFilesMenu() {
         recentFilesMenu.popupMenu.border = BorderFactory.createLineBorder(Theme.get.BORDER_COLOR)
 
         recentFilesMenu.menuComponents.forEach {
@@ -61,14 +58,7 @@ class QueueMenu : JMenu("Queue"), Refreshable {
 
         Config.recentQueueFiles
             .map { File(it) }
-            .filter {
-                if (!it.exists()) {
-                    logger.info("Removing non existing recent Queue file from recent files list: ${it.absolutePath}")
-                    Config.recentQueueFiles.remove(it.absolutePath)
-                }
-
-                it.exists()
-            }
+            .filter { removeNonExistingFilesFromRecentFiles(it) }
             .forEach { file ->
                 val itemText = file.parentFile.name + File.separator + file.name
 
@@ -76,6 +66,22 @@ class QueueMenu : JMenu("Queue"), Refreshable {
                 menuItem.addActionListener { openFile(file) }
                 recentFilesMenu.add(menuItem)
             }
+    }
+
+    private fun removeNonExistingFilesFromRecentFiles(it: File): Boolean {
+        if (it.exists()) {
+            return true
+        }
+
+        logger.info("Removing non existing recent Queue file from recent files list: ${it.absolutePath}")
+        val removed = Config.recentQueueFiles.remove(it.absolutePath)
+
+        if (!removed) {
+            logger.info("Removing non existing recent Queue file from recent files list using it's normal path: ${it.path}")
+            Config.recentQueueFiles.remove(it.path)
+        }
+
+        return false
     }
 
     override fun refreshQueueName() {
@@ -157,11 +163,30 @@ class QueueMenu : JMenu("Queue"), Refreshable {
             logger.warning("Chosen file is not a .json file: ${file.name}")
         }
 
-        if (file.exists()) {
-            logger.warning("File already exists: ${file.absolutePath}")
+        if (!file.exists()) {
+            return file
         }
 
-        return file
+        logger.warning("File already exists: ${file.absolutePath}")
+        return promptForOverwritingExistingFile(file)
+    }
+
+    private fun promptForOverwritingExistingFile(file: File?): File? {
+        val promptOption = JOptionPane.showConfirmDialog(
+            getMainFrameComponent(this),
+            "Replace existing file?",
+            "File already exists",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        )
+
+        if (promptOption == JOptionPane.YES_OPTION) {
+            logger.info("User chose for replacing existing file")
+            return file
+        }
+
+        logger.info("Aborting because user doesn't want to replace existing file")
+        return null
     }
 
     private fun requestOpenFileLocation(): File? {

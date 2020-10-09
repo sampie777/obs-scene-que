@@ -23,6 +23,8 @@ fun main(args: Array<String>) {
         )
     )
 
+    Notifications.enablePopups = true
+
     Config.enableWriteToFile(true)
     Config.load()
     setupLogging(args)  // Setup logging as soon as possible, but because it depends on Config, just let Config load first
