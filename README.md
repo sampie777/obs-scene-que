@@ -2,8 +2,6 @@ OBS Scene Queue
 
 _Basic application to easily control a scene sequence for OBS_
 
-_By Samuel-Anton Jansen_
-
 ![Screenshot 1](img/screenshot1.png)
 
 _Screenshot which shows scene "Another screen" as the current active queue item. On the right, six Quick Access Buttons are shown._
