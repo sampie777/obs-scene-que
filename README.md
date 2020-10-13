@@ -28,7 +28,7 @@ You can download all versions from [GitHub](https://github.com/sampie777/obs-sce
 1. Make sure you have at least Java 8 installed.
 1. Make sure your OBS websocket is discoverable by the computer you will run this application on. If it's the same computer, no worries. 
 1. **Launch this application** (by running the executable JAR file with Java or running the EXE file) and enjoy.
-1. **Edit the settings** if needed. This can be done using the menu Application menu -> Settings or editing the _obs-scene-que.properties_ file. This file will be created after first launch of the application. Don't run the application when editing this file. Application restart will be needed after changing the application settings.
+1. **Edit the settings** if needed. This can be done using the menu Application menu -> Settings or editing the _obs-scene-queue.properties_ file. This file will be created after first launch of the application. Don't run the application when editing this file. Application restart will be needed after changing the application settings.
 
 ### Features
 
@@ -145,13 +145,15 @@ Some known external plugins are (mostly still under development):
 
 ### Settings
 
-Most settings can be changed using the GUI. All settings are visible (and configurable) in the settings file: _obs-scene-que.properties_. Some of these settings will be explained below. 
+Most settings can be changed using the GUI. All settings are visible (and configurable) in the settings file: _obs-scene-queue.properties_. Some of these settings will be explained below. 
 
-Don't run the application while editing the _obs-scene-que.properties_ file (and before saving your changes), as your changes won't be loaded until the next launch of the application. Also, the application will overwrite your changes if it is still running.
+Don't run the application while editing the _obs-scene-queue.properties_ file (and before saving your changes), as your changes won't be loaded until the next launch of the application. Also, the application will overwrite your changes if it is still running.
 
 By deleting this file, all properties are reset to default. 
 
 **Note:** Application restart is required to load any changes to the settings.
+
+> If you've been using OBS Scene Queue version 2.6.0 and/or previous versions, the properties file will be named _obs-scene-que.properties_. 
 
 ##### Some settings explained:
 

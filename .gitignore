@@ -7,6 +7,7 @@ __pycache__
 target/
 user.properties
 obs-scene-que.properties
+obs-scene-queue.properties
 dependency-reduced-pom.xml
 out/
 releases/
