@@ -23,7 +23,11 @@ object PropertyLoader {
     // Leave disabled when running tests.
     var writeToFile: Boolean = false
 
-    private val userPropertiesFile = File(
+    private var userPropertiesFile = File(
+        getCurrentJarDirectory(this).absolutePath + File.separatorChar + "obs-scene-queue.properties"
+    )
+    // User properties file for version 2.6.0 and before
+    private val oldUserPropertiesFile_v2_6_0 = File(
         getCurrentJarDirectory(this).absolutePath + File.separatorChar + "obs-scene-que.properties"
     )
     private var userProperties = Properties()
@@ -254,6 +258,10 @@ object PropertyLoader {
 
     private fun createNewPropertiesFile(): Boolean {
         if (userPropertiesFile.exists()) {
+            return false
+        }
+        if (oldUserPropertiesFile_v2_6_0.exists()) {
+            userPropertiesFile = oldUserPropertiesFile_v2_6_0
             return false
         }
 
