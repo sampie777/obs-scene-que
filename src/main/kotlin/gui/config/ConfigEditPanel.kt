@@ -57,18 +57,6 @@ class ConfigEditPanel : JPanel() {
 
         formComponents.add(HeaderFormComponent("Queue"))
         formComponents.add(
-            BooleanFormInput(
-                "activateNextSubQueueItemsOnMouseActivationQueueItem",
-                "When activating a Queue Item,\nalso activate the next 'Activate After Previous'-Queue Items"
-            )
-        )
-        formComponents.add(
-            BooleanFormInput(
-                "activateNextSubQueueItemsOnMouseActivationSubQueueItem",
-                "When activating an 'Activate After Previous'-Queue Item,\nalso activate the next 'Activate After Previous'-Queue Items"
-            )
-        )
-        formComponents.add(
             NativeKeyEventFormInput(
                 "globalKeyEventPreviousQueueItem",
                 "Global key for activating Previous Queue",
@@ -82,6 +70,18 @@ class ConfigEditPanel : JPanel() {
                 "Global key for activating Next Queue",
                 allowEmpty = true,
                 toolTipText = "Click the Assign button and hit your keys. Click again to clear."
+            )
+        )
+        formComponents.add(
+            BooleanFormInput(
+                "activateNextSubQueueItemsOnMouseActivationQueueItem",
+                "When activating a Queue Item,\nalso activate the next 'Activate After Previous'-Queue Items"
+            )
+        )
+        formComponents.add(
+            BooleanFormInput(
+                "activateNextSubQueueItemsOnMouseActivationSubQueueItem",
+                "When activating an 'Activate After Previous'-Queue Item,\nalso activate the next 'Activate After Previous'-Queue Items"
             )
         )
         formComponents.add(StringFormInput("pluginDirectory", "Plugin directory", false))
