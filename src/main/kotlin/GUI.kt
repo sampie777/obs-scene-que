@@ -31,6 +31,12 @@ object GUI {
         }
     }
 
+    fun refreshTransitions() {
+        for (component in components.toTypedArray()) {
+            component.refreshTransitions()
+        }
+    }
+
     fun refreshQueItems() {
         val componentsCopy = components.toTypedArray()
         for (component in componentsCopy) {

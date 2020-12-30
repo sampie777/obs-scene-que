@@ -47,6 +47,16 @@ class GUITest {
     }
 
     @Test
+    fun testRefreshTransitions() {
+        val guiComponentMock = GuiComponentMock()
+        GUI.register(guiComponentMock)
+
+        GUI.refreshTransitions()
+
+        assertTrue(guiComponentMock.refreshTransitionsCalled)
+    }
+
+    @Test
     fun testRefreshOBSStatus() {
         val guiComponentMock = GuiComponentMock()
         GUI.register(guiComponentMock)

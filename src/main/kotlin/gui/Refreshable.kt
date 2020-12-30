@@ -6,6 +6,7 @@ interface Refreshable {
     fun refreshTimer() {}
     fun switchedScenes() {}
     fun refreshScenes() {}
+    fun refreshTransitions() {}
     fun refreshQueItems() {}
     fun refreshQueueName() {}
 

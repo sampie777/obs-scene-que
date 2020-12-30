@@ -5,6 +5,7 @@ enum class OBSClientStatus(val status: String) {
     CONNECTED("Connected"),
     DISCONNECTED("Disconnected"),
     LOADING_SCENE_SOURCES("Loading scene sources..."),
+    LOADING_TRANSITIONS("Loading transitions..."),
     CONNECTING("Connecting..."),
     RECONNECTING("Reconnecting..."),
     CONNECTION_FAILED("Connection failed!"),

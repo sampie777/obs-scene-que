@@ -3,11 +3,13 @@ package objects
 import GUI
 import config.Config
 import net.twasi.obsremotejava.OBSRemoteController
-import net.twasi.obsremotejava.events.responses.SwitchScenesResponse
+import net.twasi.obsremotejava.events.responses.*
 import net.twasi.obsremotejava.objects.Scene
 import net.twasi.obsremotejava.objects.Source
+import net.twasi.obsremotejava.objects.Transition
 import net.twasi.obsremotejava.requests.GetCurrentScene.GetCurrentSceneResponse
 import net.twasi.obsremotejava.requests.GetSceneList.GetSceneListResponse
+import net.twasi.obsremotejava.requests.GetTransitionList.GetTransitionListResponse
 import net.twasi.obsremotejava.requests.ResponseBase
 import objects.notifications.Notifications
 import objects.que.Que
@@ -134,6 +136,7 @@ object OBSClient {
                 reconnecting = false
 
                 loadScenes()
+                loadTransitions()
 
                 getCurrentSceneFromOBS()
             }
@@ -198,6 +201,20 @@ object OBSClient {
             t.printStackTrace()
             Notifications.add(
                 "Failed to register switchScenes callback: cannot detect scene changes (${t.localizedMessage})",
+                "OBS"
+            )
+        }
+
+        try {
+            controller!!.registerTransitionListChangedCallback {
+                logger.fine("Registered advancedScene list changed event")
+                loadTransitions()
+            }
+        } catch (t: Throwable) {
+            logger.severe("Failed to create OBS callback: registerTransitionListChangedCallback")
+            t.printStackTrace()
+            Notifications.add(
+                "Failed to register transitionListChanged callback: new transitions cannot be loaded (${t.localizedMessage}",
                 "OBS"
             )
         }
@@ -288,6 +305,39 @@ object OBSClient {
         }
     }
 
+    private fun loadTransitions() {
+        logger.info ("Retrieving transitions")
+        OBSState.clientActivityStatus = OBSClientStatus.LOADING_TRANSITIONS
+        GUI.refreshOBSStatus()
+
+        try {
+            controller!!.getTransitionList { response: ResponseBase ->
+                val res = try {
+                    response as GetTransitionListResponse
+                } catch (t: Throwable) {
+                    logger.severe("Could not cast response to GetTransitionListResponse")
+                    t.printStackTrace()
+                    Notifications.add("Could not process 'GetTransitionListResponse' from OBS: ${t.localizedMessage}", "OBS")
+                    return@getTransitionList
+                }
+
+                logger.info("${res.transitions.size} transitions retrieved")
+
+                try {
+                    processOBSTransitionsToOBSStateTransitions(res.transitions)
+                } catch(t: Throwable) {
+                    logger.severe("Failed to process transitions")
+                    t.printStackTrace()
+                    Notifications.add("Something went wrong processing transitions: ${t.localizedMessage}", "OBS")
+                }
+            }
+        } catch (t: Throwable) {
+            logger.severe("Failed to retrieve transitions")
+            t.printStackTrace()
+            Notifications.add("Something went wrong during retrieving transitions: ${t.localizedMessage}", "OBS")
+        }
+    }
+
     fun processOBSScenesToOBSStateScenes(scenes: List<Scene>) {
         logger.info("Set the OBS Scenes")
         OBSState.scenes.clear()
@@ -310,6 +360,19 @@ object OBSClient {
             tScene.sources = tSources
         }
         return tScene
+    }
+
+    fun processOBSTransitionsToOBSStateTransitions(transitions: List<Transition>) {
+        logger.info("Setting the OBS Transitions")
+        OBSState.transitions.clear()
+        for (transition in transitions) {
+            val tTransition = TTransition(transition.name)
+            OBSState.transitions.add(tTransition)
+        }
+
+        GUI.refreshTransitions()
+        OBSState.clientActivityStatus = null
+        GUI.refreshOBSStatus()
     }
 
     fun setActiveScene(scene: TScene) {

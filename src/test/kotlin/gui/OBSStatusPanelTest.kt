@@ -70,6 +70,16 @@ class OBSStatusPanelTest {
     }
 
     @Test
+    fun testGetOBSStatusRepresentationWithLoadingTransitionsStatus() {
+        val panel = OBSStatusPanel()
+
+        OBSState.clientActivityStatus = OBSClientStatus.LOADING_TRANSITIONS
+        OBSState.connectionStatus = OBSClientStatus.CONNECTED
+
+        assertEquals("Loading transitions...", panel.getOBSStatusRepresentation())
+    }
+
+    @Test
     fun testMessageLabelWithRefreshingOBSStatus() {
         OBSState.connectionStatus = OBSClientStatus.UNKNOWN
         val panel = OBSStatusPanel()

@@ -4,6 +4,7 @@ import GUI
 import config.Config
 import mocks.GuiComponentMock
 import net.twasi.obsremotejava.objects.Scene
+import net.twasi.obsremotejava.objects.Transition
 import objects.notifications.Notifications
 import kotlin.test.*
 
@@ -21,6 +22,7 @@ class OBSClientTest {
         GUI.register(panelMock)
 
         assertFalse(panelMock.refreshScenesCalled)
+        assertFalse(panelMock.refreshTransitionsCalled)
         assertFalse(panelMock.switchedScenesCalled)
 
         // When
@@ -30,6 +32,7 @@ class OBSClientTest {
         }
 
         assertFalse(panelMock.refreshScenesCalled)
+        assertFalse(panelMock.refreshTransitionsCalled)
         assertTrue(panelMock.switchedScenesCalled)
     }
 
@@ -42,6 +45,7 @@ class OBSClientTest {
         Config.obsAddress = "ws://somewhereNotLocalhost"
 
         assertFalse(panelMock.refreshScenesCalled)
+        assertFalse(panelMock.refreshTransitionsCalled)
         assertFalse(panelMock.switchedScenesCalled)
         assertFalse(panelMock.refreshOBSStatusCalled)
 
@@ -54,9 +58,38 @@ class OBSClientTest {
         OBSClient.processOBSScenesToOBSStateScenes(scenes)
 
         assertTrue(panelMock.refreshScenesCalled)
+        assertFalse(panelMock.refreshTransitionsCalled)
         assertFalse(panelMock.switchedScenesCalled)
         assertTrue(panelMock.refreshOBSStatusCalled)
         assertEquals(3, OBSState.scenes.size)
+        assertNull(OBSState.clientActivityStatus)
+    }
+
+    @Test
+    fun testSetOBSTransitions() {
+        OBSState.clientActivityStatus = OBSClientStatus.LOADING_TRANSITIONS
+        val panelMock = GuiComponentMock()
+        GUI.register(panelMock)
+
+        Config.obsAddress = "ws://somewhereNotLocalhost"
+
+        assertFalse(panelMock.refreshScenesCalled)
+        assertFalse(panelMock.refreshTransitionsCalled)
+        assertFalse(panelMock.switchedScenesCalled)
+        assertFalse(panelMock.refreshOBSStatusCalled)
+
+        val transitions = ArrayList<Transition>()
+        transitions.add(Transition())
+        transitions.add(Transition())
+
+        // When
+        OBSClient.processOBSTransitionsToOBSStateTransitions(transitions)
+
+        assertFalse(panelMock.refreshScenesCalled)
+        assertTrue(panelMock.refreshTransitionsCalled)
+        assertFalse(panelMock.switchedScenesCalled)
+        assertTrue(panelMock.refreshOBSStatusCalled)
+        assertEquals(2, OBSState.transitions.size)
         assertNull(OBSState.clientActivityStatus)
     }
 
