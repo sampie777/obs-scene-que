@@ -175,3 +175,7 @@ _Other settings_
 Feel free to contribute by opening a pull request to `develop` branch or leaving a comment somewhere.
 
 Please try to add/edit tests for the code you've worked on. Also build the application with `mvn clean install` and run the compiled jar with `java -jar obs-scene-que-X.X.X-SNAPSHOT.jar`.
+
+## Donation
+
+If you don't want to code, but still want to contribute, consider [buying me a coffee](https://www.buymeacoffee.com/sajansen) so I can afford to spend more time working on these projects :)
