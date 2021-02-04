@@ -12,6 +12,7 @@ class MainFrameTest {
     @BeforeTest
     fun before() {
         Config.mainWindowsIsMaximized = false
+        Config.mainWindowAlwaysOnTop = false
     }
 
     @Test
@@ -98,6 +99,39 @@ class MainFrameTest {
 
         assertEquals(Dimension(100, 101), frame.size)
         assertEquals(JFrame.MAXIMIZED_BOTH, frame.extendedState)
+    }
+
+    @Test
+    fun testGuiStartsWithAlwaysOnTopSettingIfFalse() {
+        Config.mainWindowAlwaysOnTop = false
+
+        val frame = MainFrame.create()
+
+        assertFalse(frame.isAlwaysOnTop)
+    }
+
+    @Test
+    fun testGuiStartsWithAlwaysOnTopSettingIfTrue() {
+        Config.mainWindowAlwaysOnTop = true
+
+        val frame = MainFrame.create()
+
+        assertTrue(frame.isAlwaysOnTop)
+    }
+
+    @Test
+    fun testAlwaysOnTopTakesPlaceAfterGuiRebuild() {
+        val frame = MainFrame.create()
+
+        Config.mainWindowAlwaysOnTop = true
+        frame.rebuildGui()
+
+        assertTrue(frame.isAlwaysOnTop)
+
+        Config.mainWindowAlwaysOnTop = false
+        frame.rebuildGui()
+
+        assertFalse(frame.isAlwaysOnTop)
     }
 
 }

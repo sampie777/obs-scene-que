@@ -7,6 +7,7 @@ import objects.notifications.Notifications
 import objects.que.Que
 import plugins.PluginLoader
 import themes.Theme
+import updater.UpdateChecker
 import java.awt.EventQueue
 import java.util.logging.Level
 import java.util.logging.LogRecord
@@ -41,6 +42,11 @@ fun main(args: Array<String>) {
     EventQueue.invokeLater {
         MainFrame.createAndShow()
     }
+
+    if ("--clear-update-history" in args) {
+        UpdateChecker().clearUpdateHistory()
+    }
+    UpdateChecker().checkForUpdates()
 
     if (Config.httpApiServerEnabled) {
         ApiServer.start()

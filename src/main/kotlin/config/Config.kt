@@ -36,6 +36,7 @@ object Config {
     var mainPanelDividerLeftLocation: Int = 370
     var mainPanelDividerRightLocation: Int = 400
     var rightMainPanelDividerLocation: Int = 400
+    var mainWindowAlwaysOnTop: Boolean = false
 
     var sourcePanelLastOpenedTab: String = "OBS"
     var detailPanelLastOpenedTab: String = ""
@@ -56,6 +57,9 @@ object Config {
 
     var httpApiServerEnabled: Boolean = false
     var httpApiServerPort: Int = 8080
+
+    // Other
+    var updatesCheckForUpdates: Boolean = true
 
     fun load() {
         try {

@@ -2,12 +2,16 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import config.Config
 import gui.mainFrame.MainFrame
+import objects.OBSClient
+import objects.notifications.Notifications
 import objects.que.Que
 import org.jnativehook.keyboard.NativeKeyEvent
 import plugins.PluginLoader
 import java.awt.Color
+import java.awt.Desktop
 import java.io.File
 import java.io.UnsupportedEncodingException
+import java.net.URI
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
@@ -47,6 +51,14 @@ fun exitApplication() {
     logger.info("Shutting down application")
 
     MainFrame.getInstance()?.saveWindowPosition()
+
+    try {
+        logger.info("Stopping OBS client...")
+        OBSClient.stop()
+    } catch (t: Throwable) {
+        logger.warning("Failed to correctly stop OBS client")
+        t.printStackTrace()
+    }
 
     try {
         logger.info("Closing windows...")
@@ -138,4 +150,20 @@ fun keyEventToString(e: NativeKeyEvent?): String {
     )
         .filter { !it.isBlank() }
         .joinToString("+")
+}
+
+fun openWebURL(url: String, subject: String = "Webbrowser"): Boolean {
+    if (!Desktop.isDesktopSupported()) {
+        logger.warning("Cannot open link '$url': not supported by host")
+        return false
+    }
+    try {
+        Desktop.getDesktop().browse(URI(url))
+        return true
+    } catch (t: Throwable) {
+        logger.severe("Error during opening link '$url'")
+        t.printStackTrace()
+        Notifications.popup("Failed to open link: $url", subject)
+    }
+    return false
 }

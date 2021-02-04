@@ -7,7 +7,6 @@ import objects.OBSState
 import objects.que.Que
 import objects.que.QueItem
 import themes.Theme
-import java.awt.Color
 import javax.swing.JLabel
 import javax.swing.JList
 import kotlin.test.BeforeTest
@@ -51,13 +50,13 @@ class QueListCellRendererTest {
 
         // When
         val cell0 = renderer.getListCellRendererComponent(list, Que.getAt(0), 0, isSelected = false, cellHasFocus = false) as JLabel
-        assertEquals(Color(255, 255, 255), cell0.background)
+        assertEquals(Theme.get.LIST_BACKGROUND_COLOR, cell0.background)
 
         val cell1 = renderer.getListCellRendererComponent(list, Que.getAt(1), 1, isSelected = false, cellHasFocus = false) as JLabel
-        assertEquals(Color(255, 255, 255), cell1.background)
+        assertEquals(Theme.get.LIST_BACKGROUND_COLOR, cell1.background)
 
         val cell2 = renderer.getListCellRendererComponent(list, Que.getAt(2), 2, isSelected = false, cellHasFocus = false) as JLabel
-        assertEquals(Color(255, 255, 255), cell2.background)
+        assertEquals(Theme.get.LIST_BACKGROUND_COLOR, cell2.background)
     }
 
     @Test
@@ -72,10 +71,10 @@ class QueListCellRendererTest {
         assertEquals(Theme.get.LIST_SELECTION_BACKGROUND_COLOR, cell0.background)
 
         val cell1 = renderer.getListCellRendererComponent(list, Que.getAt(1), 1, isSelected = false, cellHasFocus = false) as JLabel
-        assertEquals(Color(255, 255, 255), cell1.background)
+        assertEquals(Theme.get.LIST_BACKGROUND_COLOR, cell1.background)
 
         val cell2 = renderer.getListCellRendererComponent(list, Que.getAt(2), 2, isSelected = false, cellHasFocus = false) as JLabel
-        assertEquals(Color(255, 255, 255), cell2.background)
+        assertEquals(Theme.get.LIST_BACKGROUND_COLOR, cell2.background)
     }
 
 

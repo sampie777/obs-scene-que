@@ -45,6 +45,7 @@ class ConfigEditPanel : JPanel() {
         formComponents.add(HeaderFormComponent("GUI"))
         formComponents.add(ThemeSelectFormInput("theme", "Theme", Theme.availableThemes()))
         formComponents.add(BooleanFormInput("windowRestoreLastPosition", "Restore window position on start up"))
+        formComponents.add(BooleanFormInput("mainWindowAlwaysOnTop", "Keep window always on top"))
         formComponents.add(
             NumberFormInput<Int>(
                 "quickAccessButtonCount",
@@ -111,6 +112,9 @@ class ConfigEditPanel : JPanel() {
                 toolTipText = "Location of this logfile is shown in the Information screen"
             )
         )
+
+        formComponents.add(HeaderFormComponent("Other"))
+        formComponents.add(BooleanFormInput("updatesCheckForUpdates", "Check for updates"))
     }
 
     private fun createGui() {
@@ -143,7 +147,7 @@ class ConfigEditPanel : JPanel() {
 
                 logger.severe("Failed to create Config Edit GUI component: ${it.key}")
                 Notifications.add(
-                    "Failed to load GUI input for config key: <strong>${it.key}</strong>. Delete your <i>${PropertyLoader.getPropertiesFile().name}</i> file and try again.",
+                    "Failed to load GUI input for config key: <strong>${it.key}</strong>. Delete your <i>${PropertyLoader.getPropertiesFile().name}</i> file and try again. (Error: ${e.localizedMessage})",
                     "Configuration"
                 )
                 panel.add(TextFormComponent("Failed to load component. See Notifications.").component())

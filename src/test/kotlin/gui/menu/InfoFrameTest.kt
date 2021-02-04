@@ -25,13 +25,13 @@ class InfoFrameTest {
         assertEquals("Information", dialog.title)
 
         val components = (dialog.contentPane.components[0] as JPanel).components
-        assertEquals(4, components.size)
+        assertEquals(6, components.size)
 
         val infoLabel = components[0] as JLabel
         val codeLink = components[2] as ClickableLinkComponent
         assertTrue(infoLabel.text.contains(ApplicationInfo.name))
         assertTrue(infoLabel.text.contains(ApplicationInfo.author))
         assertTrue(infoLabel.text.contains(ApplicationInfo.version))
-        assertEquals("${ApplicationInfo.name} on Github", codeLink.text)
+        assertEquals("Source code (GitHub)", codeLink.text)
     }
 }

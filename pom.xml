@@ -14,6 +14,10 @@
 
     <properties>
         <author>Samuel-Anton Jansen</author>
+        <latestVersionsUrl>https://api.github.com/repos/sampie777/obs-scene-que/releases/latest</latestVersionsUrl>
+        <updatesInfoUrl>https://obsproject.com/forum/resources/obs-scene-queue.969/updates</updatesInfoUrl>
+        <downloadsUrl>https://github.com/sampie777/obs-scene-que/releases</downloadsUrl>
+        <donationUrl>https://www.buymeacoffee.com/sajansen</donationUrl>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.3.72</kotlin.version>
@@ -24,6 +28,7 @@
         <twasi.version>1.0.9-snapshot-increased-message-size-1</twasi.version>
         <launch4j.version>1.7.25</launch4j.version>
         <jnativehook.version>2.1.0</jnativehook.version>
+        <mockito.version>1.10.19</mockito.version>
     </properties>
 
     <dependencies>
@@ -68,6 +73,12 @@
             <groupId>com.1stleg</groupId>
             <artifactId>jnativehook</artifactId>
             <version>${jnativehook.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

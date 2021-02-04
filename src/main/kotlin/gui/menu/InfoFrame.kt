@@ -47,10 +47,11 @@ class InfoFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
         )
         versionLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 14)
 
-        val sourceCodeLabel = ClickableLinkComponent(
-            "${ApplicationInfo.name} on Github", ApplicationInfo.url
-        )
+        val sourceCodeLabel = ClickableLinkComponent("Source code (GitHub)", ApplicationInfo.url)
         sourceCodeLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 14)
+
+        val donationLabel = ClickableLinkComponent("Donate to ${ApplicationInfo.name}", ApplicationInfo.donationUrl)
+        donationLabel.font = Font(Theme.get.FONT_FAMILY, Font.PLAIN, 14)
 
         val applicationLoggingInfoLabel = JLabel("<html>Application log file location: ${LogService.getLogFile()?.absolutePath}</html>")
         applicationLoggingInfoLabel.font = Font(Theme.get.FONT_FAMILY, Font.ITALIC, 12)
@@ -58,6 +59,8 @@ class InfoFrame(private val parentFrame: JFrame?) : JDialog(parentFrame) {
         mainPanel.add(versionLabel)
         mainPanel.add(Box.createRigidArea(Dimension(0, 10)))
         mainPanel.add(sourceCodeLabel)
+        mainPanel.add(Box.createRigidArea(Dimension(0, 10)))
+        mainPanel.add(donationLabel)
         mainPanel.add(Box.createRigidArea(Dimension(0, 20)))
         if (Config.enableApplicationLoggingToFile) {
             mainPanel.add(applicationLoggingInfoLabel)

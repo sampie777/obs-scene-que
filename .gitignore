@@ -15,3 +15,5 @@ snapshots/
 *.xcf
 tmp/
 plugins/
+scratch/
+release.py

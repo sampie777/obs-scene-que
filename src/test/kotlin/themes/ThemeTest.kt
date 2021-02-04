@@ -2,12 +2,19 @@ package themes
 
 import config.Config
 import mocks.ThemeMock
+import org.junit.After
 import java.awt.Color
 import javax.swing.UIManager
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ThemeTest {
+
+    @After
+    fun after() {
+        Config.theme = "LightTheme"
+        Theme.init()
+    }
 
     @Test
     fun testSetAndApplyTheme() {

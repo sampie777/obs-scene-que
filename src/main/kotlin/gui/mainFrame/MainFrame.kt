@@ -58,6 +58,8 @@ class MainFrame : JFrame(), Refreshable {
             setSize(1300,760)
         }
 
+        isAlwaysOnTop = Config.mainWindowAlwaysOnTop
+
         jMenuBar = MenuBar()
         defaultCloseOperation = EXIT_ON_CLOSE
         iconImage = loadIcon("/icon-512.png")
@@ -66,6 +68,9 @@ class MainFrame : JFrame(), Refreshable {
 
     fun rebuildGui() {
         logger.info("Rebuilding main GUI")
+
+        isAlwaysOnTop = Config.mainWindowAlwaysOnTop
+
         EventQueue.invokeLater {
             contentPane.removeAll()
 

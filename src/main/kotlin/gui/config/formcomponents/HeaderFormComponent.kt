@@ -10,7 +10,7 @@ import javax.swing.SwingConstants
 class HeaderFormComponent(private val text: String) : FormComponent {
     override fun component(): Component {
         val label = JLabel(text)
-        label.font = Font("Dialog", Font.BOLD, 12)
+        label.font = Font("Dialog", Font.BOLD, 18)
         label.horizontalAlignment = SwingConstants.CENTER
         label.alignmentX = Component.CENTER_ALIGNMENT
 
