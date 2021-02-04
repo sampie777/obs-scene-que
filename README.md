@@ -112,7 +112,7 @@ When connection to OBS is lost, OBS Scene Queue will continue keeping track of t
 
 OBS Scene Queue will not attempt to reconnect immediately, but during a continuous interval of 3 seconds (as specified in the properties).
 
-> If you want to start OBS Scene Queue in 'offline' mode, thus without trying to connect to OBS: use the `--offline` command line argument like so: `java -jar obs-scene-queue.jar --offline`.
+> If you want to start OBS Scene Queue in 'offline' mode, thus without trying to connect to OBS: use the `--offline` command line argument like so: `java -jar obs-scene-queue.jar --offline`. See 'Hidden features' below.
 
 #### Themes
 An application theme can be set in Application menu -> Settings. Currently, only Light theme is available and Dark theme is experimental. You can develop your own theme by extending the BaseTheme class and creating a pull request to the `develop` branch. 
@@ -169,6 +169,14 @@ _Other settings_
 - `quickAccessButtonCount`: How many Quick Access Buttons dou you want? Temporarily decreasing this number won't lose the configuration of the Quick Access Buttons that won't be visible anymore.
 
 ---
+
+### Hidden features
+
+Use the following command line arguments for:
+
+* `-v`: Enable verbose logging.
+* `--offline`: Start OBS Scene Timer without connecting to OBS.
+* `--clear-update-history`: Clear the update history in order to force display new updates.
 
 ## Contribution
 
