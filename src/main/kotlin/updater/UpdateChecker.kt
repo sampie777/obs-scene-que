@@ -83,7 +83,7 @@ class UpdateChecker(private val urlProvider: wURL = wURL()) {
         val jsonResponse = getLatestVersionResponse() ?: return null
 
         return try {
-            Gson().fromJson(jsonResponse, LatestVersionResponseJson::class.java).name
+            Gson().fromJson(jsonResponse, LatestVersionResponseJson::class.java).tag_name
         } catch (e: JsonParseException) {
             logger.severe("Failed to parse version JSON response: '${jsonResponse}'")
             e.printStackTrace()

@@ -1,3 +1,3 @@
 package updater
 
-data class LatestVersionResponseJson(val name: String)
+data class LatestVersionResponseJson(val tag_name: String)
